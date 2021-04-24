@@ -8,7 +8,7 @@ import (
 const ItemTypeTabs = "TABS"
 
 func TabsViewer(lib *Library, builder *html.Builder, item *Item) {
-	labels := convert.SliceOfString(item.AsInterface("labels"))
+	labels := convert.SliceOfString(item.GetInterface("labels"))
 
 	builder.Div().Class("tabs")
 	for index, label := range labels {
@@ -31,6 +31,6 @@ func TabsCreator(lib *Library, builder *html.Builder, path string, item *Item) {
 }
 
 func TabsEditor(lib *Library, builder *html.Builder, item *Item) {
-	content := item.AsString("html")
+	content := item.GetString("html")
 	builder.Container("textarea").Name(item.Path).InnerHTML(content).Close()
 }

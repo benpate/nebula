@@ -38,8 +38,6 @@ func TestTabs(t *testing.T) {
 	err := json.Unmarshal(text, &item)
 	require.Nil(t, err)
 
-	spew.Dump(item)
-
 	lib := ViewerLibrary()
 
 	result := lib.Render(&item)

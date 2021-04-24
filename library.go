@@ -21,9 +21,13 @@ func NewLibrary() Library {
 func ViewerLibrary() Library {
 	result := NewLibrary()
 
-	result.Register(ItemTypeHTML, HTMLViewer)
 	result.Register(ItemTypeText, TextViewer)
+	result.Register(ItemTypeWYSIWYG, WYSIWYGViewer)
+	result.Register(ItemTypeHTML, HTMLViewer)
 	result.Register(ItemTypeTabs, TabsViewer)
+	result.Register(ItemTypeOEmbed, OEmbedViewer)
+	result.Register(ItemTypeColumns, ColumnsViewer)
+	result.Register(ItemTypeRows, RowsViewer)
 
 	return result
 }

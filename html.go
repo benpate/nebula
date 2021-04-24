@@ -7,7 +7,7 @@ import (
 const ItemTypeHTML = "HTML"
 
 func HTMLViewer(lib *Library, b *html.Builder, item *Item) {
-	content := item.AsString("html")
+	content := item.GetString("html")
 	b.WriteString(content)
 }
 
@@ -16,6 +16,6 @@ func HTMLCreator(lib *Library, b *html.Builder, item *Item) {
 }
 
 func HTMLEditor(lib *Library, b *html.Builder, item *Item) {
-	content := item.AsString("html")
+	content := item.GetString("html")
 	b.Container("textarea").Name(item.Path).InnerHTML(content).Close()
 }
