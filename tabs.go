@@ -1,36 +1,51 @@
 package content
 
 import (
-	"github.com/benpate/convert"
+	"strconv"
+
 	"github.com/benpate/html"
 )
 
 const ItemTypeTabs = "TABS"
 
-func TabsViewer(lib *Library, builder *html.Builder, item *Item) {
-	labels := convert.SliceOfString(item.GetInterface("labels"))
+func TabsViewer(lib *Library, builder *html.Builder, content Content, id int) {
+	item := content[id]
+	labels := item.GetSliceOfString("labels")
 
 	builder.Div().Class("tabs")
-	for index, label := range labels {
-		id := convert.String(index)
-		builder.A("#tab-" + id).Class("tabs-label").InnerHTML(label).Close()
+	for index, id := range item.Refs {
+		nodeID := "#id-" + strconv.Itoa(id)
+		label := labels[index]
+		builder.A(nodeID).Class("tabs-label").InnerHTML(label).Close()
 	}
 
-	for index := range item.Children {
-		id := convert.String(index)
-		builder.Div().ID("tab-" + id).EndBracket()
-		lib.SubTree(builder, &item.Children[index])
+	for _, id := range item.Refs {
+		nodeID := "id-" + strconv.Itoa(id)
+		builder.Div().ID(nodeID).EndBracket()
+		lib.SubTree(builder, content, id)
 		builder.Close()
 	}
 
 	builder.Close()
 }
 
-func TabsCreator(lib *Library, builder *html.Builder, path string, item *Item) {
-	builder.Container("textarea").Name(path).Close()
-}
+func TabsEditor(lib *Library, builder *html.Builder, content Content, id int) {
+	item := content[id]
+	labels := item.GetSliceOfString("labels")
 
-func TabsEditor(lib *Library, builder *html.Builder, item *Item) {
-	content := item.GetString("html")
-	builder.Container("textarea").Name(item.Path).InnerHTML(content).Close()
+	builder.Div().Class("tabs")
+	for index, id := range item.Refs {
+		nodeID := "#id-" + strconv.Itoa(id)
+		label := labels[index]
+		builder.A(nodeID).Class("tabs-label").InnerHTML(label).Close()
+	}
+
+	for _, id := range item.Refs {
+		nodeID := "id-" + strconv.Itoa(id)
+		builder.Div().ID(nodeID).EndBracket()
+		lib.SubTree(builder, content, id)
+		builder.Close()
+	}
+
+	builder.Close()
 }

@@ -1,21 +1,22 @@
 package content
 
 import (
+	"strconv"
+
 	"github.com/benpate/html"
 )
 
 const ItemTypeHTML = "HTML"
 
-func HTMLViewer(lib *Library, b *html.Builder, item *Item) {
-	content := item.GetString("html")
-	b.WriteString(content)
+func HTMLViewer(lib *Library, b *html.Builder, content Content, id int) {
+	item := content[id]
+	result := item.GetString("html")
+	b.WriteString(result)
 }
 
-func HTMLCreator(lib *Library, b *html.Builder, item *Item) {
-	b.Container("textarea").Name(item.Path).Close()
-}
-
-func HTMLEditor(lib *Library, b *html.Builder, item *Item) {
-	content := item.GetString("html")
-	b.Container("textarea").Name(item.Path).InnerHTML(content).Close()
+func HTMLEditor(lib *Library, b *html.Builder, content Content, id int) {
+	item := content[id]
+	nodeID := "id-" + strconv.Itoa(id)
+	result := item.GetString("html")
+	b.Container("textarea").ID(nodeID).Class("html-editor").InnerHTML(result).Close()
 }

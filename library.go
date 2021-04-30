@@ -4,7 +4,7 @@ import (
 	"github.com/benpate/html"
 )
 
-type Widget func(*Library, *html.Builder, *Item)
+type Widget func(*Library, *html.Builder, Content, int)
 
 type Library struct {
 	widgets map[string]Widget
@@ -24,22 +24,22 @@ func ViewerLibrary() Library {
 	result.Register(ItemTypeText, TextViewer)
 	result.Register(ItemTypeWYSIWYG, WYSIWYGViewer)
 	result.Register(ItemTypeHTML, HTMLViewer)
-	result.Register(ItemTypeTabs, TabsViewer)
 	result.Register(ItemTypeOEmbed, OEmbedViewer)
-	result.Register(ItemTypeColumns, ColumnsViewer)
-	result.Register(ItemTypeRows, RowsViewer)
-
-	return result
-}
-
-func CreatorLibrary() Library {
-	result := NewLibrary()
+	result.Register(ItemTypeContainer, ContainerViewer)
+	result.Register(ItemTypeTabs, TabsViewer)
 
 	return result
 }
 
 func EditorLibrary() Library {
 	result := NewLibrary()
+
+	result.Register(ItemTypeText, TextEditor)
+	result.Register(ItemTypeWYSIWYG, WYSIWYGEditor)
+	result.Register(ItemTypeHTML, HTMLEditor)
+	result.Register(ItemTypeOEmbed, OEmbedEditor)
+	result.Register(ItemTypeContainer, ContainerEditor)
+	result.Register(ItemTypeTabs, TabsEditor)
 
 	return result
 }
@@ -53,22 +53,23 @@ func (library *Library) Register(class string, widget Widget) *Library {
 }
 
 // Render returns the HTML for a specific content.Item, based on the RenderType requested
-func (library *Library) Render(item *Item) string {
+func (library *Library) Render(content Content, id int) string {
 
 	builder := html.New()
 
-	if widget, ok := library.widgets[item.Type]; ok {
-		widget(library, builder, item)
+	if widget, ok := library.widgets[content[id].Type]; ok {
+		widget(library, builder, content, id)
 	}
 
 	return builder.String()
 }
 
 // RenderToBuilder uses the widget library to safely append values to an existing html.Builder
-func (library *Library) SubTree(builder *html.Builder, item *Item) {
-	if widget, ok := library.widgets[item.Type]; ok {
-		subTree := builder.SubTree()
-		widget(library, subTree, item)
-		subTree.CloseAll()
+func (library *Library) SubTree(builder *html.Builder, content Content, id int) {
+
+	if widget, ok := library.widgets[content[id].Type]; ok {
+		subBuilder := builder.SubTree()
+		widget(library, subBuilder, content, id)
+		subBuilder.CloseAll()
 	}
 }
