@@ -72,5 +72,5 @@ func TestCompact(t *testing.T) {
 	content.DeleteReference(0, 3, "home")
 	content.Compact()
 
-	spew.Dump(content)
+	// spew.Dump(content)
 }
