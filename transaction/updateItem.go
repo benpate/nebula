@@ -3,6 +3,7 @@ package transaction
 import (
 	"github.com/benpate/content"
 	"github.com/benpate/derp"
+	"github.com/davecgh/go-spew/spew"
 )
 
 type UpdateItem struct {
@@ -13,6 +14,7 @@ type UpdateItem struct {
 
 func (txn UpdateItem) Execute(c *content.Content) error {
 
+	spew.Dump(txn, c)
 	// Bounds check
 	if (txn.ItemID < 0) || (txn.ItemID >= len(*c)) {
 		return derp.New(500, "content.transaction.UpdateItem", "Index out of bounds", txn.ItemID)

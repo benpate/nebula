@@ -1,6 +1,7 @@
 package editor
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/benpate/content"
@@ -21,8 +22,8 @@ func (e Editor) Container(builder *html.Builder, c content.Content, id int) {
 
 	// For containers with multiple items, add an insertion point that cross-cuts the beginning of the container
 	if id == 0 {
-		builder.Div().Script("install containerInsert").Data("itemId", idString).Data("place", content.ContainerPlaceLeft).Data("check", item.Check).Close()
-		builder.Div().Script("install containerInsert").Data("itemId", idString).Data("place", content.ContainerPlaceAbove).Data("check", item.Check).Close()
+		e.marker(builder, idString, content.ContainerPlaceLeft, item.Check)
+		e.marker(builder, idString, content.ContainerPlaceAbove, item.Check)
 	}
 
 	for childIndex, childID := range item.Refs {
@@ -30,33 +31,43 @@ func (e Editor) Container(builder *html.Builder, c content.Content, id int) {
 		builder.Div().Class("container-item")
 
 		if e.showInsertMarker(c, id, childIndex, content.ContainerPlaceAbove) {
-			builder.Div().Script("install containerInsert").Data("itemId", childIDString).Data("place", content.ContainerPlaceAbove).Data("check", item.Check).Close()
+			e.marker(builder, childIDString, content.ContainerPlaceAbove, item.Check)
 		}
 
 		if e.showInsertMarker(c, id, childIndex, content.ContainerPlaceLeft) {
-			builder.Div().Script("install containerInsert").Data("itemId", childIDString).Data("place", content.ContainerPlaceLeft).Data("check", item.Check).Close()
+			e.marker(builder, childIDString, content.ContainerPlaceLeft, item.Check)
 		}
 
 		// Render child item
 		e.subTree(builder, c, childID)
 
 		if e.showInsertMarker(c, id, childIndex, content.ContainerPlaceRight) {
-			builder.Div().Script("install containerInsert").Data("itemId", childIDString).Data("place", content.ContainerPlaceRight).Data("check", item.Check).Close()
+			e.marker(builder, childIDString, content.ContainerPlaceRight, item.Check)
 		}
 
 		if e.showInsertMarker(c, id, childIndex, content.ContainerPlaceBelow) {
-			builder.Div().Script("install containerInsert").Data("itemId", childIDString).Data("place", content.ContainerPlaceBelow).Data("check", item.Check).Close()
+			e.marker(builder, childIDString, content.ContainerPlaceBelow, item.Check)
 		}
 		builder.Close()
 	}
 
 	// For containers with multiple items, add an insertion point the cross-cuts the end of the container
 	if id == 0 {
-		builder.Div().Script("install containerInsert").Data("itemId", idString).Data("place", content.ContainerPlaceRight).Data("check", item.Check).Close()
-		builder.Div().Script("install containerInsert").Data("itemId", idString).Data("place", content.ContainerPlaceBelow).Data("check", item.Check).Close()
+		e.marker(builder, idString, content.ContainerPlaceRight, item.Check)
+		e.marker(builder, idString, content.ContainerPlaceBelow, item.Check)
 	}
 
 	builder.Close()
+}
+
+func (e Editor) marker(b *html.Builder, itemID string, place string, check string) {
+	b.Div().
+		Class("container-insert").
+		Data("hx-get", fmt.Sprintf("/.editor/itemTypes?itemId=%s&place=%s&check=%s", itemID, place, check)).
+		Data("itemId", itemID).
+		Data("place", place).
+		Data("check", check).
+		Close()
 }
 
 // showInsertMarker returns TRUE if an container insertion marker should be shown at this location

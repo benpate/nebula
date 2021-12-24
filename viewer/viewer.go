@@ -7,7 +7,7 @@ import (
 
 type Viewer struct{}
 
-func New() content.Widget {
+func New() Viewer {
 	return Viewer{}
 }
 

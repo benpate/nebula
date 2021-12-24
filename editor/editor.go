@@ -9,7 +9,7 @@ type Editor struct {
 	Endpoint string
 }
 
-func New(endpoint string) content.Widget {
+func New(endpoint string) Editor {
 	return Editor{
 		Endpoint: endpoint,
 	}
@@ -17,12 +17,35 @@ func New(endpoint string) content.Widget {
 
 type widgetFunc func(*html.Builder, content.Content, int)
 
-// View returns an HTML string containing the VIEW version of the content
+// Draw returns an HTML string containing the VIEW version of the content
 func (e Editor) Draw(c content.Content) string {
 	builder := html.New()
 	widgetFunc := e.getWidget(builder, c[0])
 	widgetFunc(builder, c, 0)
 	return builder.String()
+}
+
+// ItemTypes implements the content.EditorWidget interface, and returns
+// a slice of all Item Types for users to select.
+func (e Editor) ItemTypes() []content.ItemType {
+	return []content.ItemType{
+		{
+			Code:  content.ItemTypeWYSIWYG,
+			Label: "Rich Text Content",
+		},
+		{
+			Code:  content.ItemTypeText,
+			Label: "Plain Text Content",
+		},
+		{
+			Code:  content.ItemTypeOEmbed,
+			Label: "Embed Image or Video",
+		},
+		{
+			Code:  content.ItemTypeTabs,
+			Label: "Tabs",
+		},
+	}
 }
 
 func (e Editor) getWidget(b *html.Builder, item content.Item) widgetFunc {

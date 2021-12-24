@@ -15,10 +15,11 @@ type Item struct {
 }
 
 // NewItem returns a fully initialized Item
-func NewItem(t string) Item {
+func NewItem(t string, refs ...int) Item {
 	result := Item{
 		Type: t,
 		Data: make(datatype.Map),
+		Refs: refs,
 	}
 
 	result.NewChecksum()
