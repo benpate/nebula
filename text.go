@@ -7,18 +7,23 @@ import (
 	"github.com/benpate/htmlconv"
 )
 
-const ItemTypeText = "TEXT"
+type Text struct{}
 
-func TextViewer(lib *Library, b *html.Builder, content Content, id int) {
-	item := content[id]
+func (widget Text) View(b *html.Builder, content *Content, id int) {
+	item := content.GetItem(id)
 	result := item.GetString("text")
 	result = htmlconv.FromText(result)
 	b.WriteString(result)
 }
 
-func TextEditor(lib *Library, b *html.Builder, content Content, id int) {
-	item := content[id]
+func (widget Text) Edit(b *html.Builder, content *Content, id int, endpoint string) {
+	item := content.GetItem(id)
 	result := item.GetString("text")
-	path := "id-" + strconv.Itoa(id)
-	b.Container("textarea").ID(path).Class("content-editor").InnerHTML(result).Close()
+	idString := strconv.Itoa(id)
+
+	b.Form("post", endpoint).Script("install wysiwyg")
+	b.Input("hidden", "type").Value("update-item")
+	b.Input("hidden", "itemId").Value(idString)
+	b.Input("hidden", "check").Value(item.Check)
+	b.Container("textarea").Name("text").InnerHTML(result)
 }

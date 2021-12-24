@@ -6,17 +6,22 @@ import (
 	"github.com/benpate/html"
 )
 
-const ItemTypeHTML = "HTML"
+type HTML struct{}
 
-func HTMLViewer(lib *Library, b *html.Builder, content Content, id int) {
-	item := content[id]
+func (widget HTML) View(b *html.Builder, content *Content, id int) {
+	item := content.GetItem(id)
 	result := item.GetString("html")
 	b.WriteString(result)
 }
 
-func HTMLEditor(lib *Library, b *html.Builder, content Content, id int) {
-	item := content[id]
-	nodeID := "id-" + strconv.Itoa(id)
+func (widget HTML) Edit(b *html.Builder, content *Content, id int, endpoint string) {
+	item := content.GetItem(id)
 	result := item.GetString("html")
-	b.Container("textarea").ID(nodeID).Class("html-editor").InnerHTML(result).Close()
+	idString := strconv.Itoa(id)
+
+	b.Form("post", endpoint)
+	b.Input("hidden", "type").Value("update-item")
+	b.Input("hidden", "itemId").Value(idString)
+	b.Input("hidden", "check").Value(item.Check)
+	b.Container("textarea").Name("html").InnerHTML(result)
 }

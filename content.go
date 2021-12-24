@@ -1,95 +1,96 @@
 package content
 
 import (
+	"math/rand"
+	"strconv"
+	"time"
+
 	"github.com/benpate/datatype"
-	"github.com/benpate/derp"
+	"github.com/benpate/html"
 )
 
 // Content represents a complete package of content
 type Content []Item
 
-func (content Content) Render(library Library) string {
-	return library.Render(content, 0)
+func New() Content {
+	return make(Content, 0)
 }
 
-// AddReference adds a new content item to the content section
-func (content *Content) AddReference(parentID int, item Item, hash string) (int, error) {
-
-	// Bounds check
-	if (parentID < 0) || (parentID >= len(*content)) {
-		return 0, derp.New(500, "content.Create", "Index out of bounds", parentID, item)
+func Default() Content {
+	return Content{
+		{Type: "CONTAINER", Refs: []int{1}, Data: datatype.Map{"style": "ROWS"}},
+		{Type: "WYSIWYG", Data: datatype.Map{"html": "Start typing here..."}},
 	}
+}
 
-	// Hash check
-	if hash != (*content)[parentID].Hash {
-		return 0, derp.New(derp.CodeForbiddenError, "content.Create", "Invalid Hash Value")
-	}
+// IsEmpty returns TRUE if the content container is empty.
+func (content *Content) IsEmpty() bool {
+	return len(*content) == 0
+}
 
-	// Reset the Hash for each new item
-	item.NewHash()
+// View returns an HTML string containing the VIEW version of the content
+func (content *Content) View() string {
+	builder := html.New()
+	widget := content.Widget(0)
 
-	// Add the new item to the content container.
+	widget.View(builder, content, 0)
+	return builder.String()
+}
+
+// Edit returns an HTML string containing the EDIT version of the content
+func (content *Content) Edit(endpoint string) string {
+	builder := html.New()
+	widget := content.Widget(0)
+
+	widget.Edit(builder, content, 0, endpoint)
+	return builder.String() // + "<pre>" + spew.Sdump(content) + "</pre>"
+}
+
+func (content *Content) viewSubTree(builder *html.Builder, id int) {
+	subBuilder := builder.SubTree()
+	widget := content.Widget(id)
+
+	widget.View(subBuilder, content, id)
+	subBuilder.CloseAll()
+}
+
+func (content *Content) editSubTree(builder *html.Builder, id int, endpoint string) {
+	subBuilder := builder.SubTree()
+	widget := content.Widget(id)
+
+	widget.Edit(subBuilder, content, id, endpoint)
+	subBuilder.CloseAll()
+}
+
+// AddItem adds a new item to this content structure, and returns the new item's index
+func (content *Content) AddItem(item Item) int {
 	newID := len(*content)
+
 	*content = append(*content, item)
 
-	// Add a reference to the new item in the parent.
-	(*content)[parentID].AddReference(newID)
-
-	// Success!
-	return newID, nil
+	return newID
 }
 
-// DeleteReference removes an item from a parent
-func (content Content) DeleteReference(parentID int, deleteID int, hash string) error {
-
-	// Bounds check
-	if (parentID < 0) || (parentID >= len(content)) {
-		return derp.New(500, "content.Create", "Parent index out of bounds", parentID, deleteID)
-	}
-
-	// Bounds check
-	if (deleteID < 0) || (deleteID >= len(content)) {
-		return derp.New(500, "content.Create", "Child index out of bounds", parentID, deleteID)
-	}
-
-	// Hash check
-	if hash != content[parentID].Hash {
-		return derp.New(derp.CodeForbiddenError, "content.Create", "Invalid Hash Value")
-	}
-
-	// Remove the references to the deleted Item
-	for _, childID := range content[deleteID].Refs {
-		content.DeleteReference(deleteID, childID, content[deleteID].Hash)
-	}
-
-	// Remove teh deleted item
-	content[deleteID] = Item{}
-
-	// Remove the deleted item from the parent's list of child references
-	content[parentID].DeleteReference(deleteID)
-
-	// Success!
-	return nil
+// GetItem returns a pointer to the item at the desired index
+func (content *Content) GetItem(id int) *Item {
+	return &(*content)[id]
 }
 
-// UpdateItem updates the content of an item in place.
-func (content Content) UpdateItem(itemID int, data datatype.Map, hash string) error {
+func (content *Content) GetParent(id int) (int, *Item) {
 
-	// Bounds check
-	if (itemID < 0) || (itemID >= len(content)) {
-		return derp.New(500, "content.Create", "Index out of bounds", itemID)
+	for itemIndex := range *content {
+		for refIndex := range (*content)[itemIndex].Refs {
+			if (*content)[itemIndex].Refs[refIndex] == id {
+				return itemIndex, &(*content)[itemIndex]
+			}
+		}
 	}
 
-	// Hash check
-	if hash != content[itemID].Hash {
-		return derp.New(derp.CodeForbiddenError, "content.Create", "Invalid Hash Value")
-	}
-
-	// Update data
-	content[itemID].Data = data
-	return nil
+	return -1, nil
 }
 
+// Compact removes any unused items in the content slice
+// and reorganizes references
 func (content *Content) Compact() {
 	front := 0
 	back := len(*content) - 1
@@ -118,12 +119,47 @@ func (content *Content) Compact() {
 
 // move physically moves an item from one index to another (overwriting the target location)
 // and updates references
-func (content Content) move(from int, to int) {
+func (content *Content) move(from int, to int) {
 
-	content[to] = content[from]
-	content[from] = Item{}
+	(*content)[to] = (*content)[from]
+	(*content)[from] = Item{}
 
-	for index := range content {
-		content[index].UpdateReference(from, to)
+	for index := range *content {
+		(*content)[index].UpdateReference(from, to)
+	}
+}
+
+// NewChecksum generates a new checksum value to be inserted into a content.Item
+func NewChecksum() string {
+	seed := time.Now().Unix()
+	source := rand.NewSource(seed)
+	return strconv.FormatInt(source.Int63(), 36) + strconv.FormatInt(source.Int63(), 36)
+}
+
+func (content *Content) Widget(id int) Widget {
+
+	// Bounds check
+	if (id < 0) || (id >= len(*content)) {
+		return Nil{}
+	}
+
+	itemType := (*content)[id].Type
+
+	switch itemType {
+
+	case ItemTypeContainer:
+		return Container{}
+	case ItemTypeHTML:
+		return HTML{}
+	case ItemTypeOEmbed:
+		return OEmbed{}
+	case ItemTypeTabs:
+		return Tabs{}
+	case ItemTypeText:
+		return Text{}
+	case ItemTypeWYSIWYG:
+		return WYSIWYG{}
+	default:
+		return Nil{}
 	}
 }

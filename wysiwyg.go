@@ -6,18 +6,24 @@ import (
 	"github.com/benpate/html"
 )
 
-const ItemTypeWYSIWYG = "WYSIWYG"
+type WYSIWYG struct{}
 
-func WYSIWYGViewer(lib *Library, b *html.Builder, content Content, id int) {
-	item := content[id]
+func (widget WYSIWYG) View(b *html.Builder, content *Content, id int) {
+	item := content.GetItem(id)
 	result := item.GetString("html")
 	b.WriteString(result)
 }
 
-func WYSIWYGEditor(lib *Library, b *html.Builder, content Content, id int) {
-	item := content[id]
+func (widget WYSIWYG) Edit(b *html.Builder, content *Content, id int, endpoint string) {
+	item := content.GetItem(id)
 	result := item.GetString("html")
-	path := "id-" + strconv.Itoa(id)
+	idString := strconv.Itoa(id)
 
-	b.Div().ID(path).Class("ck-editor").InnerHTML(result).Close()
+	b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "blur").Script("on blur log me")
+	b.Input("hidden", "type").Value("update-item")
+	b.Input("hidden", "itemId").Value(idString)
+	b.Input("hidden", "check").Value(item.Check)
+	b.Div().Script("install wysiwyg").InnerHTML(result)
+	// b.Input("hidden", "html")
+	// b.Div().Class("ck-editor").InnerHTML(result)
 }

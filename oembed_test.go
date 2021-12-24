@@ -1,52 +1,49 @@
 package content
 
 import (
+	"encoding/json"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestOEmbedImage(t *testing.T) {
-	/*
-	   	var item Item
+	var c Content
 
-	   	text := []byte(`{
+	text := []byte(`[{
 	   		"type": "OEMBED",
-	   		"map": {
+	   		"data": {
 	   			"type": "photo",
 	   			"url": "/image.png",
 	   			"height":90,
 	   			"width":160
-	   		}}`)
+	   		}}]`)
 
-	   	err := json.Unmarshal(text, &item)
+	err := json.Unmarshal(text, &c)
 
-	   	require.Nil(t, err)
+	require.Nil(t, err)
 
-	   	lib := ViewerLibrary()
+	html := c.View()
 
-	   	html := lib.Render(&item)
+	require.Equal(t, `<img src="/image.png" width="160" height="90">`, html)
+}
 
-	   	require.Equal(t, `<img src="/image.png" width="160" height="90">`, html)
-	   }
+func TestOEmbedVideo(t *testing.T) {
 
-	   func TestOEmbedVideo(t *testing.T) {
+	var c Content
 
-	   	var item Item
-
-	   	text := []byte(`{
+	text := []byte(`[{
 	   		"type": "OEMBED",
-	   		"map": {
+	   		"data": {
 	   			"type": "video",
 	   			"html": "Here's where the video html should go"
-	   		}}`)
+	   		}}]`)
 
-	   	err := json.Unmarshal(text, &item)
+	err := json.Unmarshal(text, &c)
 
-	   	require.Nil(t, err)
+	require.Nil(t, err)
 
-	   	lib := ViewerLibrary()
+	html := c.View()
 
-	   	html := lib.Render(&item)
-
-	   	require.Equal(t, "Here's where the video html should go", html)
-	*/
+	require.Equal(t, "Here's where the video html should go", html)
 }
