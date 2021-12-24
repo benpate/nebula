@@ -46,9 +46,6 @@ func TestAddItem_InsertContainer_Above(t *testing.T) {
 
 	require.Equal(t, "HTML", c[2].Type)
 	require.Empty(t, c[2].Data["html"])
-
-	expected := `<div class="container" data-style="ROWS" data-size="2"><div class="container-item"></div><div class="container-item">This is the first item</div></div>`
-	require.Equal(t, expected, c.View())
 }
 
 func TestAddItem_InsertContainer_Above2(t *testing.T) {
@@ -99,9 +96,6 @@ func TestAddItem_InsertContainer_Above2(t *testing.T) {
 
 	require.Equal(t, "HTML", c[3].Type)
 	require.Empty(t, c[3].Data["html"])
-
-	expected := `<div class="container" data-style="ROWS" data-size="3"><div class="container-item">This is the first item</div><div class="container-item"></div><div class="container-item">This is the second item</div></div>`
-	require.Equal(t, expected, c.View())
 }
 
 func TestAddItem_InsertContainer_Below(t *testing.T) {
@@ -142,9 +136,6 @@ func TestAddItem_InsertContainer_Below(t *testing.T) {
 
 	require.Equal(t, "HTML", c[2].Type)
 	require.Empty(t, c[2].Data["html"])
-
-	expected := `<div class="container" data-style="ROWS" data-size="2"><div class="container-item">This is the first item</div><div class="container-item"></div></div>`
-	require.Equal(t, expected, c.View())
 }
 
 func TestAddItem_InsertContainer_Left(t *testing.T) {
@@ -185,9 +176,6 @@ func TestAddItem_InsertContainer_Left(t *testing.T) {
 
 	require.Equal(t, "HTML", c[2].Type)
 	require.Empty(t, c[2].Data["html"])
-
-	expected := `<div class="container" data-style="COLS" data-size="2"><div class="container-item"></div><div class="container-item">This is the first item</div></div>`
-	require.Equal(t, expected, c.View())
 }
 
 func TestAddItem_InsertContainer_Right(t *testing.T) {
@@ -228,7 +216,4 @@ func TestAddItem_InsertContainer_Right(t *testing.T) {
 
 	require.Equal(t, "HTML", c[2].Type)
 	require.Empty(t, c[2].Data["html"])
-
-	expected := `<div class="container" data-style="COLS" data-size="2"><div class="container-item">This is the first item</div><div class="container-item"></div></div>`
-	require.Equal(t, expected, c.View())
 }

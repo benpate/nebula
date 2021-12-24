@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/benpate/datatype"
-	"github.com/benpate/html"
 )
 
 // Content represents a complete package of content
@@ -26,40 +25,6 @@ func Default() Content {
 // IsEmpty returns TRUE if the content container is empty.
 func (content *Content) IsEmpty() bool {
 	return len(*content) == 0
-}
-
-// View returns an HTML string containing the VIEW version of the content
-func (content *Content) View() string {
-	builder := html.New()
-	widget := content.Widget(0)
-
-	widget.View(builder, content, 0)
-	return builder.String()
-}
-
-// Edit returns an HTML string containing the EDIT version of the content
-func (content *Content) Edit(endpoint string) string {
-	builder := html.New()
-	widget := content.Widget(0)
-
-	widget.Edit(builder, content, 0, endpoint)
-	return builder.String() // + "<pre>" + spew.Sdump(content) + "</pre>"
-}
-
-func (content *Content) viewSubTree(builder *html.Builder, id int) {
-	subBuilder := builder.SubTree()
-	widget := content.Widget(id)
-
-	widget.View(subBuilder, content, id)
-	subBuilder.CloseAll()
-}
-
-func (content *Content) editSubTree(builder *html.Builder, id int, endpoint string) {
-	subBuilder := builder.SubTree()
-	widget := content.Widget(id)
-
-	widget.Edit(subBuilder, content, id, endpoint)
-	subBuilder.CloseAll()
 }
 
 // AddItem adds a new item to this content structure, and returns the new item's index
@@ -134,32 +99,4 @@ func NewChecksum() string {
 	seed := time.Now().Unix()
 	source := rand.NewSource(seed)
 	return strconv.FormatInt(source.Int63(), 36) + strconv.FormatInt(source.Int63(), 36)
-}
-
-func (content *Content) Widget(id int) Widget {
-
-	// Bounds check
-	if (id < 0) || (id >= len(*content)) {
-		return Nil{}
-	}
-
-	itemType := (*content)[id].Type
-
-	switch itemType {
-
-	case ItemTypeContainer:
-		return Container{}
-	case ItemTypeHTML:
-		return HTML{}
-	case ItemTypeOEmbed:
-		return OEmbed{}
-	case ItemTypeTabs:
-		return Tabs{}
-	case ItemTypeText:
-		return Text{}
-	case ItemTypeWYSIWYG:
-		return WYSIWYG{}
-	default:
-		return Nil{}
-	}
 }

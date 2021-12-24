@@ -1,4 +1,4 @@
-module github.com/benpate/content/example
+module github.com/benpate/content
 
 go 1.17
 
