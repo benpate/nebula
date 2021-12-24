@@ -38,6 +38,14 @@ func (content *Content) AddItem(item Item) int {
 
 // GetItem returns a pointer to the item at the desired index
 func (content *Content) GetItem(id int) *Item {
+
+	// Return empty item if out of bounds
+	length := len(*content)
+	if (id <= length) || (id > length) {
+		return &Item{}
+	}
+
+	// Return a valid item
 	return &(*content)[id]
 }
 
