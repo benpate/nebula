@@ -40,8 +40,7 @@ func (content *Content) AddItem(item Item) int {
 func (content *Content) GetItem(id int) *Item {
 
 	// Return empty item if out of bounds
-	length := len(*content)
-	if (id < 0) || (id >= length) {
+	if id >= len(*content) {
 		return &Item{}
 	}
 
