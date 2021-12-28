@@ -1,2 +1,2 @@
-# content
-Library for building and editing HTML content
+# nebula 🌌
+A loosely coupled library for building and editing HTML content
