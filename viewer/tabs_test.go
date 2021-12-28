@@ -1,42 +1,48 @@
 package viewer
 
 import (
+	"encoding/json"
 	"testing"
+
+	"github.com/benpate/content"
+	"github.com/davecgh/go-spew/spew"
+	"github.com/stretchr/testify/require"
 )
 
 func TestTabs(t *testing.T) {
-	/*
-		text := []byte(`{
+
+	text := []byte(`[
+		{
 			"type":"TABS",
-			"map": {
+			"refs":[1,2,3],
+			"data": {
 				"labels": ["First Tab", "Second Tab", "Third Tab"]
-			},
-			"children": [{
-				"type":"HTML",
-				"map": {
-					"html":"This is the HTML for the first tab."
-				}
-			},{
-				"type":"TEXT",
-				"map": {
-					"text":"This is the text for the second tab."
-				}
-			},{
-				"type":"HTML",
-				"map": {
-					"html":"This is the text for the third tab."
-				}
-			}]
-		}`)
+			}
+		},{
+			"type":"HTML",
+			"data": {
+				"html":"This is the HTML for the first tab."
+			}
+		},{
+			"type":"TEXT",
+			"data": {
+				"text":"This is the text for the second tab."
+			}
+		},{
+			"type":"HTML",
+			"data": {
+				"html":"This is the text for the third tab."
+			}
+		}]`)
 
-		var item Item
+	var tabs content.Content
 
-		err := json.Unmarshal(text, &item)
-		require.Nil(t, err)
+	err := json.Unmarshal(text, &tabs)
+	require.Nil(t, err)
 
-		lib := ViewerLibrary()
+	viewer := New()
+	result := viewer.Draw(tabs)
 
-		result := lib.Render(&item)
+	spew.Dump(result)
 
-	*/
 }
