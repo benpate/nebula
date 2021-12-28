@@ -19,8 +19,12 @@ type widgetFunc func(*html.Builder, content.Content, int)
 
 // Draw returns an HTML string containing the VIEW version of the content
 func (e Editor) Draw(c content.Content) string {
+	if len(c) == 0 {
+		return ""
+	}
 	builder := html.New()
-	widgetFunc := e.getWidget(builder, c[0])
+	item := c.GetItem(0)
+	widgetFunc := e.getWidget(builder, item)
 	widgetFunc(builder, c, 0)
 	return builder.String()
 }
@@ -48,7 +52,7 @@ func (e Editor) ItemTypes() []content.ItemType {
 	}
 }
 
-func (e Editor) getWidget(b *html.Builder, item content.Item) widgetFunc {
+func (e Editor) getWidget(b *html.Builder, item *content.Item) widgetFunc {
 
 	switch item.Type {
 
@@ -71,9 +75,11 @@ func (e Editor) getWidget(b *html.Builder, item content.Item) widgetFunc {
 
 // subTree safely renders a sub-widget.
 func (e Editor) subTree(b *html.Builder, c content.Content, id int) {
+	item := c.GetItem(id)
 	subBuilder := b.SubTree()
-	widgetFunc := e.getWidget(subBuilder, c[id])
+	widgetFunc := e.getWidget(subBuilder, item)
 
+	// Render the sub-widget using a sub-builder...
 	widgetFunc(subBuilder, c, id)
 	subBuilder.CloseAll()
 }
