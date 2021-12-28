@@ -7,7 +7,7 @@ import (
 
 const ItemTypeWYSIWYG = "WYSIWYG"
 
-func WYSIWYG(b *html.Builder, c content.Content, id int) {
+func (v Viewer) WYSIWYG(b *html.Builder, c content.Content, id int) {
 	item := c.GetItem(id)
 	result := item.GetString("html")
 	b.WriteString(result)

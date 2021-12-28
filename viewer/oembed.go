@@ -7,7 +7,7 @@ import (
 
 const ItemTypeOEmbed = "OEMBED"
 
-func OEmbed(b *html.Builder, c content.Content, id int) {
+func (v Viewer) OEmbed(b *html.Builder, c content.Content, id int) {
 
 	item := c.GetItem(id)
 

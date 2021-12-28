@@ -8,7 +8,7 @@ import (
 
 const ItemTypeText = "TEXT"
 
-func Text(b *html.Builder, c content.Content, id int) {
+func (v Viewer) Text(b *html.Builder, c content.Content, id int) {
 	item := c.GetItem(id)
 	result := item.GetString("text")
 	result = htmlconv.FromText(result)

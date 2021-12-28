@@ -9,7 +9,7 @@ import (
 
 const ItemTypeContainer = "CONTAINER"
 
-func Container(b *html.Builder, c content.Content, id int) {
+func (v Viewer) Container(b *html.Builder, c content.Content, id int) {
 	item := c.GetItem(id)
 
 	b.Div().
@@ -19,7 +19,7 @@ func Container(b *html.Builder, c content.Content, id int) {
 
 	for _, id := range item.Refs {
 		b.Div().Class("container-item")
-		subTree(b, c, id)
+		v.subTree(b, c, id)
 		b.Close()
 	}
 }
