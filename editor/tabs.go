@@ -1,31 +1,81 @@
 package editor
 
 import (
-	"strconv"
+	"fmt"
 
 	"github.com/benpate/content"
+	"github.com/benpate/convert"
 	"github.com/benpate/html"
 )
 
-func (e Editor) Tabs(builder *html.Builder, c content.Content, id int) {
+const ItemTypeTabs = "TABS"
+
+func (e Editor) Tabs(b *html.Builder, c content.Content, id int) {
+
 	item := c.GetItem(id)
-	labels := item.GetSliceOfString("labels")
 
-	builder.Div().Class("tabs")
+	b.Div().Class("tabs").Script("install TabContainer")
+
+	b.Div().Role("tablist").EndBracket()
 	for index, id := range item.Refs {
-		nodeID := "#id-" + strconv.Itoa(id)
-		label := labels[index]
-		builder.A(nodeID).Class("tabs-label").InnerHTML(label).Close()
+		item := c.GetItem(id)
+		idString := convert.String(id)
+
+		b.Span().
+			Role("tab").
+			ID("tab-"+idString).
+			Aria("controls", "panel-"+idString).
+			Aria("selected", convert.String(index == 0)).
+			EndBracket()
+
+		b.WriteString(item.GetString("label"))
+
+		b.Form("", "").
+			Style("display:inline").
+			Data("hx-post", e.Endpoint).
+			Data("hx-trigger", "click").
+			Data("hx-confirm", "Remove this tab?")
+
+		b.Input("hidden", "type").Value("delete-item").Close()
+		b.Input("hidden", "itemId").Value(idString).Close()
+		b.Input("hidden", "check").Value(item.GetString("check")).Close()
+
+		b.Container("i").
+			Class("fa-regular fa-circle-xmark", "space-left").
+			Close()
+
+		b.Close()
+		b.Close()
 	}
 
-	for _, id := range item.Refs {
-		nodeID := "id-" + strconv.Itoa(id)
-		builder.Div().ID(nodeID).EndBracket()
-		e.subTree(builder, c, id)
-		builder.Close()
+	// Add "new" tab
+	b.Span().
+		Role("tab").
+		ID("tab-new").
+		Data("hx-post", e.Endpoint).
+		Data("hx-vals", fmt.Sprintf("{'type':'new-item', 'itemId':'%s', 'place':'RIGHT', 'itemType':'CONTAINER', 'check':'%s'}", convert.String(id), item.GetString("check"))).
+		EndBracket()
+
+	b.Container("i").Class("fa-regular fa-circle-plus").Close()
+
+	b.Close()
+	b.Close()
+
+	for index, id := range item.Refs {
+		idString := convert.String(id)
+
+		b.Div().
+			Role("tabpanel").
+			ID("panel-"+idString).
+			Aria("labelledby", "tab-"+idString).
+			Attr("hidden", convert.String(index != 0)).
+			EndBracket()
+
+		e.subTree(b, c, id)
+		b.Close()
 	}
 
-	builder.Close()
+	b.CloseAll()
 }
 
 /*
