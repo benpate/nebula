@@ -1,8 +1,13 @@
 package content
 
 import (
+	"math/rand"
+	"strconv"
+	"time"
+
 	"github.com/benpate/convert"
 	"github.com/benpate/datatype"
+	"github.com/benpate/path"
 )
 
 // Item represents a single piece of content.  It will be rendered by one of several rendering
@@ -33,6 +38,14 @@ func (item *Item) NewChecksum() {
 
 // AddReference adds a new "sub-item" reference to this item
 func (item *Item) AddReference(id int, index int) {
+
+	// special case for empty refs.  No need to do all that work.
+	if len(item.Refs) == 0 {
+		item.Refs = append(item.Refs, id)
+		return
+	}
+
+	// efficient insert for already-populated refs.
 	item.Refs = append(item.Refs, 0)
 	copy(item.Refs[index+1:], item.Refs[index:])
 	item.Refs[index] = id
@@ -66,8 +79,21 @@ func (item *Item) UnmarshalMap(value map[string]interface{}) {
 	item.NewChecksum()
 }
 
-////////////////////////////////////
-// Data Getters
+/*****************************************
+ * Data Accessors
+ *****************************************/
+
+func (item *Item) GetPath(p path.Path) (interface{}, error) {
+	return item.Data.GetPath(p)
+}
+
+func (item *Item) SetPath(p path.Path, value interface{}) error {
+	return item.Data.SetPath(p, value)
+}
+
+func (item *Item) Set(key string, value interface{}) {
+	item.Data[key] = value
+}
 
 func (item *Item) GetString(key string) string {
 	return item.Data.GetString(key)
@@ -87,4 +113,11 @@ func (item *Item) GetSliceOfString(key string) []string {
 
 func (item *Item) GetInterface(key string) interface{} {
 	return item.Data.GetInterface(key)
+}
+
+// NewChecksum generates a new checksum value to be inserted into a content.Item
+func NewChecksum() string {
+	seed := time.Now().Unix()
+	source := rand.NewSource(seed)
+	return strconv.FormatInt(source.Int63(), 36) + strconv.FormatInt(source.Int63(), 36)
 }

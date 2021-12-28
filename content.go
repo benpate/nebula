@@ -1,39 +1,61 @@
 package content
 
 import (
-	"math/rand"
-	"strconv"
-	"time"
+	"net/url"
 
-	"github.com/benpate/datatype"
+	"github.com/benpate/html"
 )
 
 // Content represents a complete package of content
 type Content []Item
 
-func New() Content {
+// New returns a fully initialized Content object
+func New(library Library) Content {
 	return make(Content, 0)
 }
 
-func Default() Content {
-	return Content{
-		{Type: "CONTAINER", Refs: []int{1}, Data: datatype.Map{"style": "ROWS"}},
-		{Type: "WYSIWYG", Data: datatype.Map{"html": "Start typing here..."}},
+/*****************************************
+ * USER INTERFACE FUNCTIONS
+ *****************************************/
+
+// Init initializes an empty container with default content.
+func Init(library Library, content Content) {
+
+	if len(content) > 0 {
+		return
 	}
+
+	content.NewItem(library, "container")
 }
+
+// View returns an HTML string containing the VIEW version of the content
+func View(library Library, content Content) string {
+	builder := html.New()
+	library.View(builder, content, 0)
+	return builder.String()
+}
+
+// Edit returns an HTML string containing the EDIT version of the content
+func Edit(library Library, content Content, endpoint string) string {
+	builder := html.New()
+	library.Edit(builder, content, 0, endpoint)
+	return builder.String()
+}
+
+// Prop returns an editable property form based on the URL params provided.
+func Prop(library Library, content Content, params url.Values, endpoint string) (string, error) {
+	builder := html.New()
+	err := library.Prop(builder, content, 0, params, endpoint)
+	return builder.String(), err
+}
+
+/*****************************************
+ * READ FUNCTIONS
+ *****************************************/
 
 // IsEmpty returns TRUE if the content container is empty.
 func (content *Content) IsEmpty() bool {
 	return len(*content) == 0
-}
-
-// AddItem adds a new item to this content structure, and returns the new item's index
-func (content *Content) AddItem(item Item) int {
-	newID := len(*content)
-
-	*content = append(*content, item)
-
-	return newID
 }
 
 // GetItem returns a pointer to the item at the desired index
@@ -59,6 +81,28 @@ func (content *Content) GetParent(id int) (int, *Item) {
 	}
 
 	return -1, nil
+}
+
+/*****************************************
+ * WRITE FUNCTIONS
+ *****************************************/
+
+// NewItem creates a new item of the designated type and initializes it
+// with the default Init() method from the corresponding widget library
+func (content *Content) NewItem(library Library, itemType string) int {
+	item := NewItem(itemType)
+	id := content.AddItem(item)
+	library.Init(*content, id)
+	return id
+}
+
+// AddItem adds a new item to this content structure, and returns the new item's index
+func (content *Content) AddItem(item Item) int {
+	newID := len(*content)
+
+	*content = append(*content, item)
+
+	return newID
 }
 
 // Compact removes any unused items in the content slice
@@ -99,11 +143,4 @@ func (content *Content) move(from int, to int) {
 	for index := range *content {
 		(*content)[index].UpdateReference(from, to)
 	}
-}
-
-// NewChecksum generates a new checksum value to be inserted into a content.Item
-func NewChecksum() string {
-	seed := time.Now().Unix()
-	source := rand.NewSource(seed)
-	return strconv.FormatInt(source.Int63(), 36) + strconv.FormatInt(source.Int63(), 36)
 }

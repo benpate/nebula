@@ -1,4 +1,4 @@
-package viewer
+package vocabulary
 
 import (
 	"github.com/benpate/content"
@@ -7,7 +7,9 @@ import (
 
 const ItemTypeOEmbed = "OEMBED"
 
-func (v Viewer) OEmbed(b *html.Builder, c content.Content, id int) {
+type OEmbed struct{}
+
+func (w OEmbed) View(b *html.Builder, c content.Content, id int) {
 
 	item := c.GetItem(id)
 
@@ -26,4 +28,11 @@ func (v Viewer) OEmbed(b *html.Builder, c content.Content, id int) {
 			Attr("width", item.GetString("width")).
 			Attr("height", item.GetString("height"))
 	}
+}
+
+func (w OEmbed) Edit(b *html.Builder, c content.Content, id int, endpoint string) {
+	script := "install Uploader(endpoint:'" + endpoint + "')"
+	b.Div().Script(script).EndBracket()
+	b.H3().InnerHTML("Drag Images Here To Upload").Close()
+	b.Close()
 }

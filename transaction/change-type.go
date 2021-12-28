@@ -13,22 +13,22 @@ type ChangeType struct {
 }
 
 // Execute performs the ChangeType transaction on the provided content structure
-func (txn ChangeType) Execute(c *content.Content) error {
+func (txn ChangeType) Execute(c *content.Content) (int, error) {
 
 	// Bounds check
 	if (txn.ItemID < 0) || (txn.ItemID >= len(*c)) {
-		return derp.New(500, "content.transaction.ChangeType", "Index out of bounds", txn)
+		return 0, derp.New(500, "content.transaction.ChangeType", "Index out of bounds", txn)
 	}
 
 	// Hash check
 	if txn.Check != (*c)[txn.ItemID].Check {
-		return derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
+		return 0, derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
 	}
 
 	(*c)[txn.ItemID].Type = txn.ItemType
 	(*c)[txn.ItemID].Data = datatype.Map{}
 
-	return nil
+	return txn.ItemID, nil
 }
 
 func (txn ChangeType) Description() string {

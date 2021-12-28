@@ -10,7 +10,7 @@ type DeleteItem struct {
 	Check  string `json:"check"  form:"check"`
 }
 
-func (txn DeleteItem) Execute(c *content.Content) error {
+func (txn DeleteItem) Execute(c *content.Content) (int, error) {
 
 	// Find parent index and record
 	parentID, parent := c.GetParent(txn.ItemID)
@@ -19,7 +19,7 @@ func (txn DeleteItem) Execute(c *content.Content) error {
 	parent.DeleteReference(txn.ItemID)
 
 	// Recursively delete this item and all of its children
-	return deleteItem(c, parentID, txn.ItemID, txn.Check)
+	return parentID, deleteItem(c, parentID, txn.ItemID, txn.Check)
 }
 
 func (txn DeleteItem) Description() string {

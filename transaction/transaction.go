@@ -7,7 +7,16 @@ import (
 )
 
 type Transaction interface {
-	Execute(*content.Content) error
+
+	// Execute performs an update to the content data.  It returns
+	// the ID of the element to be re-rendered on the client, along
+	// with an error (if present).  Implementations can use this to
+	// selectively re-render portions of the content structure without
+	// reloading the entire page.
+	Execute(*content.Content) (int, error)
+
+	// Description returns a developer-friendly string that identifies
+	// the action that was performed.
 	Description() string
 }
 

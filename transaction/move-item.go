@@ -1,6 +1,9 @@
 package transaction
 
-import "github.com/benpate/content"
+import (
+	"github.com/benpate/content"
+	"github.com/benpate/derp"
+)
 
 type MoveItem struct {
 	ItemID      int    `json:"itemId"      form:"itemId"`
@@ -9,8 +12,8 @@ type MoveItem struct {
 	Check       string `json:"check"       form:"check"`
 }
 
-func (txn MoveItem) Execute(c *content.Content) error {
-	return nil
+func (txn MoveItem) Execute(c *content.Content) (int, error) {
+	return 0, derp.New(derp.CodeBadRequestError, "content.transaction.MoveItem", "Unimplemented")
 }
 
 func (txn MoveItem) Description() string {

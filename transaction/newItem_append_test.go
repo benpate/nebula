@@ -34,9 +34,10 @@ func TestAddItem_AppendContainer_Above(t *testing.T) {
 		Check:    "123",
 	}
 
-	err := txn.Execute(&c)
+	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
+	require.Equal(t, 2, id)
 	require.Equal(t, "CONTAINER", c[0].Type)
 	require.Equal(t, "ROWS", c[0].Data["style"])
 	require.Equal(t, []int{2, 1}, c[0].Refs)
@@ -74,9 +75,10 @@ func TestAddItem_AppendContainer_Below(t *testing.T) {
 		Check:    "123",
 	}
 
-	err := txn.Execute(&c)
+	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
+	require.Equal(t, 3, id)
 	require.Equal(t, "CONTAINER", c[0].Type)
 	require.Equal(t, "ROWS", c[0].Data["style"])
 	require.Equal(t, []int{1, 2}, c[0].Refs)
@@ -114,9 +116,10 @@ func TestAddItem_AppendContainer_Left(t *testing.T) {
 		Check:    "123",
 	}
 
-	err := txn.Execute(&c)
+	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
+	require.Equal(t, 0, id)
 	require.Equal(t, "CONTAINER", c[0].Type)
 	require.Equal(t, "COLS", c[0].Data["style"])
 	require.Equal(t, []int{2, 1}, c[0].Refs)
@@ -154,9 +157,10 @@ func TestAddItem_AppendContainer_Right(t *testing.T) {
 		Check:    "123",
 	}
 
-	err := txn.Execute(&c)
+	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
+	require.Equal(t, 3, id)
 	require.Equal(t, "CONTAINER", c[0].Type)
 	require.Equal(t, "COLS", c[0].Data["style"])
 	require.Equal(t, []int{1, 2}, c[0].Refs)
