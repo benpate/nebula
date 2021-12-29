@@ -1,42 +1,11 @@
 package nebula
 
-import (
-	"net/url"
-
-	"github.com/benpate/html"
-)
-
 // Container represents a complete package of container
 type Container []Item
 
 // NewContainer returns a fully initialized Container object
 func NewContainer() Container {
 	return make(Container, 0)
-}
-
-/*****************************************
- * USER INTERFACE FUNCTIONS
- *****************************************/
-
-// View returns an HTML string containing the VIEW version of the container
-func View(library Library, container *Container) string {
-	builder := html.New()
-	library.View(builder, container, 0)
-	return builder.String()
-}
-
-// Edit returns an HTML string containing the EDIT version of the container
-func Edit(library Library, container *Container, endpoint string) string {
-	builder := html.New()
-	library.Edit(builder, container, 0, endpoint)
-	return builder.String()
-}
-
-// Prop returns an editable property form based on the URL params provided.
-func Prop(library Library, container *Container, params url.Values, endpoint string) (string, error) {
-	builder := html.New()
-	err := library.Prop(builder, container, 0, params, endpoint)
-	return builder.String(), err
 }
 
 /*****************************************
@@ -53,29 +22,30 @@ func (container *Container) IsEmpty() bool {
 	return container.Len() == 0
 }
 
-// GetItem returns a pointer to the item at the desired index
-func (container *Container) GetItem(id int) *Item {
+// GetItem returns a copy of the item at the desired index
+func (container *Container) GetItem(id int) Item {
 
 	// Return empty item if out of bounds
 	if (id < 0) || (id >= container.Len()) {
-		return &Item{}
+		return Item{}
 	}
 
 	// Return a valid item
-	return &(*container)[id]
+	return (*container)[id]
 }
 
-func (container *Container) GetParent(id int) (int, *Item) {
+// GetParent searches for the ID of a parent item
+func (container *Container) GetParent(id int) int {
 
 	for itemIndex := range *container {
 		for refIndex := range (*container)[itemIndex].Refs {
 			if (*container)[itemIndex].Refs[refIndex] == id {
-				return itemIndex, &(*container)[itemIndex]
+				return itemIndex
 			}
 		}
 	}
 
-	return -1, nil
+	return -1
 }
 
 /*****************************************
@@ -84,9 +54,8 @@ func (container *Container) GetParent(id int) (int, *Item) {
 
 // NewItem creates a new item of the designated type and initializes it
 // with the default Init() method from the corresponding widget library
-func (container *Container) NewItem(library Library, itemType string) int {
-	item := NewItem(itemType)
-	id := container.AddItem(item)
+func (container *Container) NewItem(library *Library, itemType string) int {
+	id := container.AddItem(NewItem(itemType))
 	library.Init(container, id)
 	return id
 }

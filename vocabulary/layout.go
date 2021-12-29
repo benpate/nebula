@@ -12,14 +12,13 @@ import (
 const ItemTypeLayout = "LAYOUT"
 
 type Layout struct {
-	library nebula.Library
+	library *nebula.Library
 }
 
 // Init adds a child WYSIWYG element
 func (w Layout) Init(container *nebula.Container, id int) {
-	me := container.GetItem(id)
 	wysiwyg := container.NewItem(w.library, ItemTypeWYSIWYG)
-	me.AddReference(wysiwyg, 0)
+	(*container)[id].AddReference(wysiwyg, 0)
 }
 
 // View dsplays the layout and its children.
@@ -127,6 +126,7 @@ func marker(b *html.Builder, itemID string, place string, check string) {
 		Data("itemId", itemID).
 		Data("place", place).
 		Data("check", check).
+		// InnerHTML("Insert Here").
 		Close()
 }
 

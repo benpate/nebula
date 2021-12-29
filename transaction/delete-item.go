@@ -13,10 +13,10 @@ type DeleteItem struct {
 func (txn DeleteItem) Execute(container *nebula.Container) (int, error) {
 
 	// Find parent index and record
-	parentID, parent := container.GetParent(txn.ItemID)
+	parentID := container.GetParent(txn.ItemID)
 
 	// Remove parent's reference to this item
-	parent.DeleteReference(txn.ItemID)
+	(*container)[parentID].DeleteReference(txn.ItemID)
 
 	// Recursively delete this item and all of its children
 	return parentID, deleteItem(container, parentID, txn.ItemID, txn.Check)
@@ -40,8 +40,8 @@ func deleteItem(container *nebula.Container, parentID int, deleteID int, check s
 	}
 
 	// validate checksum
-	if check != (*container)[parentID].Check {
-		return derp.New(derp.CodeForbiddenError, "content.Create", "Invalid Checksum")
+	if err := (*container)[parentID].Validate(check); err != nil {
+		return derp.Wrap(err, "content.Create", "Invalid Checksum")
 	}
 
 	// Remove all children from the content

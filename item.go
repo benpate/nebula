@@ -1,10 +1,6 @@
 package nebula
 
 import (
-	"math/rand"
-	"strconv"
-	"time"
-
 	"github.com/benpate/convert"
 	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
@@ -22,14 +18,12 @@ type Item struct {
 
 // NewItem returns a fully initialized Item
 func NewItem(t string, refs ...int) Item {
-	result := Item{
+	return Item{
 		Type:  t,
 		Data:  make(datatype.Map),
 		Refs:  refs,
 		Check: NewChecksum(),
 	}
-
-	return result
 }
 
 // IsEmpty returns TRUE if this item does not have a valid item.Type
@@ -57,7 +51,7 @@ func (item *Item) AddReference(id int, index int) {
 
 	// special case for empty refs.  No need to do all that work.
 	if len(item.Refs) == 0 {
-		item.Refs = append(item.Refs, id)
+		item.Refs = []int{id}
 		return
 	}
 
@@ -103,14 +97,6 @@ func (item *Item) GetPath(p path.Path) (interface{}, error) {
 	return item.Data.GetPath(p)
 }
 
-func (item *Item) SetPath(p path.Path, value interface{}) error {
-	return item.Data.SetPath(p, value)
-}
-
-func (item *Item) Set(key string, value interface{}) {
-	item.Data[key] = value
-}
-
 func (item *Item) GetString(key string) string {
 	return item.Data.GetString(key)
 }
@@ -131,9 +117,14 @@ func (item *Item) GetInterface(key string) interface{} {
 	return item.Data.GetInterface(key)
 }
 
-// NewChecksum generates a new random checksum for the content
-func NewChecksum() string {
-	seed := time.Now().Unix()
-	source := rand.NewSource(seed)
-	return strconv.FormatInt(source.Int63(), 36) + strconv.FormatInt(source.Int63(), 36)
+func (item *Item) SetPath(p path.Path, value interface{}) error {
+	return item.Data.SetPath(p, value)
+}
+
+func (item *Item) Set(key string, value interface{}) *Item {
+	if item.Data == nil {
+		item.Data = make(datatype.Map)
+	}
+	item.Data[key] = value
+	return item
 }

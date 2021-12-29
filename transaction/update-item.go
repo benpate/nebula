@@ -19,15 +19,13 @@ func (txn UpdateItem) Execute(container *nebula.Container) (int, error) {
 	}
 
 	// Find and validate the item
-	item := container.GetItem(txn.ItemID)
-
-	if err := item.Validate(txn.Check); err != nil {
+	if err := (*container)[txn.ItemID].Validate(txn.Check); err != nil {
 		return 0, derp.Wrap(err, "content.transaction.UpdateItem", "Invalid Checksum")
 	}
 
 	// Update data
 	for key, value := range txn.Data {
-		item.Set(key, value)
+		(*container)[txn.ItemID].Set(key, value)
 	}
 
 	return txn.ItemID, nil

@@ -20,14 +20,12 @@ func (txn ChangeType) Execute(container *nebula.Container) (int, error) {
 		return -1, derp.New(500, "content.transaction.ChangeType", "Index out of bounds", txn)
 	}
 
-	item := container.GetItem(txn.ItemID)
-
-	if err := item.Validate(txn.Check); err != nil {
+	if err := (*container)[txn.ItemID].Validate(txn.Check); err != nil {
 		return -1, derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
 	}
 
-	item.Type = txn.ItemType
-	item.Data = datatype.Map{}
+	(*container)[txn.ItemID].Type = txn.ItemType
+	(*container)[txn.ItemID].Data = datatype.Map{}
 
 	return txn.ItemID, nil
 }

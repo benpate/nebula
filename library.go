@@ -5,6 +5,7 @@ import (
 
 	"github.com/benpate/derp"
 	"github.com/benpate/html"
+	"github.com/davecgh/go-spew/spew"
 )
 
 type Library map[string]Widget
@@ -14,24 +15,24 @@ func NewLibrary() Library {
 }
 
 // Register adds a new named widget to the library
-func (lib Library) Register(name string, widget Widget) {
-	lib[name] = widget
+func (library *Library) Register(name string, widget Widget) {
+	(*library)[name] = widget
 }
 
 // Widget looks up a widget in the library by its name.
 // If no matching widget is found, than an empty "Nil" widget is returned
-func (lib Library) Widget(name string) Widget {
+func (library *Library) Widget(name string) Widget {
 
-	if widget, ok := lib[name]; ok {
+	if widget, ok := (*library)[name]; ok {
 		return widget
 	}
 
 	return NilWidget{}
 }
 
-func (lib Library) Init(container *Container, id int) {
-	item := container.GetItem(id)
-	widget := lib.Widget(item.Type)
+func (library *Library) Init(container *Container, id int) {
+	item := (*container)[id]
+	widget := library.Widget(item.Type)
 
 	if initer, ok := widget.(WidgetIniter); ok {
 		initer.Init(container, id)
@@ -39,11 +40,11 @@ func (lib Library) Init(container *Container, id int) {
 }
 
 // View safely renders a widget's View method (including any sub-widgets)
-func (lib Library) View(builder *html.Builder, container *Container, id int) {
+func (library *Library) View(builder *html.Builder, container *Container, id int) {
 
 	subBuilder := builder.SubTree()
 	item := container.GetItem(id)
-	widget := lib.Widget(item.Type)
+	widget := library.Widget(item.Type)
 
 	// Render the sub-widget using a sub-builder...
 	widget.View(subBuilder, container, id)
@@ -51,11 +52,13 @@ func (lib Library) View(builder *html.Builder, container *Container, id int) {
 }
 
 // Edit safely renders a widget's Edit method (including any sub-widgets)
-func (lib Library) Edit(builder *html.Builder, container *Container, id int, endpoint string) {
+func (library *Library) Edit(builder *html.Builder, container *Container, id int, endpoint string) {
 
 	subBuilder := builder.SubTree()
 	item := container.GetItem(id)
-	widget := lib.Widget(item.Type)
+	widget := library.Widget(item.Type)
+
+	spew.Dump("library.Edit", item)
 
 	// Render the sub-widget using a sub-builder...
 	widget.Edit(subBuilder, container, id, endpoint)
@@ -63,10 +66,10 @@ func (lib Library) Edit(builder *html.Builder, container *Container, id int, end
 }
 
 // Prop safely renders a widget's Prop method (including any sub-widgets)
-func (lib Library) Prop(builder *html.Builder, container *Container, id int, params url.Values, endpoint string) error {
+func (library *Library) Prop(builder *html.Builder, container *Container, id int, params url.Values, endpoint string) error {
 
 	item := container.GetItem(id)
-	widget := lib.Widget(item.Type)
+	widget := library.Widget(item.Type)
 
 	// Render the sub-widget using a sub-builder...
 	if propertyEditor, ok := widget.(PropertyEditor); ok {

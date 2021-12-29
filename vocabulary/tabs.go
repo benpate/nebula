@@ -11,20 +11,18 @@ import (
 const ItemTypeTabs = "TABS"
 
 type Tabs struct {
-	library nebula.Library
+	library *nebula.Library
 }
 
 // Init appends three empty tabs into this tab control.
 func (w Tabs) Init(container *nebula.Container, id int) {
-
-	me := container.GetItem(id)
 
 	// Let's add THREE new tabs
 	for index := 1; index <= 3; index++ {
 		itemID := container.NewItem(w.library, ItemTypeLayout) // Make a new container
 		item := container.GetItem(itemID)                      // Get a pointer to the item in the content structure
 		item.Set("label", "Tab "+convert.String(index))        // Add a custom "label" for the tab
-		me.AddReference(itemID, 0)                             // Add a reference to the new container into me
+		(*container)[id].AddReference(itemID, 0)               // Add a reference to the new container into me
 	}
 }
 
