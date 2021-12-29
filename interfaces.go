@@ -9,7 +9,7 @@ type Getter interface {
 // Setter wraps the "SetContent" method, which allows an object
 // to safely expose it's underlying container data
 type Setter interface {
-	SetContainter(Container)
+	SetContainer(Container)
 }
 
 // GetterSetter wraps both "GetContainer" and "SetContainer" methods,
