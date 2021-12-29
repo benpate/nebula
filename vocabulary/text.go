@@ -12,7 +12,7 @@ const ItemTypeText = "TEXT"
 type Text struct{}
 
 // View returns the Text widget, rendered as HTML
-func (w Text) View(b *html.Builder, container nebula.Container, id int) {
+func (w Text) View(b *html.Builder, container *nebula.Container, id int) {
 	item := container.GetItem(id)
 	result := item.GetString("text")
 	result = htmlconv.FromText(result)
@@ -20,7 +20,7 @@ func (w Text) View(b *html.Builder, container nebula.Container, id int) {
 }
 
 // Edit returns a textarea where the text content can be edited
-func (w Text) Edit(b *html.Builder, container nebula.Container, id int, endpoint string) {
+func (w Text) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
 	item := container.GetItem(id)
 
 	b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "blur")

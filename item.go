@@ -23,18 +23,13 @@ type Item struct {
 // NewItem returns a fully initialized Item
 func NewItem(t string, refs ...int) Item {
 	result := Item{
-		Type: t,
-		Data: make(datatype.Map),
-		Refs: refs,
+		Type:  t,
+		Data:  make(datatype.Map),
+		Refs:  refs,
+		Check: NewChecksum(),
 	}
 
-	result.NewChecksum()
 	return result
-}
-
-// NewHash updates the hash value for this item
-func (item *Item) NewChecksum() {
-	item.Check = NewChecksum()
 }
 
 // IsEmpty returns TRUE if this item does not have a valid item.Type
@@ -97,7 +92,7 @@ func (item *Item) UnmarshalMap(value map[string]interface{}) {
 	item.Type = convert.String(value["type"])
 	item.Refs = convert.SliceOfInt(value["refs"])
 	item.Data = convert.MapOfInterface("data")
-	item.NewChecksum()
+	item.Check = NewChecksum()
 }
 
 /*****************************************
@@ -136,7 +131,7 @@ func (item *Item) GetInterface(key string) interface{} {
 	return item.Data.GetInterface(key)
 }
 
-// NewChecksum generates a new checksum value to be inserted into a content.Item
+// NewChecksum generates a new random checksum for the content
 func NewChecksum() string {
 	seed := time.Now().Unix()
 	source := rand.NewSource(seed)

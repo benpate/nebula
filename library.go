@@ -29,7 +29,7 @@ func (lib Library) Widget(name string) Widget {
 	return NilWidget{}
 }
 
-func (lib Library) Init(container Container, id int) {
+func (lib Library) Init(container *Container, id int) {
 	item := container.GetItem(id)
 	widget := lib.Widget(item.Type)
 
@@ -39,7 +39,7 @@ func (lib Library) Init(container Container, id int) {
 }
 
 // View safely renders a widget's View method (including any sub-widgets)
-func (lib Library) View(builder *html.Builder, container Container, id int) {
+func (lib Library) View(builder *html.Builder, container *Container, id int) {
 
 	subBuilder := builder.SubTree()
 	item := container.GetItem(id)
@@ -51,7 +51,7 @@ func (lib Library) View(builder *html.Builder, container Container, id int) {
 }
 
 // Edit safely renders a widget's Edit method (including any sub-widgets)
-func (lib Library) Edit(builder *html.Builder, container Container, id int, endpoint string) {
+func (lib Library) Edit(builder *html.Builder, container *Container, id int, endpoint string) {
 
 	subBuilder := builder.SubTree()
 	item := container.GetItem(id)
@@ -63,7 +63,7 @@ func (lib Library) Edit(builder *html.Builder, container Container, id int, endp
 }
 
 // Prop safely renders a widget's Prop method (including any sub-widgets)
-func (lib Library) Prop(builder *html.Builder, container Container, id int, params url.Values, endpoint string) error {
+func (lib Library) Prop(builder *html.Builder, container *Container, id int, params url.Values, endpoint string) error {
 
 	item := container.GetItem(id)
 	widget := lib.Widget(item.Type)

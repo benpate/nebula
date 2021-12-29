@@ -29,7 +29,7 @@ func (w Tabs) Init(container *nebula.Container, id int) {
 }
 
 // View displays that tabs in HTML, along with sub-elements
-func (w Tabs) View(b *html.Builder, container nebula.Container, id int) {
+func (w Tabs) View(b *html.Builder, container *nebula.Container, id int) {
 
 	item := container.GetItem(id)
 
@@ -67,7 +67,7 @@ func (w Tabs) View(b *html.Builder, container nebula.Container, id int) {
 	b.CloseAll()
 }
 
-func (w Tabs) Edit(b *html.Builder, container nebula.Container, id int, endpoint string) {
+func (w Tabs) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
 
 	item := container.GetItem(id)
 

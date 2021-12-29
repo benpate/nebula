@@ -13,13 +13,13 @@ const ItemTypeWYSIWYG = "WYSIWYG"
 
 type WYSIWYG struct{}
 
-func (w WYSIWYG) View(b *html.Builder, container nebula.Container, id int) {
+func (w WYSIWYG) View(b *html.Builder, container *nebula.Container, id int) {
 	item := container.GetItem(id)
 	result := item.GetString("html")
 	b.WriteString(result)
 }
 
-func (w WYSIWYG) Edit(b *html.Builder, container nebula.Container, id int, endpoint string) {
+func (w WYSIWYG) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
 	item := container.GetItem(id)
 	result := item.GetString("html")
 	idString := convert.String(id)
@@ -38,6 +38,6 @@ func (w WYSIWYG) Edit(b *html.Builder, container nebula.Container, id int, endpo
 	b.CloseAll()
 }
 
-func (w WYSIWYG) Prop(container nebula.Container, id int, params url.Values) (string, error) {
+func (w WYSIWYG) Prop(container *nebula.Container, id int, params url.Values) (string, error) {
 	return "", derp.New(derp.CodeNotFoundError, "content.WYSIWYG.Prop", "Unrecognized panel", params)
 }

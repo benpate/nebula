@@ -23,7 +23,7 @@ func (w Layout) Init(container *nebula.Container, id int) {
 }
 
 // View dsplays the layout and its children.
-func (w Layout) View(b *html.Builder, container nebula.Container, id int) {
+func (w Layout) View(b *html.Builder, container *nebula.Container, id int) {
 
 	item := container.GetItem(id)
 
@@ -43,7 +43,7 @@ func (w Layout) View(b *html.Builder, container nebula.Container, id int) {
 	}
 }
 
-func (w Layout) Edit(b *html.Builder, container nebula.Container, id int, endpoint string) {
+func (w Layout) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
 
 	item := container.GetItem(id)
 	idString := strconv.Itoa(id)
@@ -122,7 +122,7 @@ func (w Layout) Prop(container *nebula.Container, id int, endpoint string, param
 
 func marker(b *html.Builder, itemID string, place string, check string) {
 	b.Div().
-		Class("layout-insert").
+		Class("nebula-layout-insert").
 		Data("hx-get", fmt.Sprintf("/.editor/itemTypes?itemId=%s&place=%s&check=%s", itemID, place, check)).
 		Data("itemId", itemID).
 		Data("place", place).
@@ -131,9 +131,11 @@ func marker(b *html.Builder, itemID string, place string, check string) {
 }
 
 // showInsertMarker returns TRUE if an layout insertion marker should be shown at this location
-func showInsertMarker(c nebula.Container, parentID int, childIndex int, place string) bool {
+func showInsertMarker(container *nebula.Container, parentID int, childIndex int, place string) bool {
 
-	switch c[parentID].GetString("style") {
+	parent := container.GetItem(parentID)
+
+	switch parent.GetString("style") {
 
 	case nebula.LayoutStyleRows:
 

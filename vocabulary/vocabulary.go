@@ -3,10 +3,10 @@ package vocabulary
 import "github.com/benpate/nebula"
 
 func All(library nebula.Library) {
-	library.Register("layout", Layout{library: library})
-	library.Register("html", HTML{})
-	library.Register("oembed", OEmbed{})
-	library.Register("tabs", Tabs{library: library})
-	library.Register("text", Text{})
-	library.Register("wysiwyg", WYSIWYG{})
+	library.Register(nebula.ItemTypeLayout, Layout{library: library})
+	library.Register(nebula.ItemTypeHTML, HTML{})
+	library.Register(nebula.ItemTypeOEmbed, OEmbed{})
+	library.Register(nebula.ItemTypeTabs, Tabs{library: library})
+	library.Register(nebula.ItemTypeText, Text{})
+	library.Register(nebula.ItemTypeWYSIWYG, WYSIWYG{})
 }

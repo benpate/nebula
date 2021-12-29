@@ -10,13 +10,13 @@ const ItemTypeHTML = "HTML"
 
 type HTML struct{}
 
-func (w HTML) View(b *html.Builder, container nebula.Container, id int) {
+func (w HTML) View(b *html.Builder, container *nebula.Container, id int) {
 	item := container.GetItem(id)
 	result := item.GetString("html")
 	b.WriteString(result)
 }
 
-func (w HTML) Edit(b *html.Builder, container nebula.Container, id int, endpoint string) {
+func (w HTML) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
 	item := container.GetItem(id)
 	result := item.GetString("html")
 	idString := convert.String(id)

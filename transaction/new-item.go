@@ -170,7 +170,7 @@ func insertRef(container *nebula.Container, parentID int, childID int, newItem n
 func replaceWithLayout(container *nebula.Container, style string, itemID int, newItem nebula.Item, position int) {
 
 	// reset the checksum on the current item
-	(*container)[itemID].NewChecksum()
+	(*container)[itemID].Check = nebula.NewChecksum()
 
 	// copy the current item to the end of the content structure
 	newLocationID := container.Len()

@@ -7,10 +7,10 @@ import (
 // NilWidget is a default/empty widget that does nothing.
 type NilWidget struct{}
 
-func (w NilWidget) View(b *html.Builder, container Container, id int) {
+func (w NilWidget) View(b *html.Builder, container *Container, id int) {
 	// Nothing to see here
 }
 
-func (w NilWidget) Edit(b *html.Builder, container Container, id int, endpoint string) {
+func (w NilWidget) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 	// Nothing to see here
 }
