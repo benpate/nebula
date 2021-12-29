@@ -3,44 +3,44 @@ package transaction
 import (
 	"testing"
 
-	"github.com/benpate/content"
 	"github.com/benpate/datatype"
+	"github.com/benpate/nebula"
 )
 
-func getTestContent() content.Content {
+func getTestContent() nebula.Container {
 
-	return content.Content{
+	return nebula.Container{
 		{
-			Type:  "CONTAINER",
+			Type:  nebula.ItemTypeLayout,
 			Refs:  []int{1, 2, 3, 4},
 			Check: "home",
 			Data: datatype.Map{
-				"style": "ROWS",
+				"style": nebula.LayoutStyleRows,
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "secret1",
 			Data: datatype.Map{
 				"html": "This is the <b>html</b>",
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "secret2",
 			Data: datatype.Map{
 				"html": "This is the second WYSIWYG section",
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "secret3",
 			Data: datatype.Map{
 				"html": "This is the third.",
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "secret4",
 			Data: datatype.Map{
 				"html": "You guessed it.  Fourth section here.",

@@ -1,9 +1,8 @@
 package transaction
 
 import (
-	"github.com/benpate/content"
-	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
+	"github.com/benpate/nebula"
 )
 
 const newItemPositionBefore = 0
@@ -18,84 +17,85 @@ type NewItem struct {
 }
 
 // Execute performs the NewItem transaction on the provided content structure
-func (txn NewItem) Execute(c *content.Content) (int, error) {
+func (txn NewItem) Execute(container *nebula.Container) (int, error) {
 
 	// Bounds check
-	if (txn.ItemID < 0) || (txn.ItemID >= len(*c)) {
+	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
 		return 0, derp.New(500, "content.transaction.NewItem", "Index out of bounds", txn)
 	}
 
-	// Hash check
-	if txn.Check != (*c)[txn.ItemID].Check {
-		return 0, derp.New(derp.CodeForbiddenError, "content.transaction.NewItem", "Invalid Checksum")
+	// Find and validate the sibling
+	sibling := container.GetItem(txn.ItemID)
+
+	if err := sibling.Validate(txn.Check); err != nil {
+		return -1, derp.Wrap(err, "content.transaction.NewItem", "Invalid Transaction")
 	}
 
 	// Create a new item to insert into the content
-	newItem := content.Item{
-		Type:  txn.ItemType,
-		Check: content.NewChecksum(),
-	}
-
-	sibling := (*c)[txn.ItemID]
+	newItem := nebula.NewItem(txn.ItemType)
 
 	// Insert at head or tail of a container
-	if sibling.Type == content.ItemTypeContainer {
+	if sibling.Type == nebula.ItemTypeLayout {
 		switch txn.Place {
-		case content.ContainerPlaceAbove:
-			if sibling.GetString("style") == content.ContainerStyleRows {
-				addFirstRef(c, txn.ItemID, newItem)
+		case nebula.LayoutPlaceAbove:
+			if sibling.GetString("style") == nebula.LayoutStyleRows {
+				addFirstRef(container, txn.ItemID, newItem)
 				return txn.ItemID, nil
 			}
 
-		case content.ContainerPlaceBelow:
-			if sibling.GetString("style") == content.ContainerStyleRows {
-				addLastRef(c, txn.ItemID, newItem)
+		case nebula.LayoutPlaceBelow:
+			if sibling.GetString("style") == nebula.LayoutStyleRows {
+				addLastRef(container, txn.ItemID, newItem)
 				return txn.ItemID, nil
 			}
 
-		case content.ContainerPlaceLeft:
-			if sibling.GetString("style") == content.ContainerStyleColumns {
-				addFirstRef(c, txn.ItemID, newItem)
+		case nebula.LayoutPlaceLeft:
+			if sibling.GetString("style") == nebula.LayoutStyleColumns {
+				addFirstRef(container, txn.ItemID, newItem)
 				return txn.ItemID, nil
 			}
 
-		case content.ContainerPlaceRight:
-			if sibling.GetString("style") == content.ContainerStyleColumns {
-				addLastRef(c, txn.ItemID, newItem)
+		case nebula.LayoutPlaceRight:
+			if sibling.GetString("style") == nebula.LayoutStyleColumns {
+				addLastRef(container, txn.ItemID, newItem)
 				return txn.ItemID, nil
 			}
 		}
 	}
 
 	// Locate the parent
-	parentIndex, parent := findParent(c, txn.ItemID)
+	parentIndex, parent := findParent(container, txn.ItemID)
+
+	if parent.IsEmpty() {
+		return -1, derp.New(derp.CodeBadRequestError, "nebula.transaction.NewItem", "Cannot find parent of item", sibling)
+	}
 
 	// If the parent is already a container (of the right direction) then
 	// we only need to add this new item into it...
-	if parent != nil && parent.Type == content.ItemTypeContainer {
+	if parent != nil && parent.Type == nebula.ItemTypeLayout {
 
 		switch txn.Place {
-		case content.ContainerPlaceAbove:
-			if parent.GetString("style") == content.ContainerStyleRows {
-				insertRef(c, parentIndex, txn.ItemID, newItem, newItemPositionBefore)
+		case nebula.LayoutPlaceAbove:
+			if parent.GetString("style") == nebula.LayoutStyleRows {
+				insertRef(container, parentIndex, txn.ItemID, newItem, newItemPositionBefore)
 				return parentIndex, nil
 			}
 
-		case content.ContainerPlaceBelow:
-			if parent.GetString("style") == content.ContainerStyleRows {
-				insertRef(c, parentIndex, txn.ItemID, newItem, newItemPositionAfter)
+		case nebula.LayoutPlaceBelow:
+			if parent.GetString("style") == nebula.LayoutStyleRows {
+				insertRef(container, parentIndex, txn.ItemID, newItem, newItemPositionAfter)
 				return parentIndex, nil
 			}
 
-		case content.ContainerPlaceLeft:
-			if parent.GetString("style") == content.ContainerStyleColumns {
-				insertRef(c, parentIndex, txn.ItemID, newItem, newItemPositionBefore)
+		case nebula.LayoutPlaceLeft:
+			if parent.GetString("style") == nebula.LayoutStyleColumns {
+				insertRef(container, parentIndex, txn.ItemID, newItem, newItemPositionBefore)
 				return parentIndex, nil
 			}
 
-		case content.ContainerPlaceRight:
-			if parent.GetString("style") == content.ContainerStyleColumns {
-				insertRef(c, parentIndex, txn.ItemID, newItem, newItemPositionAfter)
+		case nebula.LayoutPlaceRight:
+			if parent.GetString("style") == nebula.LayoutStyleColumns {
+				insertRef(container, parentIndex, txn.ItemID, newItem, newItemPositionAfter)
 				return parentIndex, nil
 			}
 		}
@@ -106,20 +106,20 @@ func (txn NewItem) Execute(c *content.Content) (int, error) {
 	// LEFT,RIGHT require a COLUMNS container
 
 	switch txn.Place {
-	case content.ContainerPlaceAbove:
-		replaceWithContainer(c, content.ContainerStyleRows, txn.ItemID, newItem, newItemPositionBefore)
+	case nebula.LayoutPlaceAbove:
+		replaceWithLayout(container, nebula.LayoutStyleRows, txn.ItemID, newItem, newItemPositionBefore)
 		return txn.ItemID, nil
 
-	case content.ContainerPlaceBelow:
-		replaceWithContainer(c, content.ContainerStyleRows, txn.ItemID, newItem, newItemPositionAfter)
+	case nebula.LayoutPlaceBelow:
+		replaceWithLayout(container, nebula.LayoutStyleRows, txn.ItemID, newItem, newItemPositionAfter)
 		return txn.ItemID, nil
 
-	case content.ContainerPlaceLeft:
-		replaceWithContainer(c, content.ContainerStyleColumns, txn.ItemID, newItem, newItemPositionBefore)
+	case nebula.LayoutPlaceLeft:
+		replaceWithLayout(container, nebula.LayoutStyleColumns, txn.ItemID, newItem, newItemPositionBefore)
 		return txn.ItemID, nil
 
-	case content.ContainerPlaceRight:
-		replaceWithContainer(c, content.ContainerStyleColumns, txn.ItemID, newItem, newItemPositionAfter)
+	case nebula.LayoutPlaceRight:
+		replaceWithLayout(container, nebula.LayoutStyleColumns, txn.ItemID, newItem, newItemPositionAfter)
 		return txn.ItemID, nil
 	}
 
@@ -132,24 +132,24 @@ func (txn NewItem) Description() string {
 	return "New Item (" + txn.ItemType + ")"
 }
 
-func addFirstRef(c *content.Content, parentID int, newItem content.Item) {
-	newID := c.AddItem(newItem)
-	oldRefs := (*c)[parentID].Refs
-	(*c)[parentID].Refs = append([]int{newID}, oldRefs...)
+func addFirstRef(container *nebula.Container, parentID int, newItem nebula.Item) {
+	newID := container.AddItem(newItem)
+	oldRefs := (*container)[parentID].Refs
+	(*container)[parentID].Refs = append([]int{newID}, oldRefs...)
 }
 
-func addLastRef(c *content.Content, parentID int, newItem content.Item) {
-	newID := c.AddItem(newItem)
-	(*c)[parentID].Refs = append((*c)[parentID].Refs, newID)
+func addLastRef(container *nebula.Container, parentID int, newItem nebula.Item) {
+	newID := container.AddItem(newItem)
+	(*container)[parentID].Refs = append((*container)[parentID].Refs, newID)
 }
 
 // insertRef inserts `newItem` into the content, and places a reference to it inside of the
 // `parentID` item, either BEFORE or AFTER the `childID` item
-func insertRef(c *content.Content, parentID int, childID int, newItem content.Item, position int) {
-	newID := c.AddItem(newItem)
+func insertRef(container *nebula.Container, parentID int, childID int, newItem nebula.Item, position int) {
+	newID := container.AddItem(newItem)
 	newRefs := make([]int, 0)
 
-	for _, itemID := range (*c)[parentID].Refs {
+	for _, itemID := range (*container)[parentID].Refs {
 		if itemID == childID {
 			if position == newItemPositionBefore {
 				newRefs = append(newRefs, newID, itemID)
@@ -161,31 +161,26 @@ func insertRef(c *content.Content, parentID int, childID int, newItem content.It
 		}
 	}
 
-	(*c)[parentID].Refs = newRefs
+	(*container)[parentID].Refs = newRefs
 }
 
 // replaceWithContainer replaces an existing content Item with a container (of a specific style),
 // moves the original item to the end of the content structure,
 // then inserts the new item into correct position of the new container (either BEFORE or AFTER the original Item)
-func replaceWithContainer(c *content.Content, style string, itemID int, newItem content.Item, position int) {
+func replaceWithLayout(container *nebula.Container, style string, itemID int, newItem nebula.Item, position int) {
 
 	// reset the checksum on the current item
-	(*c)[itemID].NewChecksum()
+	(*container)[itemID].NewChecksum()
 
 	// copy the current item to the end of the content structure
-	newLocationID := len(*c)
-	*c = append(*c, (*c)[itemID])
+	newLocationID := container.Len()
+	*container = append(*container, (*container)[itemID])
 
-	// insert a container in the spot where the original content was
-	(*c)[itemID] = content.Item{
-		Type:  content.ItemTypeContainer,
-		Refs:  []int{newLocationID},
-		Check: content.NewChecksum(),
-		Data: datatype.Map{
-			"style": style,
-		},
-	}
+	// insert a new layout in the spot where the original content was
+	layout := nebula.NewItem(nebula.ItemTypeLayout, newLocationID)
+	layout.Set("style", style)
+	(*container)[itemID] = layout
 
 	// insert a reference to the newItem into the new container
-	insertRef(c, itemID, newLocationID, newItem, position)
+	insertRef(container, itemID, newLocationID, newItem, position)
 }

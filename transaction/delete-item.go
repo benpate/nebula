@@ -1,8 +1,8 @@
 package transaction
 
 import (
-	"github.com/benpate/content"
 	"github.com/benpate/derp"
+	"github.com/benpate/nebula"
 )
 
 type DeleteItem struct {
@@ -10,16 +10,16 @@ type DeleteItem struct {
 	Check  string `json:"check"  form:"check"`
 }
 
-func (txn DeleteItem) Execute(c *content.Content) (int, error) {
+func (txn DeleteItem) Execute(container *nebula.Container) (int, error) {
 
 	// Find parent index and record
-	parentID, parent := c.GetParent(txn.ItemID)
+	parentID, parent := container.GetParent(txn.ItemID)
 
 	// Remove parent's reference to this item
 	parent.DeleteReference(txn.ItemID)
 
 	// Recursively delete this item and all of its children
-	return parentID, deleteItem(c, parentID, txn.ItemID, txn.Check)
+	return parentID, deleteItem(container, parentID, txn.ItemID, txn.Check)
 }
 
 func (txn DeleteItem) Description() string {
@@ -27,33 +27,33 @@ func (txn DeleteItem) Description() string {
 }
 
 // DeleteReference removes an item from a parent
-func deleteItem(c *content.Content, parentID int, deleteID int, check string) error {
+func deleteItem(container *nebula.Container, parentID int, deleteID int, check string) error {
 
 	// Bounds check
-	if (parentID < 0) || (parentID >= len(*c)) {
+	if (parentID < 0) || (parentID >= container.Len()) {
 		return derp.New(500, "content.Create", "Parent index out of bounds", parentID, deleteID)
 	}
 
 	// Bounds check
-	if (deleteID < 0) || (deleteID >= len(*c)) {
+	if (deleteID < 0) || (deleteID >= container.Len()) {
 		return derp.New(500, "content.Create", "Child index out of bounds", parentID, deleteID)
 	}
 
 	// validate checksum
-	if check != (*c)[parentID].Check {
+	if check != (*container)[parentID].Check {
 		return derp.New(derp.CodeForbiddenError, "content.Create", "Invalid Checksum")
 	}
 
 	// Remove all children from the content
-	if len((*c)[deleteID].Refs) > 0 {
-		childCheck := (*c)[deleteID].Check
-		for _, childID := range (*c)[deleteID].Refs {
-			deleteItem(c, deleteID, childID, childCheck)
+	if len((*container)[deleteID].Refs) > 0 {
+		childCheck := (*container)[deleteID].Check
+		for _, childID := range (*container)[deleteID].Refs {
+			deleteItem(container, deleteID, childID, childCheck)
 		}
 	}
 
 	// Remove the deleted item
-	(*c)[deleteID] = content.Item{}
+	(*container)[deleteID] = nebula.Item{}
 
 	// Success!
 	return nil

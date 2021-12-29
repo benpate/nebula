@@ -1,27 +1,49 @@
-package content
+package nebula
 
-const ItemTypeContainer = "CONTAINER"
+/************************
+ *  Item Type
+ ************************/
 
+// ItemTypeLayout represents a layout container
+const ItemTypeLayout = "LAYOUT"
+
+// ItemTypeHTML represents HTML code edited in a plain text editor
 const ItemTypeHTML = "HTML"
 
+// ItemTypeOEmbed represents an embedded resource (image, video, object)
 const ItemTypeOEmbed = "OEMBED"
 
+// ItemTypeTabs represents a tab container
 const ItemTypeTabs = "TABS"
 
+// ItemTypeText represents plain text
 const ItemTypeText = "TEXT"
 
+// ItemTypeWYSIWYG represents HTML edited in a what-you-see-is-what-you-get editor
 const ItemTypeWYSIWYG = "WYSIWYG"
 
-////////////////
+/************************
+ *  Layout Style
+ ************************/
 
-const ContainerStyleRows = "ROWS"
+// LayoutStyleRows represents a group of content items organized into rows
+const LayoutStyleRows = "ROWS"
 
-const ContainerStyleColumns = "COLS"
+// LayoutStyle Colums represents a group of content items organized into responsive columns
+const LayoutStyleColumns = "COLS"
 
-const ContainerPlaceAbove = "ABOVE"
+/************************
+ *  Layout Place
+ ************************/
 
-const ContainerPlaceBelow = "BELOW"
+// LayoutPlaceAbove represents the placement of a new item above the reference item
+const LayoutPlaceAbove = "ABOVE"
 
-const ContainerPlaceLeft = "LEFT"
+// LayoutPlaceAbove represents the placement of a new item below the reference item
+const LayoutPlaceBelow = "BELOW"
 
-const ContainerPlaceRight = "RIGHT"
+// LayoutPlaceAbove represents the placement of a new item to the left of the reference item
+const LayoutPlaceLeft = "LEFT"
+
+// LayoutPlaceAbove represents the placement of a new item to the right of the reference item
+const LayoutPlaceRight = "RIGHT"

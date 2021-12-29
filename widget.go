@@ -1,4 +1,4 @@
-package content
+package nebula
 
 import (
 	"net/url"
@@ -9,23 +9,23 @@ import (
 type Widget interface {
 
 	// View writes the widget HTML into the provided HTML builder
-	View(*html.Builder, Content, int)
+	View(*html.Builder, Container, int)
 
 	// Edit writes an editable widget into the provided HTML builder
-	Edit(*html.Builder, Content, int, string)
+	Edit(*html.Builder, Container, int, string)
 }
 
 type WidgetIniter interface {
 
-	// Init is called on every new Item in the content data.
+	// Init is called on every new Item in the container data.
 	// It allows widgets to customize their internal data before use.
-	Init(Content, int)
+	Init(Container, int)
 }
 
 // PropertyEditor wraps the Prop method, which allows widgets to
-// define custom modals that perform content-specific actions
+// define custom modals that perform container-specific actions
 type PropertyEditor interface {
 
 	// Prop returns HTML for a property editor
-	Prop(*html.Builder, Content, int, url.Values, string) error
+	Prop(*html.Builder, Container, int, url.Values, string) error
 }

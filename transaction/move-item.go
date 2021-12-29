@@ -1,8 +1,8 @@
 package transaction
 
 import (
-	"github.com/benpate/content"
 	"github.com/benpate/derp"
+	"github.com/benpate/nebula"
 )
 
 type MoveItem struct {
@@ -12,10 +12,10 @@ type MoveItem struct {
 	Check       string `json:"check"       form:"check"`
 }
 
-func (txn MoveItem) Execute(c *content.Content) (int, error) {
-	return 0, derp.New(derp.CodeBadRequestError, "content.transaction.MoveItem", "Unimplemented")
+func (txn MoveItem) Execute(container *nebula.Container) (int, error) {
+	return -1, derp.New(derp.CodeBadRequestError, "content.transaction.MoveItem", "Unimplemented")
 }
 
 func (txn MoveItem) Description() string {
-	return "Move Item"
+	return "Move Item Unimplemented"
 }

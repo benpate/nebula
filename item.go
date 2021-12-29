@@ -1,4 +1,4 @@
-package content
+package nebula
 
 import (
 	"math/rand"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/benpate/convert"
 	"github.com/benpate/datatype"
+	"github.com/benpate/derp"
 	"github.com/benpate/path"
 )
 
@@ -34,6 +35,26 @@ func NewItem(t string, refs ...int) Item {
 // NewHash updates the hash value for this item
 func (item *Item) NewChecksum() {
 	item.Check = NewChecksum()
+}
+
+// IsEmpty returns TRUE if this item does not have a valid item.Type
+func (item *Item) IsEmpty() bool {
+	return (item == nil) || (item.Type == "")
+}
+
+// Validate checks that an item has a type (meaning it has been found by container.GetItem)
+// and has a valid checksum
+func (item *Item) Validate(checksum string) error {
+
+	if item.IsEmpty() {
+		return derp.New(derp.CodeBadRequestError, "nebula.Item.Validate", "Item is empty")
+	}
+
+	if item.Check != checksum {
+		return derp.New(derp.CodeForbiddenError, "nebula.Item.Validate", "Invalid checksum", checksum)
+	}
+
+	return nil
 }
 
 // AddReference adds a new "sub-item" reference to this item

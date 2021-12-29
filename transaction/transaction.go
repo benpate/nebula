@@ -1,9 +1,9 @@
 package transaction
 
 import (
-	"github.com/benpate/content"
 	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
+	"github.com/benpate/nebula"
 )
 
 type Transaction interface {
@@ -13,7 +13,7 @@ type Transaction interface {
 	// with an error (if present).  Implementations can use this to
 	// selectively re-render portions of the content structure without
 	// reloading the entire page.
-	Execute(*content.Content) (int, error)
+	Execute(*nebula.Container) (int, error)
 
 	// Description returns a developer-friendly string that identifies
 	// the action that was performed.

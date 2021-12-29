@@ -1,9 +1,9 @@
 package transaction
 
 import (
-	"github.com/benpate/content"
 	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
+	"github.com/benpate/nebula"
 )
 
 type ChangeType struct {
@@ -13,20 +13,21 @@ type ChangeType struct {
 }
 
 // Execute performs the ChangeType transaction on the provided content structure
-func (txn ChangeType) Execute(c *content.Content) (int, error) {
+func (txn ChangeType) Execute(container *nebula.Container) (int, error) {
 
 	// Bounds check
-	if (txn.ItemID < 0) || (txn.ItemID >= len(*c)) {
-		return 0, derp.New(500, "content.transaction.ChangeType", "Index out of bounds", txn)
+	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
+		return -1, derp.New(500, "content.transaction.ChangeType", "Index out of bounds", txn)
 	}
 
-	// Hash check
-	if txn.Check != (*c)[txn.ItemID].Check {
-		return 0, derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
+	item := container.GetItem(txn.ItemID)
+
+	if err := item.Validate(txn.Check); err != nil {
+		return -1, derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
 	}
 
-	(*c)[txn.ItemID].Type = txn.ItemType
-	(*c)[txn.ItemID].Data = datatype.Map{}
+	item.Type = txn.ItemType
+	item.Data = datatype.Map{}
 
 	return txn.ItemID, nil
 }

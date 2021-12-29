@@ -1,11 +1,9 @@
 package vocabulary
 
-import (
-	"github.com/benpate/content"
-)
+import "github.com/benpate/nebula"
 
-func All(library content.Library) {
-	library.Register("container", Container{library: library})
+func All(library nebula.Library) {
+	library.Register("layout", Layout{library: library})
 	library.Register("html", HTML{})
 	library.Register("oembed", OEmbed{})
 	library.Register("tabs", Tabs{library: library})

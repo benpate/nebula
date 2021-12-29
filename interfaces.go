@@ -1,19 +1,19 @@
-package content
+package nebula
 
-// Getter wraps the "GetContent" method, which allows an object
-// to safely expose it's underlying content data
+// Getter wraps the "GetContainer" method, which allows an object
+// to safely expose it's underlying container data
 type Getter interface {
-	GetContent() Content
+	GetContainer() Container
 }
 
 // Setter wraps the "SetContent" method, which allows an object
-// to safely expose it's underlying content data
+// to safely expose it's underlying container data
 type Setter interface {
-	SetContent(Content)
+	SetContainter(Container)
 }
 
-// GetterSetter wraps both "GetContent" and "SetContent" methods,
-// allowing read/write access to an object's underlying content data.
+// GetterSetter wraps both "GetContainer" and "SetContainer" methods,
+// allowing read/write access to an object's underlying container data.
 type GetterSetter interface {
 	Getter
 	Setter

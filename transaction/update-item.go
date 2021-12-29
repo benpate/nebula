@@ -1,8 +1,8 @@
 package transaction
 
 import (
-	"github.com/benpate/content"
 	"github.com/benpate/derp"
+	"github.com/benpate/nebula"
 )
 
 type UpdateItem struct {
@@ -11,20 +11,25 @@ type UpdateItem struct {
 	Check  string                 `json:"hash"   form:"hash"`
 }
 
-func (txn UpdateItem) Execute(c *content.Content) (int, error) {
+func (txn UpdateItem) Execute(container *nebula.Container) (int, error) {
 
 	// Bounds check
-	if (txn.ItemID < 0) || (txn.ItemID >= len(*c)) {
+	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
 		return 0, derp.New(500, "content.transaction.UpdateItem", "Index out of bounds", txn.ItemID)
 	}
 
-	// Validate checksum
-	if txn.Check != (*c)[txn.ItemID].Check {
-		return 0, derp.New(derp.CodeForbiddenError, "content.transaction.UpdateItem", "Invalid Checksum")
+	// Find and validate the item
+	item := container.GetItem(txn.ItemID)
+
+	if err := item.Validate(txn.Check); err != nil {
+		return 0, derp.Wrap(err, "content.transaction.UpdateItem", "Invalid Checksum")
 	}
 
 	// Update data
-	(*c)[txn.ItemID].Data = txn.Data
+	for key, value := range txn.Data {
+		item.Set(key, value)
+	}
+
 	return txn.ItemID, nil
 }
 

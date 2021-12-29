@@ -1,14 +1,16 @@
 package transaction
 
-import "github.com/benpate/content"
+import (
+	"github.com/benpate/nebula"
+)
 
 // findParent returns the item that contains the provided itemID.  If no
 // container is found, then (-1, nil) is returned
-func findParent(c *content.Content, itemID int) (int, *content.Item) {
+func findParent(container *nebula.Container, itemID int) (int, *nebula.Item) {
 
-	for itemIndex := range *c {
-		if refIndex := findChildPosition(c, itemIndex, itemID); refIndex != -1 {
-			return itemIndex, &(*c)[itemIndex]
+	for itemIndex := range *container {
+		if refIndex := findChildPosition(container, itemIndex, itemID); refIndex != -1 {
+			return itemIndex, &(*container)[itemIndex]
 		}
 	}
 
@@ -16,9 +18,9 @@ func findParent(c *content.Content, itemID int) (int, *content.Item) {
 }
 
 // findChildPosition returns the position of a childID in the ref array.
-func findChildPosition(c *content.Content, itemID int, childID int) int {
-	for refIndex := range (*c)[itemID].Refs {
-		if (*c)[itemID].Refs[refIndex] == childID {
+func findChildPosition(container *nebula.Container, itemID int, childID int) int {
+	for refIndex := range (*container)[itemID].Refs {
+		if (*container)[itemID].Refs[refIndex] == childID {
 			return refIndex
 		}
 	}

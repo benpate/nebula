@@ -3,24 +3,24 @@ package transaction
 import (
 	"testing"
 
-	"github.com/benpate/content"
 	"github.com/benpate/datatype"
+	"github.com/benpate/nebula"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAddItem_InsertContainer_Above(t *testing.T) {
 
-	c := content.Content{
+	c := nebula.Container{
 		{
-			Type:  "CONTAINER",
+			Type:  nebula.ItemTypeLayout,
 			Check: "123",
 			Refs:  []int{1},
 			Data: datatype.Map{
-				"style": "ROWS",
+				"style": nebula.LayoutStyleRows,
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "123",
 			Data: datatype.Map{
 				"html": "This is the first item",
@@ -29,46 +29,47 @@ func TestAddItem_InsertContainer_Above(t *testing.T) {
 	}
 	txn := NewItem{
 		ItemID:   1,
-		Place:    "ABOVE",
-		ItemType: "HTML",
+		Place:    nebula.LayoutPlaceAbove,
+		ItemType: nebula.ItemTypeHTML,
 		Check:    "123",
 	}
 
 	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
-	require.Equal(t, 2, id)
-	require.Equal(t, "CONTAINER", c[0].Type)
-	require.Equal(t, "ROWS", c[0].Data["style"])
+	require.Equal(t, 3, c.Len())
+	require.Equal(t, 0, id)
+	require.Equal(t, nebula.ItemTypeLayout, c[0].Type)
+	require.Equal(t, nebula.LayoutStyleRows, c[0].Data["style"])
 	require.Equal(t, []int{2, 1}, c[0].Refs)
 
-	require.Equal(t, "WYSIWYG", c[1].Type)
+	require.Equal(t, nebula.ItemTypeWYSIWYG, c[1].Type)
 	require.Equal(t, "This is the first item", c[1].Data["html"])
 
-	require.Equal(t, "HTML", c[2].Type)
+	require.Equal(t, nebula.ItemTypeHTML, c[2].Type)
 	require.Empty(t, c[2].Data["html"])
 }
 
 func TestAddItem_InsertContainer_Above2(t *testing.T) {
 
-	c := content.Content{
+	c := nebula.Container{
 		{
-			Type:  "CONTAINER",
+			Type:  nebula.ItemTypeLayout,
 			Check: "123",
 			Refs:  []int{1, 2},
 			Data: datatype.Map{
-				"style": "ROWS",
+				"style": nebula.LayoutStyleRows,
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "123",
 			Data: datatype.Map{
 				"html": "This is the first item",
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "123",
 			Data: datatype.Map{
 				"html": "This is the second item",
@@ -77,42 +78,43 @@ func TestAddItem_InsertContainer_Above2(t *testing.T) {
 	}
 	txn := NewItem{
 		ItemID:   2,
-		Place:    "ABOVE",
-		ItemType: "HTML",
+		Place:    nebula.LayoutPlaceAbove,
+		ItemType: nebula.ItemTypeHTML,
 		Check:    "123",
 	}
 
 	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
-	require.Equal(t, 3, id)
-	require.Equal(t, "CONTAINER", c[0].Type)
-	require.Equal(t, "ROWS", c[0].Data["style"])
+	require.Equal(t, 4, c.Len())
+	require.Equal(t, 0, id)
+	require.Equal(t, nebula.ItemTypeLayout, c[0].Type)
+	require.Equal(t, nebula.LayoutStyleRows, c[0].Data["style"])
 	require.Equal(t, []int{1, 3, 2}, c[0].Refs)
 
-	require.Equal(t, "WYSIWYG", c[1].Type)
+	require.Equal(t, nebula.ItemTypeWYSIWYG, c[1].Type)
 	require.Equal(t, "This is the first item", c[1].Data["html"])
 
-	require.Equal(t, "WYSIWYG", c[2].Type)
+	require.Equal(t, nebula.ItemTypeWYSIWYG, c[2].Type)
 	require.Equal(t, "This is the second item", c[2].Data["html"])
 
-	require.Equal(t, "HTML", c[3].Type)
+	require.Equal(t, nebula.ItemTypeHTML, c[3].Type)
 	require.Empty(t, c[3].Data["html"])
 }
 
 func TestAddItem_InsertContainer_Below(t *testing.T) {
 
-	c := content.Content{
+	c := nebula.Container{
 		{
-			Type:  "CONTAINER",
+			Type:  nebula.ItemTypeLayout,
 			Check: "123",
 			Refs:  []int{1},
 			Data: datatype.Map{
-				"style": "ROWS",
+				"style": nebula.LayoutStyleRows,
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "123",
 			Data: datatype.Map{
 				"html": "This is the first item",
@@ -121,39 +123,40 @@ func TestAddItem_InsertContainer_Below(t *testing.T) {
 	}
 	txn := NewItem{
 		ItemID:   1,
-		Place:    "BELOW",
-		ItemType: "HTML",
+		Place:    nebula.LayoutPlaceBelow,
+		ItemType: nebula.ItemTypeHTML,
 		Check:    "123",
 	}
 
 	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
-	require.Equal(t, 2, id)
-	require.Equal(t, "CONTAINER", c[0].Type)
-	require.Equal(t, "ROWS", c[0].Data["style"])
+	require.Equal(t, 3, c.Len())
+	require.Equal(t, 0, id)
+	require.Equal(t, nebula.ItemTypeLayout, c[0].Type)
+	require.Equal(t, nebula.LayoutStyleRows, c[0].Data["style"])
 	require.Equal(t, []int{1, 2}, c[0].Refs)
 
-	require.Equal(t, "WYSIWYG", c[1].Type)
+	require.Equal(t, nebula.ItemTypeWYSIWYG, c[1].Type)
 	require.Equal(t, "This is the first item", c[1].Data["html"])
 
-	require.Equal(t, "HTML", c[2].Type)
+	require.Equal(t, nebula.ItemTypeHTML, c[2].Type)
 	require.Empty(t, c[2].Data["html"])
 }
 
 func TestAddItem_InsertContainer_Left(t *testing.T) {
 
-	c := content.Content{
+	c := nebula.Container{
 		{
-			Type:  "CONTAINER",
+			Type:  nebula.ItemTypeLayout,
 			Check: "123",
 			Refs:  []int{1},
 			Data: datatype.Map{
-				"style": "COLS",
+				"style": nebula.LayoutStyleColumns,
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "123",
 			Data: datatype.Map{
 				"html": "This is the first item",
@@ -162,39 +165,40 @@ func TestAddItem_InsertContainer_Left(t *testing.T) {
 	}
 	txn := NewItem{
 		ItemID:   1,
-		Place:    "LEFT",
-		ItemType: "HTML",
+		Place:    nebula.LayoutPlaceLeft,
+		ItemType: nebula.ItemTypeHTML,
 		Check:    "123",
 	}
 
 	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
-	require.Equal(t, 2, id)
-	require.Equal(t, "CONTAINER", c[0].Type)
-	require.Equal(t, "COLS", c[0].Data["style"])
+	require.Equal(t, 3, c.Len())
+	require.Equal(t, 0, id)
+	require.Equal(t, nebula.ItemTypeLayout, c[0].Type)
+	require.Equal(t, nebula.LayoutStyleColumns, c[0].Data["style"])
 	require.Equal(t, []int{2, 1}, c[0].Refs)
 
-	require.Equal(t, "WYSIWYG", c[1].Type)
+	require.Equal(t, nebula.ItemTypeWYSIWYG, c[1].Type)
 	require.Equal(t, "This is the first item", c[1].Data["html"])
 
-	require.Equal(t, "HTML", c[2].Type)
+	require.Equal(t, nebula.ItemTypeHTML, c[2].Type)
 	require.Empty(t, c[2].Data["html"])
 }
 
 func TestAddItem_InsertContainer_Right(t *testing.T) {
 
-	c := content.Content{
+	c := nebula.Container{
 		{
-			Type:  "CONTAINER",
+			Type:  nebula.ItemTypeLayout,
 			Check: "123",
 			Refs:  []int{1},
 			Data: datatype.Map{
-				"style": "COLS",
+				"style": nebula.LayoutStyleColumns,
 			},
 		},
 		{
-			Type:  "WYSIWYG",
+			Type:  nebula.ItemTypeWYSIWYG,
 			Check: "123",
 			Data: datatype.Map{
 				"html": "This is the first item",
@@ -203,22 +207,23 @@ func TestAddItem_InsertContainer_Right(t *testing.T) {
 	}
 	txn := NewItem{
 		ItemID:   1,
-		Place:    "RIGHT",
-		ItemType: "HTML",
+		Place:    nebula.LayoutPlaceRight,
+		ItemType: nebula.ItemTypeHTML,
 		Check:    "123",
 	}
 
 	id, err := txn.Execute(&c)
 
 	require.Nil(t, err)
-	require.Equal(t, 2, id)
-	require.Equal(t, "CONTAINER", c[0].Type)
-	require.Equal(t, "COLS", c[0].Data["style"])
+	require.Equal(t, 3, c.Len())
+	require.Equal(t, 0, id)
+	require.Equal(t, nebula.ItemTypeLayout, c[0].Type)
+	require.Equal(t, nebula.LayoutStyleColumns, c[0].Data["style"])
 	require.Equal(t, []int{1, 2}, c[0].Refs)
 
-	require.Equal(t, "WYSIWYG", c[1].Type)
+	require.Equal(t, nebula.ItemTypeWYSIWYG, c[1].Type)
 	require.Equal(t, "This is the first item", c[1].Data["html"])
 
-	require.Equal(t, "HTML", c[2].Type)
+	require.Equal(t, nebula.ItemTypeHTML, c[2].Type)
 	require.Empty(t, c[2].Data["html"])
 }

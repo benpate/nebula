@@ -1,17 +1,17 @@
 package vocabulary
 
 import (
-	"github.com/benpate/content"
 	"github.com/benpate/html"
+	"github.com/benpate/nebula"
 )
 
 const ItemTypeOEmbed = "OEMBED"
 
 type OEmbed struct{}
 
-func (w OEmbed) View(b *html.Builder, c content.Content, id int) {
+func (w OEmbed) View(b *html.Builder, container nebula.Container, id int) {
 
-	item := c.GetItem(id)
+	item := container.GetItem(id)
 
 	// If the oEmbed data includes HTML, then just use that and be done.
 	if html := item.GetString("html"); html != "" {
@@ -30,7 +30,7 @@ func (w OEmbed) View(b *html.Builder, c content.Content, id int) {
 	}
 }
 
-func (w OEmbed) Edit(b *html.Builder, c content.Content, id int, endpoint string) {
+func (w OEmbed) Edit(b *html.Builder, container nebula.Container, id int, endpoint string) {
 	script := "install Uploader(endpoint:'" + endpoint + "')"
 	b.Div().Script(script).EndBracket()
 	b.H3().InnerHTML("Drag Images Here To Upload").Close()

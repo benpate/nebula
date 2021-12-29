@@ -1,4 +1,4 @@
-module github.com/benpate/content
+module github.com/benpate/nebula
 
 go 1.17
 
