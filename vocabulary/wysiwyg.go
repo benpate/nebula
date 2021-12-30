@@ -32,8 +32,28 @@ func (w WYSIWYG) Edit(b *html.Builder, container *nebula.Container, id int, endp
 	b.Input("hidden", "type").Value("update-item")
 	b.Input("hidden", "itemId").Value(idString)
 	b.Input("hidden", "check").Value(item.Check)
-	b.Input("hidden", "html").Value("").ID("html-" + idString)
-	b.Div().Script("install wysiwyg(id:'html-" + idString + "')").InnerHTML(result).Close()
+
+	b.Div().Class("wysiwyg").Script("install wysiwyg(name:'html') install hotkey")
+	b.Div().Class("wysiwyg-toolbar").ID("toolbar-" + idString)
+	{
+		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
+		b.Button().Data("command", "bold").Data("hotkey", "b").InnerHTML("B").Close()
+		b.Button().Data("command", "italic").Data("hotkey", "i").InnerHTML("I").Close()
+		b.Button().Data("command", "underline").Data("hotkey", "u").InnerHTML("U").Close()
+		b.Close()
+	}
+	{
+		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
+		b.Button().Data("command", "formatBlock").Data("command-value", "h1").InnerHTML("H1").Close()
+		b.Button().Data("command", "formatBlock").Data("command-value", "h2").InnerHTML("H2").Close()
+		b.Button().Data("command", "formatBlock").Data("command-value", "h3").InnerHTML("H3").Close()
+		b.Button().Data("command", "formatBlock").Data("command-value", "p").InnerHTML("P").Close()
+
+		b.Close()
+	}
+	b.Close()
+
+	b.Div().Class("wysiwyg-editor").InnerHTML(result)
 	// b.Div().Style("min-height:1em;").Script("on click 1 call makeWYSIWYG(me)").InnerHTML(result)
 
 	b.CloseAll()
