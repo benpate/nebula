@@ -3,7 +3,6 @@ package nebula
 import (
 	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
-	"github.com/benpate/nebula"
 )
 
 type ChangeType struct {
@@ -13,7 +12,7 @@ type ChangeType struct {
 }
 
 // Execute performs the ChangeType transaction on the provided content structure
-func (txn ChangeType) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
+func (txn ChangeType) Execute(library *Library, container *Container) (int, error) {
 
 	// Bounds check
 	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {

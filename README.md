@@ -2,8 +2,8 @@
 
 [![GoDoc](http://img.shields.io/badge/go-documentation-blue.svg?style=flat-square)](https://pkg.go.dev/github.com/benpate/nebula)
 [![Go Report Card](https://goreportcard.com/badge/github.com/benpate/nebula?style=flat-square)](https://goreportcard.com/report/github.com/benpate/nebula)
-[![Build Status](http://img.shields.io/travis/benpate/nebula.svg?style=flat-square)](https://travis-ci.com/benpate/nebula)
-[![Codecov](https://img.shields.io/codecov/c/github/benpate/nebula.svg?style=flat-square)](https://codecov.io/gh/benpate/nebula)
+[![Build Status](http://img.shields.io/travis/benpate/svg?style=flat-square)](https://travis-ci.com/benpate/nebula)
+[![Codecov](https://img.shields.io/codecov/c/github/benpate/svg?style=flat-square)](https://codecov.io/gh/benpate/nebula)
 ![Version](https://img.shields.io/github/v/release/benpate/nebula?include_prereleases&style=flat-square&color=brightgreen)
 ## A loosely coupled library for building and editing HTML content
 

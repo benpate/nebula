@@ -4,24 +4,21 @@ import (
 	"testing"
 
 	"github.com/benpate/datatype"
-	"github.com/benpate/nebula"
-	"github.com/benpate/nebula/transaction"
-	"github.com/benpate/nebula/vocabulary"
 	"github.com/stretchr/testify/require"
 )
 
-func getTestColumns() nebula.Container {
+func getTestColumns() Container {
 
-	return nebula.Container{
+	return Container{
 		{
-			Type: nebula.ItemTypeLayout,
+			Type: ItemTypeLayout,
 			Refs: []int{1},
 			Data: datatype.Map{
-				"style": nebula.LayoutStyleColumns,
+				"style": LayoutStyleColumns,
 			},
 		},
 		{
-			Type: nebula.ItemTypeHTML,
+			Type: ItemTypeHTML,
 			Data: datatype.Map{
 				"html": "FIRST HTML BLOCK",
 			},
@@ -31,13 +28,12 @@ func getTestColumns() nebula.Container {
 
 func TestAddItem_Columns_RIGHT(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestColumns()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -58,7 +54,7 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -80,13 +76,12 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 
 func TestAddItem_Columns_LEFT(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestColumns()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -107,7 +102,7 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",

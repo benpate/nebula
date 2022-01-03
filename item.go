@@ -36,11 +36,11 @@ func (item *Item) IsEmpty() bool {
 func (item *Item) Validate(checksum string) error {
 
 	if item.IsEmpty() {
-		return derp.New(derp.CodeBadRequestError, "nebula.Item.Validate", "Item is empty")
+		return derp.New(derp.CodeBadRequestError, "Item.Validate", "Item is empty")
 	}
 
 	if item.Check != checksum {
-		return derp.New(derp.CodeForbiddenError, "nebula.Item.Validate", "Invalid checksum", checksum)
+		return derp.New(derp.CodeForbiddenError, "Item.Validate", "Invalid checksum", checksum)
 	}
 
 	return nil

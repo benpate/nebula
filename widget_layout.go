@@ -7,23 +7,29 @@ import (
 	"github.com/benpate/convert"
 	"github.com/benpate/first"
 	"github.com/benpate/html"
-	"github.com/benpate/nebula"
 )
 
+// ItemTypeLayout represents a Layout widget
 const ItemTypeLayout = "LAYOUT"
 
+// LayoutStyleRows represents a group of content items organized into rows
+const LayoutStyleRows = "ROWS"
+
+// LayoutStyle Colums represents a group of content items organized into responsive columns
+const LayoutStyleColumns = "COLS"
+
 type Layout struct {
-	library *nebula.Library
+	library *Library
 }
 
 // Init adds a child WYSIWYG element
-func (w Layout) Init(container *nebula.Container, id int) {
+func (w Layout) Init(container *Container, id int) {
 	wysiwyg := container.NewItemWithInit(w.library, ItemTypeWYSIWYG, nil)
 	(*container)[id].AddReference(wysiwyg, 0)
 }
 
 // View dsplays the layout and its children.
-func (w Layout) View(b *html.Builder, container *nebula.Container, layoutID int) {
+func (w Layout) View(b *html.Builder, container *Container, layoutID int) {
 
 	item := container.GetItem(layoutID)
 
@@ -43,11 +49,11 @@ func (w Layout) View(b *html.Builder, container *nebula.Container, layoutID int)
 	}
 }
 
-func (w Layout) Edit(b *html.Builder, container *nebula.Container, layoutID int, endpoint string) {
+func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoint string) {
 
 	layout := container.GetItem(layoutID)
 	layoutIDString := strconv.Itoa(layoutID)
-	style := first.String(layout.GetString("style"), nebula.LayoutStyleRows)
+	style := first.String(layout.GetString("style"), LayoutStyleRows)
 
 	b.Div().
 		Class("nebula-layout").
@@ -55,32 +61,32 @@ func (w Layout) Edit(b *html.Builder, container *nebula.Container, layoutID int,
 		Data("size", strconv.Itoa(len(layout.Refs))).
 		Data("id", layoutIDString)
 
-	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceAbove, layout.Check, endpoint)
-	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceLeft, layout.Check, endpoint)
+	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceAbove, layout.Check, endpoint)
+	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceLeft, layout.Check, endpoint)
 
 	for _, childID := range layout.Refs {
 		childIDString := strconv.Itoa(childID)
 
 		b.Div().Class("nebula-layout-item")
 
-		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceAbove, layout.Check, endpoint)
-		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceLeft, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceAbove, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceLeft, layout.Check, endpoint)
 
 		w.library.Edit(b, container, childID, endpoint)
 
-		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceBelow, layout.Check, endpoint)
-		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceRight, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceBelow, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceRight, layout.Check, endpoint)
 
 		b.Close()
 	}
 
-	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceBelow, layout.Check, endpoint)
-	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceRight, layout.Check, endpoint)
+	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceBelow, layout.Check, endpoint)
+	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceRight, layout.Check, endpoint)
 
 	b.Close()
 }
 
-func (w Layout) Prop(b *html.Builder, container *nebula.Container, id int, endpoint string, params url.Values) error {
+func (w Layout) Prop(b *html.Builder, container *Container, id int, endpoint string, params url.Values) error {
 
 	b.H1().InnerHTML("Add Another Section").Close()
 

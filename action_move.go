@@ -2,7 +2,6 @@ package nebula
 
 import (
 	"github.com/benpate/derp"
-	"github.com/benpate/nebula"
 )
 
 type MoveItem struct {
@@ -12,6 +11,6 @@ type MoveItem struct {
 	Check       string `json:"check"       form:"check"`
 }
 
-func (txn MoveItem) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
+func (txn MoveItem) Execute(library *Library, container *Container) (int, error) {
 	return -1, derp.New(derp.CodeBadRequestError, "content.transaction.MoveItem", "Unimplemented")
 }

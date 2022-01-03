@@ -2,7 +2,6 @@ package nebula
 
 import (
 	"github.com/benpate/derp"
-	"github.com/benpate/nebula"
 )
 
 type DeleteItem struct {
@@ -10,7 +9,7 @@ type DeleteItem struct {
 	Check  string `json:"check"  form:"check"`
 }
 
-func (txn DeleteItem) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
+func (txn DeleteItem) Execute(library *Library, container *Container) (int, error) {
 
 	// Find parent index and record
 	parentID := container.GetParent(txn.ItemID)
@@ -23,7 +22,7 @@ func (txn DeleteItem) Execute(library *nebula.Library, container *nebula.Contain
 }
 
 // DeleteReference removes an item from a parent
-func deleteItem(container *nebula.Container, parentID int, deleteID int, check string) error {
+func deleteItem(container *Container, parentID int, deleteID int, check string) error {
 
 	// Bounds check
 	if (parentID < 0) || (parentID >= container.Len()) {
@@ -49,7 +48,7 @@ func deleteItem(container *nebula.Container, parentID int, deleteID int, check s
 	}
 
 	// Remove the deleted item
-	(*container)[deleteID] = nebula.Item{}
+	(*container)[deleteID] = Item{}
 
 	// Success!
 	return nil

@@ -4,21 +4,17 @@ import (
 	"testing"
 
 	"github.com/benpate/datatype"
-	"github.com/benpate/nebula"
-	"github.com/benpate/nebula/transaction"
-	"github.com/benpate/nebula/vocabulary"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAddItem_Rows_ABOVE(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -39,7 +35,7 @@ func TestAddItem_Rows_ABOVE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -60,13 +56,12 @@ func TestAddItem_Rows_ABOVE(t *testing.T) {
 
 func TestAddItem_Rows_BEFORE(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -87,7 +82,7 @@ func TestAddItem_Rows_BEFORE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -108,13 +103,12 @@ func TestAddItem_Rows_BEFORE(t *testing.T) {
 
 func TestAddItem_Rows_BELOW(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -135,7 +129,7 @@ func TestAddItem_Rows_BELOW(t *testing.T) {
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -156,13 +150,12 @@ func TestAddItem_Rows_BELOW(t *testing.T) {
 
 func TestAddItem_Rows_AFTER(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -183,7 +176,7 @@ func TestAddItem_Rows_AFTER(t *testing.T) {
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -204,13 +197,12 @@ func TestAddItem_Rows_AFTER(t *testing.T) {
 
 func TestAddItem_Rows_LEFT(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -239,7 +231,7 @@ func TestAddItem_Rows_LEFT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -268,13 +260,12 @@ func TestAddItem_Rows_LEFT(t *testing.T) {
 
 func TestAddItem_Rows_RIGHT(t *testing.T) {
 
-	library := nebula.NewLibrary()
-	vocabulary.All(&library)
+	library := NewLibrary()
 
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -303,7 +294,7 @@ func TestAddItem_Rows_RIGHT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		txn := transaction.Parse(datatype.Map{
+		txn := ParseAction(datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -330,18 +321,18 @@ func TestAddItem_Rows_RIGHT(t *testing.T) {
 	}
 }
 
-func getTestRows() nebula.Container {
+func getTestRows() Container {
 
-	return nebula.Container{
+	return Container{
 		{
-			Type: nebula.ItemTypeLayout,
+			Type: ItemTypeLayout,
 			Refs: []int{1},
 			Data: datatype.Map{
-				"style": nebula.LayoutStyleRows,
+				"style": LayoutStyleRows,
 			},
 		},
 		{
-			Type: nebula.ItemTypeHTML,
+			Type: ItemTypeHTML,
 			Data: datatype.Map{
 				"html": "FIRST HTML BLOCK",
 			},

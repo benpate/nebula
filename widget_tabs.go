@@ -6,22 +6,21 @@ import (
 	"github.com/benpate/convert"
 	"github.com/benpate/datatype"
 	"github.com/benpate/html"
-	"github.com/benpate/nebula"
 )
 
 const ItemTypeTabs = "TABS"
 
 type Tabs struct {
-	library *nebula.Library
+	library *Library
 }
 
 // Init appends three empty tabs into this tab control.
-func (w Tabs) Init(container *nebula.Container, id int) {
+func (w Tabs) Init(container *Container, id int) {
 
 	// Let's add THREE new tabs
 	for index := 1; index <= 3; index++ {
 		itemID := container.NewItemWithInit(w.library, ItemTypeLayout, datatype.Map{
-			"style": nebula.LayoutStyleRows,
+			"style": LayoutStyleRows,
 			"label": "Tab " + convert.String(index),
 		})
 		(*container)[id].AddReference(itemID, 0) // Add a reference to the new container into me
@@ -29,7 +28,7 @@ func (w Tabs) Init(container *nebula.Container, id int) {
 }
 
 // View displays that tabs in HTML, along with sub-elements
-func (w Tabs) View(b *html.Builder, container *nebula.Container, id int) {
+func (w Tabs) View(b *html.Builder, container *Container, id int) {
 
 	item := container.GetItem(id)
 
@@ -67,7 +66,7 @@ func (w Tabs) View(b *html.Builder, container *nebula.Container, id int) {
 	b.CloseAll()
 }
 
-func (w Tabs) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
+func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 
 	item := container.GetItem(id)
 

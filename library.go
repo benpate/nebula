@@ -10,7 +10,16 @@ import (
 type Library map[string]Widget
 
 func NewLibrary() Library {
-	return make(Library)
+	library := make(Library)
+
+	library.Register(ItemTypeLayout, Layout{library: &library})
+	library.Register(ItemTypeHTML, HTML{})
+	library.Register(ItemTypeOEmbed, OEmbed{})
+	library.Register(ItemTypeTabs, Tabs{library: &library})
+	library.Register(ItemTypeText, Text{})
+	library.Register(ItemTypeWYSIWYG, WYSIWYG{})
+
+	return library
 }
 
 // Register adds a new named widget to the library

@@ -4,7 +4,6 @@ import (
 	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
 	"github.com/benpate/first"
-	"github.com/benpate/nebula"
 )
 
 type AddItem struct {
@@ -16,7 +15,7 @@ type AddItem struct {
 }
 
 // Execute performs the AddItem transaction on the provided content structure
-func (txn AddItem) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
+func (txn AddItem) Execute(library *Library, container *Container) (int, error) {
 
 	/*** Validate the transa tion */
 
@@ -25,7 +24,7 @@ func (txn AddItem) Execute(library *nebula.Library, container *nebula.Container)
 
 	// Validate the item can be manipulated
 	if err := item.Validate(txn.Check); err != nil {
-		return -1, derp.Wrap(err, "nebula.transaction.AddItem", "Invalid item", txn)
+		return -1, derp.Wrap(err, "transaction.AddItem", "Invalid item", txn)
 	}
 
 	// Create the new item to insert into the container
@@ -36,11 +35,11 @@ func (txn AddItem) Execute(library *nebula.Library, container *nebula.Container)
 	// If we can append to this item, do it
 	switch canAppendLayout(&item, txn.Place) {
 
-	case nebula.LayoutPlaceBefore:
+	case LayoutPlaceBefore:
 		container.AddFirstReference(txn.ItemID, newItemID)
 		return txn.ItemID, nil
 
-	case nebula.LayoutPlaceAfter:
+	case LayoutPlaceAfter:
 		container.AddLastReference(txn.ItemID, newItemID)
 		return txn.ItemID, nil
 	}
@@ -59,7 +58,7 @@ func (txn AddItem) Execute(library *nebula.Library, container *nebula.Container)
 	/*** Fall through means that we'll need to split/replace the existing item with a layout */
 
 	// create a new layout item that will contain the new items
-	newLayoutID := container.NewItem(nebula.ItemTypeLayout, datatype.Map{
+	newLayoutID := container.NewItem(ItemTypeLayout, datatype.Map{
 		"style": getLayoutStyleFromPlace(txn.Place),
 	})
 	newLayout := container.GetItem(newLayoutID)
@@ -82,7 +81,7 @@ func (txn AddItem) Execute(library *nebula.Library, container *nebula.Container)
 
 // findParent returns the ID of the designated item's parent.
 // If the item has no parent, then this function returns -1.
-func findParent(container *nebula.Container, itemID int) int {
+func findParent(container *Container, itemID int) int {
 
 	for itemIndex := range *container {
 		for _, refID := range (*container)[itemIndex].Refs {
@@ -96,33 +95,33 @@ func findParent(container *nebula.Container, itemID int) int {
 }
 
 // canAppendLayout returns TRUE if the placement matches the item's layout style
-func canAppendLayout(item *nebula.Item, place string) string {
+func canAppendLayout(item *Item, place string) string {
 
-	if item.Type != nebula.ItemTypeLayout {
+	if item.Type != ItemTypeLayout {
 		return ""
 	}
 
 	switch getLayoutStyle(item) {
-	case nebula.LayoutStyleRows:
+	case LayoutStyleRows:
 
 		switch place {
 
-		case nebula.LayoutPlaceBefore, nebula.LayoutPlaceAbove:
-			return nebula.LayoutPlaceBefore
+		case LayoutPlaceBefore, LayoutPlaceAbove:
+			return LayoutPlaceBefore
 
-		case nebula.LayoutPlaceAfter, nebula.LayoutPlaceBelow:
-			return nebula.LayoutPlaceAfter
+		case LayoutPlaceAfter, LayoutPlaceBelow:
+			return LayoutPlaceAfter
 		}
 
-	case nebula.LayoutStyleColumns:
+	case LayoutStyleColumns:
 
 		switch place {
 
-		case nebula.LayoutPlaceBefore, nebula.LayoutPlaceLeft:
-			return nebula.LayoutPlaceBefore
+		case LayoutPlaceBefore, LayoutPlaceLeft:
+			return LayoutPlaceBefore
 
-		case nebula.LayoutPlaceAfter, nebula.LayoutPlaceRight:
-			return nebula.LayoutPlaceAfter
+		case LayoutPlaceAfter, LayoutPlaceRight:
+			return LayoutPlaceAfter
 		}
 	}
 
@@ -135,35 +134,35 @@ func getLayoutStyleFromPlace(place string) string {
 
 	switch place {
 
-	case nebula.LayoutPlaceAbove:
-		return nebula.LayoutStyleRows
+	case LayoutPlaceAbove:
+		return LayoutStyleRows
 
-	case nebula.LayoutPlaceAfter:
-		return nebula.LayoutStyleRows
+	case LayoutPlaceAfter:
+		return LayoutStyleRows
 
-	case nebula.LayoutPlaceBefore:
-		return nebula.LayoutStyleRows
+	case LayoutPlaceBefore:
+		return LayoutStyleRows
 
-	case nebula.LayoutPlaceBelow:
-		return nebula.LayoutStyleRows
+	case LayoutPlaceBelow:
+		return LayoutStyleRows
 
-	case nebula.LayoutPlaceLeft:
-		return nebula.LayoutStyleColumns
+	case LayoutPlaceLeft:
+		return LayoutStyleColumns
 
-	case nebula.LayoutPlaceRight:
-		return nebula.LayoutStyleColumns
+	case LayoutPlaceRight:
+		return LayoutStyleColumns
 
 	}
 
-	return nebula.LayoutStyleRows
+	return LayoutStyleRows
 }
 
 // getLayoutStyle returns a valid layout style for all layout items.
 // If a non-layout item is passed, then it returns ""
-func getLayoutStyle(item *nebula.Item) string {
+func getLayoutStyle(item *Item) string {
 
-	if item.Type == nebula.ItemTypeLayout {
-		return first.String(item.GetString("style"), nebula.LayoutStyleRows)
+	if item.Type == ItemTypeLayout {
+		return first.String(item.GetString("style"), LayoutStyleRows)
 	}
 
 	return ""

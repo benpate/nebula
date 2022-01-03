@@ -2,7 +2,6 @@ package nebula
 
 import (
 	"github.com/benpate/derp"
-	"github.com/benpate/nebula"
 )
 
 type UpdateItem struct {
@@ -11,7 +10,7 @@ type UpdateItem struct {
 	Check  string                 `json:"hash"   form:"hash"`
 }
 
-func (txn UpdateItem) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
+func (txn UpdateItem) Execute(library *Library, container *Container) (int, error) {
 
 	// Bounds check
 	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {

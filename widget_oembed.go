@@ -2,14 +2,13 @@ package nebula
 
 import (
 	"github.com/benpate/html"
-	"github.com/benpate/nebula"
 )
 
 const ItemTypeOEmbed = "OEMBED"
 
 type OEmbed struct{}
 
-func (w OEmbed) View(b *html.Builder, container *nebula.Container, id int) {
+func (w OEmbed) View(b *html.Builder, container *Container, id int) {
 
 	item := container.GetItem(id)
 
@@ -30,7 +29,7 @@ func (w OEmbed) View(b *html.Builder, container *nebula.Container, id int) {
 	}
 }
 
-func (w OEmbed) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
+func (w OEmbed) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 	script := "install Uploader(endpoint:'" + endpoint + "')"
 	b.Div().Script(script).EndBracket()
 	b.H3().InnerHTML("Drag Images Here To Upload").Close()

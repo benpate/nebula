@@ -6,7 +6,7 @@ import (
 	"github.com/benpate/datatype"
 )
 
-func TestContainer(t *testing.T) {
+func TestItem(t *testing.T) {
 
 	library := NewLibrary()
 

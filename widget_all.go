@@ -1,12 +1,10 @@
 package nebula
 
-import "github.com/benpate/nebula"
-
-func All(library *nebula.Library) {
-	library.Register(nebula.ItemTypeLayout, Layout{library: library})
-	library.Register(nebula.ItemTypeHTML, HTML{})
-	library.Register(nebula.ItemTypeOEmbed, OEmbed{})
-	library.Register(nebula.ItemTypeTabs, Tabs{library: library})
-	library.Register(nebula.ItemTypeText, Text{})
-	library.Register(nebula.ItemTypeWYSIWYG, WYSIWYG{})
+func All(library *Library) {
+	library.Register(ItemTypeLayout, Layout{library: library})
+	library.Register(ItemTypeHTML, HTML{})
+	library.Register(ItemTypeOEmbed, OEmbed{})
+	library.Register(ItemTypeTabs, Tabs{library: library})
+	library.Register(ItemTypeText, Text{})
+	library.Register(ItemTypeWYSIWYG, WYSIWYG{})
 }

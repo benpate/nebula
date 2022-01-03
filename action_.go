@@ -2,22 +2,21 @@ package nebula
 
 import (
 	"github.com/benpate/datatype"
-	"github.com/benpate/nebula"
 )
 
-type Transaction interface {
+type Action interface {
 
 	// Execute performs an update to the content data.  It returns
 	// the ID of the element to be re-rendered on the client, along
 	// with an error (if present).  Implementations can use this to
 	// selectively re-render portions of the content structure without
 	// reloading the entire page.
-	Execute(*nebula.Library, *nebula.Container) (int, error)
+	Execute(*Library, *Container) (int, error)
 
 	// TODO: ExecuteMongo() -- generates an efficient update statement for a mongodb collection.
 }
 
-func Parse(in map[string]interface{}) Transaction {
+func ParseAction(in map[string]interface{}) Action {
 
 	data := datatype.Map(in)
 
@@ -66,7 +65,7 @@ func Parse(in map[string]interface{}) Transaction {
 		}
 	}
 
-	return NilTransaction(data)
+	return NilAction(data)
 }
 
 func extractData(input map[string]interface{}) map[string]interface{} {
