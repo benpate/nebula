@@ -16,9 +16,12 @@ func (txn DeleteItem) Execute(library *Library, container *Container) (int, erro
 	// Find parent index and record
 	parentID := container.GetParentID(txn.ItemID)
 
+	if container.IsNil(parentID) {
+		return -1, derp.New(derp.CodeBadRequestError, "nebula.DeleteItem.Execute", "Invalid item", txn)
+	}
+
 	// Remove parent's reference to this item
 	container.DeleteReference(parentID, txn.ItemID)
-	(*container)[parentID].DeleteReference(txn.ItemID)
 
 	// TODO: If a delete results in an empty layout, then remove the layout
 	// TODO: If a delete results in a layout with a single item, then remove the layout and promote the item
@@ -35,12 +38,12 @@ func deleteItem(container *Container, parentID int, deleteID int, check string) 
 	// to handle items that are still bad
 
 	// Bounds check
-	if (parentID < 0) || (parentID >= container.Len()) {
+	if container.IsNil(parentID) {
 		return derp.New(500, "content.Create", "Parent index out of bounds", parentID, deleteID)
 	}
 
 	// Bounds check
-	if (deleteID < 0) || (deleteID >= container.Len()) {
+	if container.IsNil(deleteID) {
 		return derp.New(500, "content.Create", "Child index out of bounds", parentID, deleteID)
 	}
 

@@ -25,21 +25,28 @@ func (container *Container) Len() int {
 	return len(*container)
 }
 
-// IsEmpty returns TRUE if the container container is empty.
-func (container *Container) IsEmpty() bool {
-	return container.Len() == 0
-}
-
 // GetItem returns a copy of the item at the desired index
 func (container *Container) GetItem(itemID int) Item {
 
 	// Return empty item if out of bounds
-	if (itemID < 0) || (itemID >= container.Len()) {
+	if container.IsNil(itemID) {
 		return Item{}
 	}
 
 	// Return a valid item
 	return (*container)[itemID]
+}
+
+// IsNil returns TRUE if the identified item is empty or out of bounds
+func (container *Container) IsNil(itemID int) bool {
+
+	// Bounds check
+	if (itemID < 0) || (itemID >= container.Len()) {
+		return true
+	}
+
+	// Check for empty item
+	return (*container)[itemID].Type == ""
 }
 
 // GetType returns the item type of the designated item
@@ -109,10 +116,18 @@ func (container *Container) NewItemWithInit(library *Library, itemType string, d
 }
 
 func (container *Container) AddFirstReference(itemID int, newItemID int) {
+	if container.IsNil(itemID) {
+		return
+	}
+
 	(*container)[itemID].AddFirstReference(newItemID)
 }
 
 func (container *Container) AddLastReference(itemID int, newItemID int) {
+	if container.IsNil(itemID) {
+		return
+	}
+
 	(*container)[itemID].AddLastReference(newItemID)
 }
 

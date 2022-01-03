@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/benpate/datatype"
+	"github.com/benpate/derp"
 	"github.com/stretchr/testify/require"
 )
 
@@ -34,6 +35,22 @@ func TestDelete(t *testing.T) {
 	container.Compact()
 
 	require.Equal(t, 3, container.Len()) // empty item removed after compact
+}
+
+func TestDelete_BoundsCheck(t *testing.T) {
+
+	library := NewLibrary()
+	container := getTestContainer()
+
+	itemID, err := container.Execute(&library, datatype.Map{
+		"type":   "delete-item",
+		"itemId": "4",
+		"check":  "",
+	})
+
+	require.NotNil(t, err)
+	require.Equal(t, -1, itemID)
+	require.Equal(t, "nebula.DeleteItem.Execute: Invalid item", derp.Message(err))
 }
 
 func getTestContainer() Container {
