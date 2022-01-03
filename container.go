@@ -67,7 +67,6 @@ func (container *Container) NewItem(itemType string, data datatype.Map) int {
 	itemID := len(*container)
 	item := NewItem(itemType)
 	item.Data = data
-	item.Check = NewChecksum()
 
 	// Append to the container
 	*container = append(*container, item)

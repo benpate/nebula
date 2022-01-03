@@ -22,7 +22,7 @@ func NewItem(t string, refs ...int) Item {
 		Type:  t,
 		Data:  make(datatype.Map),
 		Refs:  refs,
-		Check: NewChecksum(),
+		Check: newChecksum(),
 	}
 }
 
@@ -96,7 +96,7 @@ func (item *Item) UnmarshalMap(value map[string]interface{}) {
 	item.Type = convert.String(value["type"])
 	item.Refs = convert.SliceOfInt(value["refs"])
 	item.Data = convert.MapOfInterface("data")
-	item.Check = NewChecksum()
+	item.Check = newChecksum()
 }
 
 /*****************************************

@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/benpate/html"
@@ -38,9 +39,17 @@ func Prop(library *Library, container *Container, itemID int, endpoint string, p
  * OTHER UTILITY  FUNCTIONS
  *****************************************/
 
-// NewChecksum generates a new random checksum for the content
-func NewChecksum() string {
+// newChecksum generates a new random checksum for the content
+func newChecksum() string {
 	seed := time.Now().Unix()
 	source := rand.NewSource(seed)
 	return strconv.FormatInt(source.Int63(), 36) + strconv.FormatInt(source.Int63(), 36)
+}
+
+// makeURL assembles a URL string from a path and a set of parameters
+func makeURL(path string, queryParams ...string) string {
+	if len(queryParams) == 0 {
+		return path
+	}
+	return path + "?" + strings.Join(queryParams, "&")
 }
