@@ -1,10 +1,11 @@
 package vocabulary
 
 import (
-	"fmt"
 	"net/url"
 	"strconv"
 
+	"github.com/benpate/convert"
+	"github.com/benpate/first"
 	"github.com/benpate/html"
 	"github.com/benpate/nebula"
 )
@@ -17,14 +18,14 @@ type Layout struct {
 
 // Init adds a child WYSIWYG element
 func (w Layout) Init(container *nebula.Container, id int) {
-	wysiwyg := container.NewItem(w.library, ItemTypeWYSIWYG)
+	wysiwyg := container.NewItemWithInit(w.library, ItemTypeWYSIWYG, nil)
 	(*container)[id].AddReference(wysiwyg, 0)
 }
 
 // View dsplays the layout and its children.
-func (w Layout) View(b *html.Builder, container *nebula.Container, id int) {
+func (w Layout) View(b *html.Builder, container *nebula.Container, layoutID int) {
 
-	item := container.GetItem(id)
+	item := container.GetItem(layoutID)
 
 	if len(item.Refs) == 0 {
 		return
@@ -42,71 +43,59 @@ func (w Layout) View(b *html.Builder, container *nebula.Container, id int) {
 	}
 }
 
-func (w Layout) Edit(b *html.Builder, container *nebula.Container, id int, endpoint string) {
+func (w Layout) Edit(b *html.Builder, container *nebula.Container, layoutID int, endpoint string) {
 
-	item := container.GetItem(id)
-	idString := strconv.Itoa(id)
-	style := item.GetString("style")
+	layout := container.GetItem(layoutID)
+	layoutIDString := strconv.Itoa(layoutID)
+	style := first.String(layout.GetString("style"), nebula.LayoutStyleRows)
 
 	b.Div().
 		Class("nebula-layout").
 		Data("style", style).
-		Data("size", strconv.Itoa(len(item.Refs))).
-		Data("id", idString)
+		Data("size", strconv.Itoa(len(layout.Refs))).
+		Data("id", layoutIDString)
 
-	// For layouts with multiple items, add an insertion point that cross-cuts the beginning of the layout
-	if id == 0 {
-		marker(b, idString, nebula.LayoutPlaceLeft, item.Check)
-		marker(b, idString, nebula.LayoutPlaceAbove, item.Check)
-	}
+	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceAbove, layout.Check, endpoint)
+	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceLeft, layout.Check, endpoint)
 
-	for childIndex, childID := range item.Refs {
+	for _, childID := range layout.Refs {
 		childIDString := strconv.Itoa(childID)
+
 		b.Div().Class("nebula-layout-item")
 
-		if showInsertMarker(container, id, childIndex, nebula.LayoutPlaceAbove) {
-			marker(b, childIDString, nebula.LayoutPlaceAbove, item.Check)
-		}
+		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceAbove, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceLeft, layout.Check, endpoint)
 
-		if showInsertMarker(container, id, childIndex, nebula.LayoutPlaceLeft) {
-			marker(b, childIDString, nebula.LayoutPlaceLeft, item.Check)
-		}
-
-		// Render child item
 		w.library.Edit(b, container, childID, endpoint)
 
-		if showInsertMarker(container, id, childIndex, nebula.LayoutPlaceRight) {
-			marker(b, childIDString, nebula.LayoutPlaceRight, item.Check)
-		}
+		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceBelow, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, nebula.LayoutPlaceRight, layout.Check, endpoint)
 
-		if showInsertMarker(container, id, childIndex, nebula.LayoutPlaceBelow) {
-			marker(b, childIDString, nebula.LayoutPlaceBelow, item.Check)
-		}
 		b.Close()
 	}
 
-	// For layouts with multiple items, add an insertion point the cross-cuts the end of the layout
-	if id == 0 {
-		marker(b, idString, nebula.LayoutPlaceRight, item.Check)
-		marker(b, idString, nebula.LayoutPlaceBelow, item.Check)
-	}
+	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceBelow, layout.Check, endpoint)
+	layoutInsert(b, layoutIDString, layoutIDString, nebula.LayoutPlaceRight, layout.Check, endpoint)
 
 	b.Close()
 }
 
-func (w Layout) Prop(container *nebula.Container, id int, endpoint string, params url.Values) (string, error) {
-
-	b := html.New()
+func (w Layout) Prop(b *html.Builder, container *nebula.Container, id int, endpoint string, params url.Values) error {
 
 	b.H1().InnerHTML("Add Another Section").Close()
 
 	b.Div().Class("table")
 	for _, itemType := range ItemTypes() {
-		b.Div()
+		b.Div().Attr("tabindex", "0")
 		b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "click")
 		b.Input("hidden", "type").Value("add-item").Close()
 		b.Input("hidden", "itemId").Value(params.Get("itemId")).Close()
 		b.Input("hidden", "itemType").Value(itemType.Code)
+
+		for key, value := range itemType.Data {
+			b.Input("hidden", key).Value(convert.String(value)).Close()
+		}
+
 		b.Input("hidden", "place").Value(params.Get("place")).Close()
 		b.Input("hidden", "check").Value(params.Get("check")).Close()
 		b.Div().InnerHTML(itemType.Label).Close()
@@ -114,55 +103,19 @@ func (w Layout) Prop(container *nebula.Container, id int, endpoint string, param
 		b.Close() // Form
 		b.Close() // Div
 	}
-	b.Close()
+	b.CloseAll()
 
-	return b.String(), nil
+	return nil
 }
 
-func marker(b *html.Builder, itemID string, place string, check string) {
+// insertMarker adds a nebula-layout-insert to the html.Builder.
+func layoutInsert(b *html.Builder, layoutID string, widgetID string, place string, check string, endpoint string) {
+
+	url := makeURL(endpoint, "prop=insert", "itemId="+layoutID, "subItemId="+widgetID, "place="+place, "check="+check)
+
 	b.Div().
 		Class("nebula-layout-insert").
-		Data("hx-get", fmt.Sprintf("/.editor/itemTypes?itemId=%s&place=%s&check=%s", itemID, place, check)).
-		Data("itemId", itemID).
 		Data("place", place).
-		Data("check", check).
-		// InnerHTML("Insert Here").
+		Data("hx-get", url).
 		Close()
-}
-
-// showInsertMarker returns TRUE if an layout insertion marker should be shown at this location
-func showInsertMarker(container *nebula.Container, parentID int, childIndex int, place string) bool {
-
-	parent := container.GetItem(parentID)
-
-	switch parent.GetString("style") {
-
-	case nebula.LayoutStyleRows:
-
-		switch place {
-		case nebula.LayoutPlaceAbove:
-			return true
-		case nebula.LayoutPlaceBelow:
-			return false
-		case nebula.LayoutPlaceLeft:
-			return true
-		case nebula.LayoutPlaceRight:
-			return true
-		}
-
-	case nebula.LayoutStyleColumns:
-
-		switch place {
-		case nebula.LayoutPlaceLeft:
-			return true
-		case nebula.LayoutPlaceRight:
-			return false
-		case nebula.LayoutPlaceAbove:
-			return true
-		case nebula.LayoutPlaceBelow:
-			return true
-		}
-	}
-
-	return false
 }

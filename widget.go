@@ -27,5 +27,5 @@ type WidgetIniter interface {
 type PropertyEditor interface {
 
 	// Prop returns HTML for a property editor
-	Prop(*html.Builder, *Container, int, url.Values, string) error
+	Prop(*html.Builder, *Container, int, string, url.Values) error
 }

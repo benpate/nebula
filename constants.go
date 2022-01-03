@@ -36,6 +36,12 @@ const LayoutStyleColumns = "COLS"
  *  Layout Place
  ************************/
 
+// LayoutPlaceBefore represents the placement of a new item before the reference item
+const LayoutPlaceBefore = "BEFORE"
+
+// LayoutPlaceAfter represents the placement of a new item after the reference item
+const LayoutPlaceAfter = "AFTER"
+
 // LayoutPlaceAbove represents the placement of a new item above the reference item
 const LayoutPlaceAbove = "ABOVE"
 

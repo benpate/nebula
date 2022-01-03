@@ -11,7 +11,7 @@ type UpdateItem struct {
 	Check  string                 `json:"hash"   form:"hash"`
 }
 
-func (txn UpdateItem) Execute(container *nebula.Container) (int, error) {
+func (txn UpdateItem) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
 
 	// Bounds check
 	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
@@ -29,8 +29,4 @@ func (txn UpdateItem) Execute(container *nebula.Container) (int, error) {
 	}
 
 	return txn.ItemID, nil
-}
-
-func (txn UpdateItem) Description() string {
-	return "Update Item"
 }

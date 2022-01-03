@@ -2,7 +2,6 @@ package transaction
 
 import (
 	"github.com/benpate/datatype"
-	"github.com/benpate/derp"
 	"github.com/benpate/nebula"
 )
 
@@ -13,14 +12,12 @@ type Transaction interface {
 	// with an error (if present).  Implementations can use this to
 	// selectively re-render portions of the content structure without
 	// reloading the entire page.
-	Execute(*nebula.Container) (int, error)
+	Execute(*nebula.Library, *nebula.Container) (int, error)
 
-	// Description returns a developer-friendly string that identifies
-	// the action that was performed.
-	Description() string
+	// TODO: ExecuteMongo() -- generates an efficient update statement for a mongodb collection.
 }
 
-func Parse(in map[string]interface{}) (Transaction, error) {
+func Parse(in map[string]interface{}) Transaction {
 
 	data := datatype.Map(in)
 
@@ -32,16 +29,17 @@ func Parse(in map[string]interface{}) (Transaction, error) {
 			ItemID:   data.GetInt("itemId"),
 			ItemType: data.GetString("itemType"),
 			Check:    data.GetString("check"),
-		}, nil
+		}
 
-	case "new-item":
+	case "add-item":
 
-		return NewItem{
+		return AddItem{
 			ItemID:   data.GetInt("itemId"),
 			Place:    data.GetString("place"),
 			ItemType: data.GetString("itemType"),
+			Style:    data.GetString("style"),
 			Check:    data.GetString("check"),
-		}, nil
+		}
 
 	case "update-item":
 
@@ -49,14 +47,14 @@ func Parse(in map[string]interface{}) (Transaction, error) {
 			ItemID: data.GetInt("itemId"),
 			Data:   extractData(in),
 			Check:  data.GetString("check"),
-		}, nil
+		}
 
 	case "delete-item":
 
 		return DeleteItem{
 			ItemID: data.GetInt("itemId"),
 			Check:  data.GetString("check"),
-		}, nil
+		}
 
 	case "move-item":
 
@@ -65,10 +63,10 @@ func Parse(in map[string]interface{}) (Transaction, error) {
 			NewParentID: data.GetInt("newParentId"),
 			Position:    data.GetInt("position"),
 			Check:       data.GetString("check"),
-		}, nil
+		}
 	}
 
-	return NilTransaction(data), derp.New(500, "content.ParseTransaction", "Invalid Transaction", in)
+	return NilTransaction(data)
 }
 
 func extractData(input map[string]interface{}) map[string]interface{} {

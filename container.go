@@ -1,5 +1,9 @@
 package nebula
 
+import (
+	"github.com/benpate/datatype"
+)
+
 // Container represents a complete package of container
 type Container []Item
 
@@ -52,21 +56,87 @@ func (container *Container) GetParent(id int) int {
  * WRITE FUNCTIONS
  *****************************************/
 
-// NewItem creates a new item of the designated type and initializes it
-// with the default Init() method from the corresponding widget library
-func (container *Container) NewItem(library *Library, itemType string) int {
-	id := container.AddItem(NewItem(itemType))
-	library.Init(container, id)
-	return id
-}
+// NewItem creates a new item of the designated type
+func (container *Container) NewItem(itemType string, data datatype.Map) int {
 
-// AddItem adds a new item to this container structure, and returns the new item's index
-func (container *Container) AddItem(item Item) int {
-	newID := len(*container)
+	if data == nil {
+		data = make(datatype.Map)
+	}
 
+	// Create a new item using type and data
+	itemID := len(*container)
+	item := NewItem(itemType)
+	item.Data = data
+	item.Check = NewChecksum()
+
+	// Append to the container
 	*container = append(*container, item)
 
-	return newID
+	// Done
+	return itemID
+}
+
+// NewItem creates a new item of the designated type and initializes it
+// with the default Init() method from the corresponding widget library
+func (container *Container) NewItemWithInit(library *Library, itemType string, data datatype.Map) int {
+
+	// Create the new item
+	itemID := container.NewItem(itemType, data)
+
+	// Initialize the item (adding any extra dependencies, like tab containers)
+	library.Init(container, itemID)
+
+	// Is this success?
+	return itemID
+}
+
+func (container *Container) AddFirstReference(itemID int, newItemID int) {
+	(*container)[itemID].AddFirstReference(newItemID)
+}
+
+func (container *Container) AddLastReference(itemID int, newItemID int) {
+	(*container)[itemID].AddLastReference(newItemID)
+}
+
+// AddReference links the newItemID into the parent's reference list, placed relative to the referenceID
+func (container *Container) AddReference(parentID int, newItemID int, referenceID int, place string) {
+
+	index := (*container)[parentID].findReference(referenceID)
+
+	// If the item cannot be found, then place relative to the whole reference list.
+	// With a good UI, this shouldn't happen very much, though.
+	if index == -1 {
+		if place == LayoutPlaceBefore {
+			container.AddLastReference(parentID, newItemID)
+		} else {
+			container.AddLastReference(parentID, newItemID)
+		}
+		return
+	}
+
+	// To insert AFTER an indexed item, increment the index
+	if place == LayoutPlaceAfter {
+		index = index + 1
+	}
+
+	(*container)[parentID].AddReference(newItemID, index)
+}
+
+// ReplaceRefs searches all references from parentID, and replaces oldID with newID if found
+func (container *Container) ReplaceReference(parentID int, oldID int, newID int) {
+
+	// Bounds check
+	if (parentID < 0) || (parentID >= len(*container)) {
+		return
+	}
+
+	// scan parent record for references to oldID.  Replace if found
+	for index, itemID := range (*container)[parentID].Refs {
+		if itemID == oldID {
+			(*container)[parentID].Refs[index] = newID
+			return
+		}
+	}
 }
 
 // Compact removes any unused items in the container slice

@@ -13,7 +13,7 @@ type ChangeType struct {
 }
 
 // Execute performs the ChangeType transaction on the provided content structure
-func (txn ChangeType) Execute(container *nebula.Container) (int, error) {
+func (txn ChangeType) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
 
 	// Bounds check
 	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
@@ -28,8 +28,4 @@ func (txn ChangeType) Execute(container *nebula.Container) (int, error) {
 	(*container)[txn.ItemID].Data = datatype.Map{}
 
 	return txn.ItemID, nil
-}
-
-func (txn ChangeType) Description() string {
-	return "Change Item Type (" + txn.ItemType + ")"
 }

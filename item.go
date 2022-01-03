@@ -10,10 +10,10 @@ import (
 // Item represents a single piece of content.  It will be rendered by one of several rendering
 // Libraries, using the custom data it contains.
 type Item struct {
-	Type  string       `json:"type"           bson:"type"`           // The type of contem item (WYSIWYG, CONTAINER, OEMBED, ETC...)
-	Check string       `json:"check"          bson:"check"`          // A random code or nonce to authenticate requests
-	Refs  []int        `json:"refs,omitempty" bson:"refs,omitempty"` // Indexes of sub-items contained by this item
-	Data  datatype.Map `json:"data,omitempty" bson:"data,omitempty"` // Additional data specific to this item type.
+	Type  string       `json:"type"           bson:"type"`  // The type of contem item (WYSIWYG, CONTAINER, OEMBED, ETC...)
+	Check string       `json:"check"          bson:"check"` // A random code or nonce to authenticate requests
+	Refs  []int        `json:"refs,omitempty" bson:"refs"`  // Indexes of sub-items contained by this item
+	Data  datatype.Map `json:"data,omitempty" bson:"data"`  // Additional data specific to this item type.
 }
 
 // NewItem returns a fully initialized Item
@@ -46,7 +46,17 @@ func (item *Item) Validate(checksum string) error {
 	return nil
 }
 
-// AddReference adds a new "sub-item" reference to this item
+// AddFirstReference adds an itemID to the beginning of the reference list
+func (item *Item) AddFirstReference(id int) {
+	item.Refs = append([]int{id}, item.Refs...)
+}
+
+// AddLastReference adds and itemID to the end of the reference list
+func (item *Item) AddLastReference(id int) {
+	item.Refs = append(item.Refs, id)
+}
+
+// AddReference adds a new item into the middle of the reference list
 func (item *Item) AddReference(id int, index int) {
 
 	// special case for empty refs.  No need to do all that work.
@@ -122,9 +132,23 @@ func (item *Item) SetPath(p path.Path, value interface{}) error {
 }
 
 func (item *Item) Set(key string, value interface{}) *Item {
-	if item.Data == nil {
-		item.Data = make(datatype.Map)
-	}
 	item.Data[key] = value
 	return item
+}
+
+/*****************************************
+ * Other Utilities
+ *****************************************/
+
+// findReference searches for another itemID in the item's reference list, and returns it place.
+// if the item does not exist in this list, then -1 is returned instead
+func (item *Item) findReference(itemID int) int {
+
+	for index, refID := range item.Refs {
+		if refID == itemID {
+			return index
+		}
+	}
+
+	return -1
 }

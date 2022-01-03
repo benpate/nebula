@@ -10,7 +10,7 @@ type DeleteItem struct {
 	Check  string `json:"check"  form:"check"`
 }
 
-func (txn DeleteItem) Execute(container *nebula.Container) (int, error) {
+func (txn DeleteItem) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
 
 	// Find parent index and record
 	parentID := container.GetParent(txn.ItemID)
@@ -20,10 +20,6 @@ func (txn DeleteItem) Execute(container *nebula.Container) (int, error) {
 
 	// Recursively delete this item and all of its children
 	return parentID, deleteItem(container, parentID, txn.ItemID, txn.Check)
-}
-
-func (txn DeleteItem) Description() string {
-	return "Delete Item"
 }
 
 // DeleteReference removes an item from a parent

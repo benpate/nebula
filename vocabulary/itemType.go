@@ -1,9 +1,14 @@
 package vocabulary
 
+import (
+	"github.com/benpate/datatype"
+)
+
 type ItemType struct {
 	Code        string
 	Label       string
 	Description string
+	Data        datatype.Map
 }
 
 // ItemTypes returns all item types provided by this widget library

@@ -8,10 +8,6 @@ import (
 
 type NilTransaction datatype.Map
 
-func (txn NilTransaction) Execute(c *nebula.Container) (int, error) {
+func (txn NilTransaction) Execute(library *nebula.Library, container *nebula.Container) (int, error) {
 	return 0, derp.New(500, "content.NilTransaction", "Unrecognized Transaction Type", txn)
-}
-
-func (txn NilTransaction) Description() string {
-	return "Nil Transaction"
 }
