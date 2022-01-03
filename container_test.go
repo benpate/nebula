@@ -24,6 +24,6 @@ func TestContainer(t *testing.T) {
 		"itemId":   2,
 		"itemType": "WYSIWYG",
 		"place":    "RIGHT",
-		"check":    container.GetItem(second).Check,
+		"check":    container.GetChecksum(second),
 	})
 }

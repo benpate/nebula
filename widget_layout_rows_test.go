@@ -14,39 +14,41 @@ func TestAddItem_Rows_ABOVE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "ABOVE",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{2, 1}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{2, 1}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "ABOVE",
-			"check":    container.GetItem(1).Check,
+			"check":    container.GetChecksum(1),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{2, 1}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{2, 1}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 }
 
@@ -57,39 +59,41 @@ func TestAddItem_Rows_BEFORE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "BEFORE",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{2, 1}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{2, 1}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "BEFORE",
-			"check":    container.GetItem(1).Check,
+			"check":    container.GetChecksum(1),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{2, 1}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{2, 1}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 }
 
@@ -100,39 +104,41 @@ func TestAddItem_Rows_BELOW(t *testing.T) {
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "BELOW",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{1, 2}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{1, 2}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "BELOW",
-			"check":    container.GetItem(1).Check,
+			"check":    container.GetChecksum(1),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{1, 2}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{1, 2}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 }
 
@@ -143,39 +149,41 @@ func TestAddItem_Rows_AFTER(t *testing.T) {
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "AFTER",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{1, 2}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{1, 2}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "AFTER",
-			"check":    container.GetItem(1).Check,
+			"check":    container.GetChecksum(1),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{1, 2}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{1, 2}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 }
 
@@ -186,54 +194,56 @@ func TestAddItem_Rows_LEFT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "LEFT",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 4, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
 		require.Equal(t, "COLS", container[0].Data["style"])
-		require.Equal(t, []int{2, 3}, container[0].Refs)
+		require.Equal(t, []int{2, 3}, container.GetRefs(0))
 
-		require.Equal(t, "HTML", container[1].Type)
+		require.Equal(t, "HTML", container.GetType(1))
 		require.Equal(t, "FIRST HTML BLOCK", container[1].Data["html"])
 
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "TEXT", container.GetType(2))
 
-		require.Equal(t, "LAYOUT", container[3].Type)
+		require.Equal(t, "LAYOUT", container.GetType(3))
 		require.Equal(t, "ROWS", container[3].Data["style"])
-		require.Equal(t, []int{1}, container[3].Refs)
+		require.Equal(t, []int{1}, container.GetRefs(3))
 	}
 
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "LEFT",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 4, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
 		require.Equal(t, "ROWS", container[0].Data["style"])
-		require.Equal(t, []int{1}, container[0].Refs)
+		require.Equal(t, []int{1}, container.GetRefs(0))
 
-		require.Equal(t, "LAYOUT", container[1].Type)
+		require.Equal(t, "LAYOUT", container.GetType(1))
 		require.Equal(t, "COLS", container[1].Data["style"])
-		require.Equal(t, []int{2, 3}, container[1].Refs)
+		require.Equal(t, []int{2, 3}, container.GetRefs(1))
 
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "TEXT", container.GetType(2))
 
-		require.Equal(t, "HTML", container[3].Type)
+		require.Equal(t, "HTML", container.GetType(3))
 		require.Equal(t, "FIRST HTML BLOCK", container[3].Data["html"])
 	}
 }
@@ -245,54 +255,56 @@ func TestAddItem_Rows_RIGHT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "RIGHT",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 4, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
 		require.Equal(t, "COLS", container[0].Data["style"])
-		require.Equal(t, []int{3, 2}, container[0].Refs)
+		require.Equal(t, []int{3, 2}, container.GetRefs(0))
 
-		require.Equal(t, "HTML", container[1].Type)
+		require.Equal(t, "HTML", container.GetType(1))
 		require.Equal(t, "FIRST HTML BLOCK", container[1].Data["html"])
 
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "TEXT", container.GetType(2))
 
-		require.Equal(t, "LAYOUT", container[3].Type)
+		require.Equal(t, "LAYOUT", container.GetType(3))
 		require.Equal(t, "ROWS", container[3].Data["style"])
-		require.Equal(t, []int{1}, container[3].Refs)
+		require.Equal(t, []int{1}, container.GetRefs(3))
 	}
 
 	{
 		container := getTestRows()
 
-		_, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "RIGHT",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
+		require.Equal(t, 0, itemID)
 		require.Equal(t, 4, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
 		require.Equal(t, "ROWS", container[0].Data["style"])
-		require.Equal(t, []int{1}, container[0].Refs)
+		require.Equal(t, []int{1}, container.GetRefs(0))
 
-		require.Equal(t, "LAYOUT", container[1].Type)
+		require.Equal(t, "LAYOUT", container.GetType(1))
 		require.Equal(t, "COLS", container[1].Data["style"])
-		require.Equal(t, []int{3, 2}, container[1].Refs)
+		require.Equal(t, []int{3, 2}, container.GetRefs(1))
 
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "TEXT", container.GetType(2))
 
-		require.Equal(t, "HTML", container[3].Type)
+		require.Equal(t, "HTML", container.GetType(3))
 		require.Equal(t, "FIRST HTML BLOCK", container[3].Data["html"])
 	}
 }

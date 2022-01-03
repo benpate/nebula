@@ -52,7 +52,12 @@ func (txn AddItem) Execute(library *Library, container *Container) (int, error) 
 	// If we can append to this layout, do it
 	if place := canAppendLayout(&parent, txn.Place); place != "" {
 		container.AddReference(parentID, newItemID, txn.ItemID, place)
-		return parentID, nil
+
+		if parentID > 0 {
+			return parentID, nil
+		}
+
+		return 0, nil
 	}
 
 	/*** Fall through means that we'll need to split/replace the existing item with a layout */
@@ -76,7 +81,10 @@ func (txn AddItem) Execute(library *Library, container *Container) (int, error) 
 	container.AddReference(txn.ItemID, newItemID, newLayoutID, place)
 
 	// Since we have moved things around, replace the whole parent
-	return parentID, nil
+	if parentID > 0 {
+		return parentID, nil
+	}
+	return 0, nil
 }
 
 // findParent returns the ID of the designated item's parent.

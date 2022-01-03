@@ -13,6 +13,10 @@ func NewContainer() Container {
 }
 
 /*****************************************
+ * TODO: PATH INTERFACE
+ *****************************************/
+
+/*****************************************
  * READ FUNCTIONS
  *****************************************/
 
@@ -27,23 +31,38 @@ func (container *Container) IsEmpty() bool {
 }
 
 // GetItem returns a copy of the item at the desired index
-func (container *Container) GetItem(id int) Item {
+func (container *Container) GetItem(itemID int) Item {
 
 	// Return empty item if out of bounds
-	if (id < 0) || (id >= container.Len()) {
+	if (itemID < 0) || (itemID >= container.Len()) {
 		return Item{}
 	}
 
 	// Return a valid item
-	return (*container)[id]
+	return (*container)[itemID]
+}
+
+// GetType returns the item type of the designated item
+func (container *Container) GetType(itemID int) string {
+	return container.GetItem(itemID).Type
+}
+
+// GetRefs returns the child references of the designated item
+func (container *Container) GetRefs(itemID int) []int {
+	return container.GetItem(itemID).Refs
+}
+
+// GetChecksum returns the checksum of the designated item
+func (container *Container) GetChecksum(itemID int) string {
+	return container.GetItem(itemID).Check
 }
 
 // GetParent searches for the ID of a parent item
-func (container *Container) GetParent(id int) int {
+func (container *Container) GetParent(itemID int) int {
 
 	for itemIndex := range *container {
 		for refIndex := range (*container)[itemIndex].Refs {
-			if (*container)[itemIndex].Refs[refIndex] == id {
+			if (*container)[itemIndex].Refs[refIndex] == itemID {
 				return itemIndex
 			}
 		}
@@ -138,6 +157,13 @@ func (container *Container) ReplaceReference(parentID int, oldID int, newID int)
 	}
 }
 
+// Execute parses and executes a new Action against this container.
+func (container *Container) Execute(library *Library, input map[string]interface{}) (int, error) {
+
+	action := NewAction(input)
+	return action.Execute(library, container)
+}
+
 // Compact removes any unused items in the container slice
 // and reorganizes references
 func (container *Container) Compact() {
@@ -164,13 +190,6 @@ func (container *Container) Compact() {
 	}
 
 	*container = (*container)[:back]
-}
-
-// Execute parses and executes a new Action against this container.
-func (container *Container) Execute(library *Library, input map[string]interface{}) (int, error) {
-
-	action := NewAction(input)
-	return action.Execute(library, container)
 }
 
 // move physically moves an item from one index to another (overwriting the target location)

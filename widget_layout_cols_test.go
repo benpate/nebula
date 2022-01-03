@@ -38,15 +38,15 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "RIGHT",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{1, 2}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{1, 2}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 	{
@@ -57,15 +57,15 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "RIGHT",
-			"check":    container.GetItem(1).Check,
+			"check":    container.GetChecksum(1),
 		})
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{1, 2}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{1, 2}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 }
@@ -82,15 +82,15 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "LEFT",
-			"check":    container.GetItem(0).Check,
+			"check":    container.GetChecksum(0),
 		})
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{2, 1}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{2, 1}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 	{
@@ -101,15 +101,15 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "LEFT",
-			"check":    container.GetItem(1).Check,
+			"check":    container.GetChecksum(1),
 		})
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
-		require.Equal(t, "LAYOUT", container[0].Type)
-		require.Equal(t, []int{2, 1}, container[0].Refs)
-		require.Equal(t, "HTML", container[1].Type)
-		require.Equal(t, "TEXT", container[2].Type)
+		require.Equal(t, "LAYOUT", container.GetType(0))
+		require.Equal(t, []int{2, 1}, container.GetRefs(0))
+		require.Equal(t, "HTML", container.GetType(1))
+		require.Equal(t, "TEXT", container.GetType(2))
 	}
 
 }
