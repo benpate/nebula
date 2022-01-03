@@ -1,7 +1,6 @@
 package nebula
 
 import (
-	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
 )
 
@@ -14,17 +13,12 @@ type ChangeType struct {
 // Execute performs the ChangeType transaction on the provided content structure
 func (txn ChangeType) Execute(library *Library, container *Container) (int, error) {
 
-	// Bounds check
-	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
-		return -1, derp.New(500, "content.transaction.ChangeType", "Index out of bounds", txn)
-	}
-
+	// Validate transaction
 	if err := (*container)[txn.ItemID].Validate(txn.Check); err != nil {
 		return -1, derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
 	}
 
 	(*container)[txn.ItemID].Type = txn.ItemType
-	(*container)[txn.ItemID].Data = datatype.Map{}
 
 	return txn.ItemID, nil
 }

@@ -4,11 +4,13 @@ import (
 	"github.com/benpate/derp"
 )
 
+// Delete action removes a single item from a container
 type DeleteItem struct {
 	ItemID int    `json:"itemId" form:"itemId"`
 	Check  string `json:"check"  form:"check"`
 }
 
+// Execute removes a single itme from a container
 func (txn DeleteItem) Execute(library *Library, container *Container) (int, error) {
 
 	// Find parent index and record
@@ -18,12 +20,19 @@ func (txn DeleteItem) Execute(library *Library, container *Container) (int, erro
 	container.DeleteReference(parentID, txn.ItemID)
 	(*container)[parentID].DeleteReference(txn.ItemID)
 
+	// TODO: If a delete results in an empty layout, then remove the layout
+	// TODO: If a delete results in a layout with a single item, then remove the layout and promote the item
+
 	// Recursively delete this item and all of its children
 	return parentID, deleteItem(container, parentID, txn.ItemID, txn.Check)
 }
 
-// DeleteReference removes an item from a parent
+// DeleteReference removes an item from a parent.
+// This separate function is used to make recursive calls efficiently
 func deleteItem(container *Container, parentID int, deleteID int, check string) error {
+
+	// TODO: perhaps these could just fail gracefully? Then, we allow cleanup by the "compact" function
+	// to handle items that are still bad
 
 	// Bounds check
 	if (parentID < 0) || (parentID >= container.Len()) {

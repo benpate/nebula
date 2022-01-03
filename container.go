@@ -144,23 +144,6 @@ func (container *Container) DeleteReference(parentID int, referenceID int) {
 	(*container)[parentID].DeleteReference(referenceID)
 }
 
-// ReplaceRefs searches all references from parentID, and replaces oldID with newID if found
-func (container *Container) ReplaceReference(parentID int, oldID int, newID int) {
-
-	// Bounds check
-	if (parentID < 0) || (parentID >= len(*container)) {
-		return
-	}
-
-	// scan parent record for references to oldID.  Replace if found
-	for index, itemID := range (*container)[parentID].Refs {
-		if itemID == oldID {
-			(*container)[parentID].Refs[index] = newID
-			return
-		}
-	}
-}
-
 // Execute parses and executes a new Action against this container.
 func (container *Container) Execute(library *Library, input map[string]interface{}) (int, error) {
 
