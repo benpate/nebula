@@ -1,4 +1,4 @@
-package vocabulary
+package nebula
 
 import "strings"
 

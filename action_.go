@@ -1,4 +1,4 @@
-package transaction
+package nebula
 
 import (
 	"github.com/benpate/datatype"
