@@ -19,13 +19,11 @@ func TestContainer(t *testing.T) {
 	container[second].Data["html"] = "SECOND HTML ITEM"
 	container.AddLastReference(layoutID, second)
 
-	txn := ParseAction(datatype.Map{
+	container.Execute(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   2,
 		"itemType": "WYSIWYG",
 		"place":    "RIGHT",
 		"check":    container.GetItem(second).Check,
 	})
-
-	txn.Execute(&library, &container)
 }

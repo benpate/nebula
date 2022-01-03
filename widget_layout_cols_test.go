@@ -33,15 +33,13 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		txn := ParseAction(datatype.Map{
+		_, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "RIGHT",
 			"check":    container.GetItem(0).Check,
 		})
-
-		_, err := txn.Execute(&library, &container)
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
@@ -54,15 +52,13 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		txn := ParseAction(datatype.Map{
+		_, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "RIGHT",
 			"check":    container.GetItem(1).Check,
 		})
-
-		_, err := txn.Execute(&library, &container)
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
@@ -81,15 +77,13 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		txn := ParseAction(datatype.Map{
+		_, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
 			"place":    "LEFT",
 			"check":    container.GetItem(0).Check,
 		})
-
-		_, err := txn.Execute(&library, &container)
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))
@@ -102,15 +96,13 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		txn := ParseAction(datatype.Map{
+		_, err := container.Execute(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
 			"place":    "LEFT",
 			"check":    container.GetItem(1).Check,
 		})
-
-		_, err := txn.Execute(&library, &container)
 
 		require.Nil(t, err)
 		require.Equal(t, 3, len(container))

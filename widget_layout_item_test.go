@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/benpate/datatype"
+	"github.com/stretchr/testify/require"
 )
 
 func TestItem(t *testing.T) {
@@ -19,7 +20,7 @@ func TestItem(t *testing.T) {
 	container[second].Data["html"] = "SECOND HTML ITEM"
 	container.AddLastReference(layoutID, second)
 
-	txn := ParseAction(datatype.Map{
+	_, err := container.Execute(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   2,
 		"itemType": "WYSIWYG",
@@ -27,5 +28,5 @@ func TestItem(t *testing.T) {
 		"check":    container.GetItem(second).Check,
 	})
 
-	txn.Execute(&library, &container)
+	require.Nil(t, err)
 }

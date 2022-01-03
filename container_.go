@@ -166,6 +166,13 @@ func (container *Container) Compact() {
 	*container = (*container)[:back]
 }
 
+// Execute parses and executes a new Action against this container.
+func (container *Container) Execute(library *Library, input map[string]interface{}) (int, error) {
+
+	action := NewAction(input)
+	return action.Execute(library, container)
+}
+
 // move physically moves an item from one index to another (overwriting the target location)
 // and updates references
 func (container *Container) move(from int, to int) {
