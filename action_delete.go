@@ -12,9 +12,10 @@ type DeleteItem struct {
 func (txn DeleteItem) Execute(library *Library, container *Container) (int, error) {
 
 	// Find parent index and record
-	parentID := container.GetParent(txn.ItemID)
+	parentID := container.GetParentID(txn.ItemID)
 
 	// Remove parent's reference to this item
+	container.DeleteReference(parentID, txn.ItemID)
 	(*container)[parentID].DeleteReference(txn.ItemID)
 
 	// Recursively delete this item and all of its children

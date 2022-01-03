@@ -82,9 +82,9 @@ func (item *Item) UpdateReference(from int, to int) {
 }
 
 // DeleteReference removes a reference from this Item.
-func (item *Item) DeleteReference(id int) {
+func (item *Item) DeleteReference(itemID int) {
 	for index := range item.Refs {
-		if item.Refs[index] == id {
+		if item.Refs[index] == itemID {
 			item.Refs = append(item.Refs[:index], item.Refs[index+1:]...)
 			return
 		}

@@ -46,7 +46,7 @@ func (txn AddItem) Execute(library *Library, container *Container) (int, error) 
 
 	/*** If we can't append to the item directly, then try to insert into to its parent instead */
 
-	parentID := findParent(container, txn.ItemID)
+	parentID := container.GetParentID(txn.ItemID)
 	parent := container.GetItem(parentID)
 
 	// If we can append to this layout, do it
@@ -85,21 +85,6 @@ func (txn AddItem) Execute(library *Library, container *Container) (int, error) 
 		return parentID, nil
 	}
 	return 0, nil
-}
-
-// findParent returns the ID of the designated item's parent.
-// If the item has no parent, then this function returns -1.
-func findParent(container *Container, itemID int) int {
-
-	for itemIndex := range *container {
-		for _, refID := range (*container)[itemIndex].Refs {
-			if refID == itemID {
-				return itemIndex
-			}
-		}
-	}
-
-	return -1
 }
 
 // canAppendLayout returns TRUE if the placement matches the item's layout style

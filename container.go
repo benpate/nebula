@@ -58,7 +58,7 @@ func (container *Container) GetChecksum(itemID int) string {
 }
 
 // GetParent searches for the ID of a parent item
-func (container *Container) GetParent(itemID int) int {
+func (container *Container) GetParentID(itemID int) int {
 
 	for itemIndex := range *container {
 		for refIndex := range (*container)[itemIndex].Refs {
@@ -138,6 +138,10 @@ func (container *Container) AddReference(parentID int, newItemID int, referenceI
 	}
 
 	(*container)[parentID].AddReference(newItemID, index)
+}
+
+func (container *Container) DeleteReference(parentID int, referenceID int) {
+	(*container)[parentID].DeleteReference(referenceID)
 }
 
 // ReplaceRefs searches all references from parentID, and replaces oldID with newID if found
