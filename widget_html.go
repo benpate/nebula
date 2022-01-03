@@ -5,16 +5,20 @@ import (
 	"github.com/benpate/html"
 )
 
+// ItemTypeHTML describes an HTML code editor
 const ItemTypeHTML = "HTML"
 
+// HTML widget displays plain HTML content
 type HTML struct{}
 
+// View renders the HTML content of the widget
 func (w HTML) View(b *html.Builder, container *Container, id int) {
 	item := container.GetItem(id)
 	result := item.GetString("html")
 	b.WriteString(result)
 }
 
+// Edit renders a plain text editor for editing HTML code
 func (w HTML) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 	item := container.GetItem(id)
 	result := item.GetString("html")

@@ -6,6 +6,7 @@ import (
 	"github.com/benpate/htmlconv"
 )
 
+// ItemTypeText describes a plain text editor
 const ItemTypeText = "TEXT"
 
 type Text struct{}

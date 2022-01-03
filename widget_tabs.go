@@ -8,6 +8,7 @@ import (
 	"github.com/benpate/html"
 )
 
+// ItemTypeTabs describes a multi-tab container layout
 const ItemTypeTabs = "TABS"
 
 type Tabs struct {

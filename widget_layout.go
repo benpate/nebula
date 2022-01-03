@@ -12,11 +12,37 @@ import (
 // ItemTypeLayout represents a Layout widget
 const ItemTypeLayout = "LAYOUT"
 
+/************************
+ *  Layout Styles
+ ************************/
+
 // LayoutStyleRows represents a group of content items organized into rows
 const LayoutStyleRows = "ROWS"
 
 // LayoutStyle Colums represents a group of content items organized into responsive columns
 const LayoutStyleColumns = "COLS"
+
+/************************
+ *  Layout Placements
+ ************************/
+
+// LayoutPlaceBefore represents the placement of a new item before the reference item
+const LayoutPlaceBefore = "BEFORE"
+
+// LayoutPlaceAfter represents the placement of a new item after the reference item
+const LayoutPlaceAfter = "AFTER"
+
+// LayoutPlaceAbove represents the placement of a new item above the reference item
+const LayoutPlaceAbove = "ABOVE"
+
+// LayoutPlaceAbove represents the placement of a new item below the reference item
+const LayoutPlaceBelow = "BELOW"
+
+// LayoutPlaceAbove represents the placement of a new item to the left of the reference item
+const LayoutPlaceLeft = "LEFT"
+
+// LayoutPlaceAbove represents the placement of a new item to the right of the reference item
+const LayoutPlaceRight = "RIGHT"
 
 type Layout struct {
 	library *Library

@@ -8,6 +8,7 @@ import (
 	"github.com/benpate/html"
 )
 
+// ItemTypeWYSIWYG describes a what-you-see-is-what-you-get content editor
 const ItemTypeWYSIWYG = "WYSIWYG"
 
 type WYSIWYG struct{}

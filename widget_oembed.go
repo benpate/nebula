@@ -4,6 +4,7 @@ import (
 	"github.com/benpate/html"
 )
 
+// ItemTypeOEmbed describes an oEmbed object (see https://oembed.com)
 const ItemTypeOEmbed = "OEMBED"
 
 type OEmbed struct{}
