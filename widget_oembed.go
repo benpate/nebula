@@ -32,7 +32,7 @@ func (w OEmbed) View(b *html.Builder, container *Container, id int) {
 
 func (w OEmbed) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 	// script := "install Uploader(endpoint:'" + endpoint + "')"
-	b.Div().Class("oEmbed") // .Script(script).EndBracket()
-	b.H3().InnerHTML("Drag Images Here To Upload").Close()
+	b.Div().Class("oEmbed").TabIndex("0") // .Script(script).EndBracket()
+	b.Div().InnerHTML("Drag Files Here<br>To Upload").Close()
 	b.Close()
 }
