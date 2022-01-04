@@ -23,9 +23,13 @@ func (w Text) View(b *html.Builder, container *Container, id int) {
 func (w Text) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 	item := container.GetItem(id)
 
-	b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "blur")
+	b.Form("", "").
+		Data("hx-post", endpoint).
+		Data("hx-trigger", "autosave").
+		Data("hx-swap", "none")
+
 	b.Input("hidden", "type").Value("update-item")
 	b.Input("hidden", "itemId").Value(convert.String(id))
 	b.Input("hidden", "check").Value(item.Check)
-	b.Container("textarea").Name("text").InnerHTML(item.GetString("text"))
+	b.Container("textarea").Name("text").Script("install Autosize install Autosave").InnerHTML(item.GetString("text"))
 }

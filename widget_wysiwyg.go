@@ -31,7 +31,7 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 
 	b.Form("", "").
 		Data("hx-post", endpoint).
-		Data("hx-trigger", "updated").
+		Data("hx-trigger", "autosave").
 		Data("hx-swap", "none")
 
 	// Form fields here
@@ -71,7 +71,7 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	}
 	b.Close()
 
-	b.Div().Class("wysiwyg-editor").InnerHTML(result)
+	b.Div().Class("wysiwyg-editor").Script("install Autosave").InnerHTML(result)
 	b.CloseAll()
 }
 
