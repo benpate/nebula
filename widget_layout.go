@@ -87,27 +87,37 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 		Data("size", strconv.Itoa(len(layout.Refs))).
 		Data("id", layoutIDString)
 
-	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceAbove, layout.Check, endpoint)
-	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceLeft, layout.Check, endpoint)
+	if layoutID == 0 {
+		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceAbove, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceLeft, layout.Check, endpoint)
+	}
 
-	for _, childID := range layout.Refs {
+	for childIndex, childID := range layout.Refs {
 		childIDString := strconv.Itoa(childID)
 
+		child := container.GetItem(childID)
 		b.Div().Class("nebula-layout-item")
 
-		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceAbove, layout.Check, endpoint)
-		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceLeft, layout.Check, endpoint)
+		if (childIndex == 0) || style == LayoutStyleColumns {
+			layoutInsert(b, layoutIDString, childIDString, LayoutPlaceAbove, child.Check, endpoint)
+		}
+
+		if (childIndex == 0) || style == LayoutStyleRows {
+			layoutInsert(b, layoutIDString, childIDString, LayoutPlaceLeft, child.Check, endpoint)
+		}
 
 		w.library.Edit(b, container, childID, endpoint)
 
-		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceBelow, layout.Check, endpoint)
-		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceRight, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceBelow, child.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceRight, child.Check, endpoint)
 
 		b.Close()
 	}
 
-	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceBelow, layout.Check, endpoint)
-	layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceRight, layout.Check, endpoint)
+	if layoutID == 0 {
+		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceBelow, layout.Check, endpoint)
+		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceRight, layout.Check, endpoint)
+	}
 
 	b.Close()
 }
@@ -121,7 +131,7 @@ func (w Layout) Prop(b *html.Builder, container *Container, id int, endpoint str
 		b.Div().Attr("tabindex", "0")
 		b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "click")
 		b.Input("hidden", "type").Value("add-item").Close()
-		b.Input("hidden", "itemId").Value(params.Get("itemId")).Close()
+		b.Input("hidden", "itemId").Value(params.Get("subItemId")).Close()
 		b.Input("hidden", "itemType").Value(itemType.Code)
 
 		for key, value := range itemType.Data {
@@ -145,7 +155,7 @@ func layoutInsert(b *html.Builder, layoutID string, widgetID string, place strin
 
 	url := makeURL(endpoint, "prop=insert", "itemId="+layoutID, "subItemId="+widgetID, "place="+place, "check="+check)
 
-	b.Div().
+	b.Span().
 		Class("nebula-layout-insert").
 		Data("place", place).
 		Data("hx-get", url).

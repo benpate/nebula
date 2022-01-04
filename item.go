@@ -40,7 +40,7 @@ func (item *Item) Validate(checksum string) error {
 	}
 
 	if item.Check != checksum {
-		return derp.New(derp.CodeForbiddenError, "Item.Validate", "Invalid checksum", checksum)
+		return derp.New(derp.CodeBadRequestError, "Item.Validate", "Invalid checksum", checksum)
 	}
 
 	return nil
