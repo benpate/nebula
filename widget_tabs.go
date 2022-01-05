@@ -67,25 +67,29 @@ func (w Tabs) View(b *html.Builder, container *Container, id int) {
 	b.CloseAll()
 }
 
-func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint string) {
+func (w Tabs) Edit(b *html.Builder, container *Container, itemID int, endpoint string) {
 
-	item := container.GetItem(id)
+	parent := container.GetItem(itemID)
+	parentIDString := convert.String(itemID)
 
-	b.Div().Class("tabs").Script("install TabContainer")
+	b.Div().
+		Class("tabs").
+		Data("id", parentIDString).
+		Script("install TabContainer")
 
 	b.Div().Role("tablist").EndBracket()
-	for index, id := range item.Refs {
-		item := container.GetItem(id)
-		idString := convert.String(id)
+	for index, tabID := range parent.Refs {
+		tab := container.GetItem(tabID)
+		tabIDString := convert.String(tabID)
 
 		b.Span().
 			Role("tab").
-			ID("tab-"+idString).
-			Aria("controls", "panel-"+idString).
+			ID("tab-"+tabIDString).
+			Aria("controls", "panel-"+tabIDString).
 			Aria("selected", convert.String(index == 0)).
 			EndBracket()
 
-		b.WriteString(item.GetString("label"))
+		b.WriteString(tab.GetString("label"))
 
 		b.Form("", "").
 			Style("display:inline").
@@ -94,8 +98,8 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 			Data("hx-confirm", "Remove this tab?")
 
 		b.Input("hidden", "type").Value("delete-item").Close()
-		b.Input("hidden", "itemId").Value(idString).Close()
-		b.Input("hidden", "check").Value(item.GetString("check")).Close()
+		b.Input("hidden", "itemId").Value(tabIDString).Close()
+		b.Input("hidden", "check").Value(tab.GetString("check")).Close()
 
 		b.Container("i").
 			Class("fa-regular fa-circle-xmark", "space-left").
@@ -110,7 +114,7 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 		Role("tab").
 		ID("tab-new").
 		Data("hx-post", endpoint).
-		Data("hx-vals", fmt.Sprintf("{'type':'new-item', 'itemId':'%s', 'place':'RIGHT', 'itemType':'CONTAINER', 'check':'%s'}", convert.String(id), item.GetString("check"))).
+		Data("hx-vals", fmt.Sprintf("{'type':'new-item', 'itemId':'%s', 'place':'RIGHT', 'itemType':'CONTAINER', 'check':'%s'}", parentIDString, parent.GetString("check"))).
 		EndBracket()
 
 	b.Container("i").Class("fa-regular fa-circle-plus").Close()
@@ -118,17 +122,17 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 	b.Close()
 	b.Close()
 
-	for index, id := range item.Refs {
-		idString := convert.String(id)
+	for index, tabID := range parent.Refs {
+		tabIDString := convert.String(tabID)
 
 		b.Div().
 			Role("tabpanel").
-			ID("panel-"+idString).
-			Aria("labelledby", "tab-"+idString).
+			ID("panel-"+tabIDString).
+			Aria("labelledby", "tab-"+tabIDString).
 			Attr("hidden", convert.String(index != 0)).
 			EndBracket()
 
-		w.library.Edit(b, container, id, endpoint)
+		w.library.Edit(b, container, tabID, endpoint)
 		b.Close()
 	}
 
