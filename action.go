@@ -10,14 +10,6 @@ func NewAction(in map[string]interface{}) Action {
 
 	switch data.GetString("type") {
 
-	case "change-type":
-
-		return ChangeType{
-			ItemID:   data.GetInt("itemId"),
-			ItemType: data.GetString("itemType"),
-			Check:    data.GetString("check"),
-		}
-
 	case "add-item":
 
 		return AddItem{
@@ -28,12 +20,12 @@ func NewAction(in map[string]interface{}) Action {
 			Check:    data.GetString("check"),
 		}
 
-	case "update-item":
+	case "change-type":
 
-		return UpdateItem{
-			ItemID: data.GetInt("itemId"),
-			Data:   extractData(in),
-			Check:  data.GetString("check"),
+		return ChangeType{
+			ItemID:   data.GetInt("itemId"),
+			ItemType: data.GetString("itemType"),
+			Check:    data.GetString("check"),
 		}
 
 	case "delete-item":
@@ -51,6 +43,23 @@ func NewAction(in map[string]interface{}) Action {
 			Position:    data.GetInt("position"),
 			Check:       data.GetString("check"),
 		}
+
+	case "update-item":
+
+		return UpdateItem{
+			ItemID: data.GetInt("itemId"),
+			Data:   extractData(in),
+			Check:  data.GetString("check"),
+		}
+
+	case "upload-file":
+
+		return UploadFile{
+			ItemID: data.GetInt("itemId"),
+			File:   data.GetString("file"),
+			Check:  data.GetString("check"),
+		}
+
 	}
 
 	return NilAction(data)

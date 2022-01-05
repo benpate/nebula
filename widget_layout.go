@@ -64,7 +64,7 @@ func (w Layout) View(b *html.Builder, container *Container, layoutID int) {
 	}
 
 	b.Div().
-		Class("nabula-layout").
+		Class("nebula-layout").
 		Data("style", item.GetString("style")).
 		Data("size", strconv.Itoa(len(item.Refs)))
 

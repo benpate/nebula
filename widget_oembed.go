@@ -1,7 +1,9 @@
 package nebula
 
 import (
+	"github.com/benpate/convert"
 	"github.com/benpate/html"
+	"github.com/benpate/list"
 )
 
 // ItemTypeOEmbed describes an oEmbed object (see https://oembed.com)
@@ -9,9 +11,9 @@ const ItemTypeOEmbed = "OEMBED"
 
 type OEmbed struct{}
 
-func (w OEmbed) View(b *html.Builder, container *Container, id int) {
+func (w OEmbed) View(b *html.Builder, container *Container, itemID int) {
 
-	item := container.GetItem(id)
+	item := container.GetItem(itemID)
 
 	// If the oEmbed data includes HTML, then just use that and be done.
 	if html := item.GetString("html"); html != "" {
@@ -19,20 +21,40 @@ func (w OEmbed) View(b *html.Builder, container *Container, id int) {
 		return
 	}
 
-	// Special handling for known types
-	switch item.GetString("type") {
+	switch list.Head(item.GetString("mimeType"), "/") {
+	case "image", "photo":
+		b.Empty("img").Class("pure-img").Attr("src", item.GetString("file"))
+		b.Close()
 
-	case "photo":
-		b.Empty("img").
-			Attr("src", item.GetString("url")).
-			Attr("width", item.GetString("width")).
-			Attr("height", item.GetString("height"))
+	case "video":
+		b.Span().InnerHTML("video here...")
+		b.Close()
 	}
 }
 
-func (w OEmbed) Edit(b *html.Builder, container *Container, id int, endpoint string) {
-	// script := "install Uploader(endpoint:'" + endpoint + "')"
-	b.Div().Class("oEmbed").TabIndex("0") // .Script(script).EndBracket()
-	b.Div().InnerHTML("Drag Files Here<br>To Upload").Close()
-	b.Close()
+func (w OEmbed) Edit(b *html.Builder, container *Container, itemID int, endpoint string) {
+
+	item := container.GetItem(itemID)
+
+	b.Form("", "").
+		Script("install DropToUpload").
+		Data("hx-post", endpoint).
+		Data("hx-trigger", "change").
+		Attr("hx-encoding", "multipart/form-data").
+		Class("uploader")
+
+	b.Input("hidden", "type").Value("upload-file")
+	b.Input("hidden", "itemId").Value(convert.String(itemID))
+	b.Input("hidden", "check").Value(item.Check)
+	b.Input("file", "file").Attr("accept", "image/*")
+
+	// View the file inline
+	// w.View(b.SubTree(), container, itemID)
+
+	if item.GetString("file") == "" {
+		b.Div().InnerHTML("Drag Files Here<br><br>Or Click To Select").Close()
+	} else {
+		w.View(b, container, itemID)
+	}
+	b.CloseAll()
 }

@@ -16,7 +16,7 @@ func ItemTypes() []ItemType {
 	return []ItemType{
 		{
 			Code:  ItemTypeWYSIWYG,
-			Label: "Rich Text Content",
+			Label: "HTML Content",
 		},
 		{
 			Code:  ItemTypeText,
@@ -29,6 +29,10 @@ func ItemTypes() []ItemType {
 		{
 			Code:  ItemTypeTabs,
 			Label: "Tabs",
+		},
+		{
+			Code:  ItemTypeHTML,
+			Label: "HTML Code",
 		},
 	}
 }

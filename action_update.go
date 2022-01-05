@@ -13,7 +13,7 @@ type UpdateItem struct {
 func (txn UpdateItem) Execute(library *Library, container *Container) (int, error) {
 
 	// Bounds check
-	if (txn.ItemID < 0) || (txn.ItemID >= container.Len()) {
+	if container.IsNil(txn.ItemID) {
 		return 0, derp.New(500, "content.transaction.UpdateItem", "Index out of bounds", txn.ItemID)
 	}
 
