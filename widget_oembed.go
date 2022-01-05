@@ -35,12 +35,14 @@ func (w OEmbed) View(b *html.Builder, container *Container, itemID int) {
 func (w OEmbed) Edit(b *html.Builder, container *Container, itemID int, endpoint string) {
 
 	item := container.GetItem(itemID)
+	idString := convert.String(itemID)
 
 	b.Form("", "").
-		Script("install DropToUpload").
+		Data("id", idString).
 		Data("hx-post", endpoint).
 		Data("hx-trigger", "change").
-		Attr("hx-encoding", "multipart/form-data").
+		Data("hx-encoding", "multipart/form-data").
+		Script("install DropToUpload").
 		Class("uploader")
 
 	b.Input("hidden", "type").Value("upload-file")
