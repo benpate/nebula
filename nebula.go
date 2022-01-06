@@ -24,11 +24,7 @@ func View(library *Library, container *Container) string {
 // Edit returns an HTML string containing the EDIT version of the container
 func Edit(library *Library, container *Container, endpoint string) string {
 	builder := html.New()
-
-	builder.Div().Class("content-editor").EndBracket()
 	library.Edit(builder, container, 0, endpoint)
-	builder.CloseAll()
-
 	return builder.String()
 }
 

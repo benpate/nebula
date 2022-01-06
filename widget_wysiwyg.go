@@ -30,7 +30,6 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	idString := convert.String(id)
 
 	b.Form("", "").
-		Data("id", idString).
 		Data("hx-post", endpoint).
 		Data("hx-trigger", "autosave").
 		Data("hx-swap", "none")

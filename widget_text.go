@@ -12,26 +12,24 @@ const ItemTypeText = "TEXT"
 type Text struct{}
 
 // View returns the Text widget, rendered as HTML
-func (w Text) View(b *html.Builder, container *Container, itemID int) {
-	item := container.GetItem(itemID)
+func (w Text) View(b *html.Builder, container *Container, id int) {
+	item := container.GetItem(id)
 	result := item.GetString("text")
 	result = htmlconv.FromText(result)
 	b.WriteString(result)
 }
 
 // Edit returns a textarea where the text content can be edited
-func (w Text) Edit(b *html.Builder, container *Container, itemID int, endpoint string) {
-	item := container.GetItem(itemID)
-	idString := convert.String(itemID)
+func (w Text) Edit(b *html.Builder, container *Container, id int, endpoint string) {
+	item := container.GetItem(id)
 
 	b.Form("", "").
-		Data("id", idString).
 		Data("hx-post", endpoint).
 		Data("hx-trigger", "autosave").
 		Data("hx-swap", "none")
 
 	b.Input("hidden", "type").Value("update-item")
-	b.Input("hidden", "itemId").Value(idString)
+	b.Input("hidden", "itemId").Value(convert.String(id))
 	b.Input("hidden", "check").Value(item.Check)
 	b.Container("textarea").Name("text").Script("install Autosize install Autosave").InnerHTML(item.GetString("text"))
 }

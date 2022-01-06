@@ -82,16 +82,15 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 	style := first.String(layout.GetString("style"), LayoutStyleRows)
 
 	b.Div().
-		Data("id", layoutIDString).
 		Class("nebula-layout").
 		Data("style", style).
 		Data("size", strconv.Itoa(len(layout.Refs))).
 		Data("id", layoutIDString)
 
-	/*if layoutID == 0 {
+	if layoutID == 0 {
 		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceAbove, layout.Check, endpoint)
 		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceLeft, layout.Check, endpoint)
-	} */
+	}
 
 	for childIndex, childID := range layout.Refs {
 		childIDString := strconv.Itoa(childID)
@@ -109,28 +108,16 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 
 		w.library.Edit(b, container, childID, endpoint)
 
-		if child.Type != ItemTypeLayout {
-			b.Div().Class("nebula-layout-controls")
-			b.Div().Class("nebula-layout-sortable-handle")
-			b.Container("i").Class("fa-solid fa-grip-vertical").Close()
-			b.Close()
-
-			b.Div().Class("nebula-layout-delete")
-			b.Container("i").Class("fa-solid fa-circle-xmark").Close()
-			b.Close()
-			b.Close()
-		}
-
 		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceBelow, child.Check, endpoint)
 		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceRight, child.Check, endpoint)
 
 		b.Close()
 	}
 
-	/* if layoutID == 0 {
+	if layoutID == 0 {
 		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceBelow, layout.Check, endpoint)
 		layoutInsert(b, layoutIDString, layoutIDString, LayoutPlaceRight, layout.Check, endpoint)
-	}*/
+	}
 
 	b.Close()
 }
