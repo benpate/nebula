@@ -15,7 +15,7 @@ func TestItem_Split_ABOVE(t *testing.T) {
 
 	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -53,7 +53,7 @@ func TestItem_Split_BELOW(t *testing.T) {
 
 	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -91,7 +91,7 @@ func TestItem_Split_LEFT(t *testing.T) {
 
 	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -129,7 +129,7 @@ func TestItem_Split_RIGHT(t *testing.T) {
 
 	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -167,7 +167,7 @@ func TestItem_Split_BEFORE(t *testing.T) {
 
 	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -205,7 +205,7 @@ func TestItem_Split_AFTER(t *testing.T) {
 
 	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":     "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",

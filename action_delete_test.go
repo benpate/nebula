@@ -13,7 +13,7 @@ func TestDelete(t *testing.T) {
 	library := NewLibrary()
 	container := getTestContainer()
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":   "delete-item",
 		"itemId": "3",
 		"check":  container.GetChecksum(3),
@@ -42,7 +42,7 @@ func TestDelete_BoundsCheck(t *testing.T) {
 	library := NewLibrary()
 	container := getTestContainer()
 
-	itemID, err := container.Execute(&library, datatype.Map{
+	itemID, err := container.Post(&library, datatype.Map{
 		"type":   "delete-item",
 		"itemId": "4",
 		"check":  "",

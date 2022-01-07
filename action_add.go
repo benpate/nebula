@@ -14,8 +14,12 @@ type AddItem struct {
 	Check    string `json:"check"    form:"check"`    // Checksum to validation transaction.
 }
 
+func (txn AddItem) Get(library *Library, container *Container) string {
+	return ""
+}
+
 // Execute performs the AddItem transaction on the provided content structure
-func (txn AddItem) Execute(library *Library, container *Container) (int, error) {
+func (txn AddItem) Post(library *Library, container *Container) (int, error) {
 
 	/*** Validate the transa tion */
 

@@ -14,7 +14,7 @@ func TestAddItem_Rows_ABOVE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -34,7 +34,7 @@ func TestAddItem_Rows_ABOVE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -59,7 +59,7 @@ func TestAddItem_Rows_BEFORE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -79,7 +79,7 @@ func TestAddItem_Rows_BEFORE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -104,7 +104,7 @@ func TestAddItem_Rows_BELOW(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -124,7 +124,7 @@ func TestAddItem_Rows_BELOW(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -149,7 +149,7 @@ func TestAddItem_Rows_AFTER(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -169,7 +169,7 @@ func TestAddItem_Rows_AFTER(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -194,7 +194,7 @@ func TestAddItem_Rows_LEFT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -222,7 +222,7 @@ func TestAddItem_Rows_LEFT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -255,7 +255,7 @@ func TestAddItem_Rows_RIGHT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -283,7 +283,7 @@ func TestAddItem_Rows_RIGHT(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Execute(&library, datatype.Map{
+		itemID, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",

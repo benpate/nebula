@@ -33,7 +33,7 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		_, err := container.Execute(&library, datatype.Map{
+		_, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -61,7 +61,7 @@ func TestAddItem_Columns_RIGHT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		_, err := container.Execute(&library, datatype.Map{
+		_, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",
@@ -86,7 +86,7 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		_, err := container.Execute(&library, datatype.Map{
+		_, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -105,7 +105,7 @@ func TestAddItem_Columns_LEFT(t *testing.T) {
 	{
 		container := getTestColumns()
 
-		_, err := container.Execute(&library, datatype.Map{
+		_, err := container.Post(&library, datatype.Map{
 			"type":     "add-item",
 			"itemId":   1,
 			"itemType": "TEXT",

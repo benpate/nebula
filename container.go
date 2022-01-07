@@ -160,10 +160,16 @@ func (container *Container) DeleteReference(parentID int, referenceID int) {
 }
 
 // Execute parses and executes a new Action against this container.
-func (container *Container) Execute(library *Library, input map[string]interface{}) (int, error) {
+func (container *Container) Get(library *Library, input map[string]interface{}) string {
+	action := NewAction(input)
+	return action.Get(library, container)
+}
+
+// Execute parses and executes a new Action against this container.
+func (container *Container) Post(library *Library, input map[string]interface{}) (int, error) {
 
 	action := NewAction(input)
-	return action.Execute(library, container)
+	return action.Post(library, container)
 }
 
 // Compact removes any unused items in the container slice

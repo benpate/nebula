@@ -98,7 +98,7 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 		if child.Type != ItemTypeLayout {
 			b.Div().Class("nebula-layout-controls")
 			b.Div().Class("nebula-layout-sortable-handle")
-			b.Container("i").Class("fa-solid fa-grip-vertical").Close()
+			b.Container("i").Class("fa-solid fa-grip-horizontal").Close()
 			b.Close()
 
 			b.Div().Class("nebula-layout-delete")

@@ -10,8 +10,12 @@ type DeleteItem struct {
 	Check  string `json:"check"  form:"check"`
 }
 
+func (txn DeleteItem) Get(library *Library, container *Container) string {
+	return ""
+}
+
 // Execute removes a single itme from a container
-func (txn DeleteItem) Execute(library *Library, container *Container) (int, error) {
+func (txn DeleteItem) Post(library *Library, container *Container) (int, error) {
 
 	// Find parent index and record
 	parentID := container.GetParentID(txn.ItemID)
