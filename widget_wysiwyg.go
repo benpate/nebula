@@ -44,27 +44,31 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	b.Div().Class("wysiwyg-toolbar").Attr("hidden", "true").ID("toolbar-" + idString)
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Data("command", "formatBlock").Data("command-value", "h1").InnerHTML("H1").Close()
-		b.Button().Data("command", "formatBlock").Data("command-value", "h2").InnerHTML("H2").Close()
-		b.Button().Data("command", "formatBlock").Data("command-value", "h3").InnerHTML("H3").Close()
-		b.Button().Data("command", "formatBlock").Data("command-value", "p").InnerHTML("P").Close()
+		b.Button().TabIndex("0").Data("command", "formatBlock").Data("command-value", "h1").InnerHTML("H1").Close()
+		b.Button().TabIndex("0").Data("command", "formatBlock").Data("command-value", "h2").InnerHTML("H2").Close()
+		b.Button().TabIndex("0").Data("command", "formatBlock").Data("command-value", "h3").InnerHTML("H3").Close()
+		b.Button().TabIndex("0").Data("command", "formatBlock").Data("command-value", "p").InnerHTML("P").Close()
 		b.Close()
 	}
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Data("command", "bold").Data("hotkey", "b").InnerHTML("B").Close()
-		b.Button().Data("command", "italic").Data("hotkey", "i").InnerHTML("I").Close()
-		b.Button().Data("command", "underline").Data("hotkey", "u").InnerHTML("U").Close()
+		b.Button().TabIndex("0").Data("command", "bold").Data("hotkey", "b").InnerHTML("B").Close()
+		b.Button().TabIndex("0").Data("command", "italic").Data("hotkey", "i").InnerHTML("I").Close()
+		b.Button().TabIndex("0").Data("command", "underline").Data("hotkey", "u").InnerHTML("U").Close()
 		b.Close()
 	}
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Script("on click log me get prompt('Enter URL') log it call document.execCommand('link', result)").InnerHTML("Link").Close()
-		b.Button().Data("command", "unlink").InnerHTML("Unlink").Close()
+		b.Button().TabIndex("0").Script("on click log me get prompt('Enter URL') log it call document.execCommand('link', result)")
+		b.Container("i").Class("fa-regular", "fa-link").Close()
+		b.Close()
+		b.Button().TabIndex("0").Data("command", "unlink")
+		b.Container("i").Class("fa-regular", "fa-unlink").Close()
+		b.Close()
 		b.Close()
 	}
 	{
-		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
+		b.Span().Class("wysiwyg-toolbar-group").Attr("hidden", "true").EndBracket()
 		b.Button().Data("command", "undo").Data("hotkey", "z").InnerHTML("Undo").Close()
 		b.Button().Data("command", "redo").Data("hotkey", "Z").InnerHTML("Redo").Close()
 		b.Close()

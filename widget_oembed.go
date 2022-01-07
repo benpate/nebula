@@ -4,6 +4,7 @@ import (
 	"github.com/benpate/convert"
 	"github.com/benpate/html"
 	"github.com/benpate/list"
+	"github.com/davecgh/go-spew/spew"
 )
 
 // ItemTypeOEmbed describes an oEmbed object (see https://oembed.com)
@@ -21,13 +22,16 @@ func (w OEmbed) View(b *html.Builder, container *Container, itemID int) {
 		return
 	}
 
+	spew.Dump(item)
+
 	switch list.Head(item.GetString("mimeType"), "/") {
-	case "image", "photo":
-		b.Empty("img").Class("pure-img").Attr("src", item.GetString("file"))
-		b.Close()
 
 	case "video":
 		b.Span().InnerHTML("video here...")
+		b.Close()
+
+	default:
+		b.Empty("img").Class("pure-img").Attr("src", item.GetString("file"))
 		b.Close()
 	}
 }
@@ -49,9 +53,6 @@ func (w OEmbed) Edit(b *html.Builder, container *Container, itemID int, endpoint
 	b.Input("hidden", "itemId").Value(convert.String(itemID))
 	b.Input("hidden", "check").Value(item.Check)
 	b.Input("file", "file").Attr("accept", "image/*")
-
-	// View the file inline
-	// w.View(b.SubTree(), container, itemID)
 
 	if item.GetString("file") == "" {
 		b.Div().InnerHTML("Drag Files Here<br><br>Or Click To Select").Close()
