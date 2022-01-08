@@ -7,7 +7,7 @@ import (
 
 type NilAction datatype.Map
 
-func (txn NilAction) Get(library *Library, container *Container) string {
+func (txn NilAction) Get(library *Library, container *Container, endpoint string) string {
 	return ""
 }
 

@@ -1,10 +1,11 @@
 package nebula
 
 import (
+	"math/rand"
+
 	"github.com/benpate/convert"
 	"github.com/benpate/html"
 	"github.com/benpate/list"
-	"github.com/davecgh/go-spew/spew"
 )
 
 // ItemTypeOEmbed describes an oEmbed object (see https://oembed.com)
@@ -22,8 +23,6 @@ func (w OEmbed) View(b *html.Builder, container *Container, itemID int) {
 		return
 	}
 
-	spew.Dump(item)
-
 	switch list.Head(item.GetString("mimeType"), "/") {
 
 	case "video":
@@ -40,6 +39,9 @@ func (w OEmbed) Edit(b *html.Builder, container *Container, itemID int, endpoint
 
 	item := container.GetItem(itemID)
 	idString := convert.String(itemID)
+	idStringUnique := "file-" + idString + "-" + convert.String(rand.Int())
+
+	b.Container("label").For(idStringUnique).Class("block")
 
 	b.Form("", "").
 		Data("id", idString).
@@ -49,13 +51,13 @@ func (w OEmbed) Edit(b *html.Builder, container *Container, itemID int, endpoint
 		Script("install DropToUpload").
 		Class("uploader")
 
-	b.Input("hidden", "type").Value("upload-file")
+	b.Input("hidden", "action").Value("upload-file")
 	b.Input("hidden", "itemId").Value(convert.String(itemID))
 	b.Input("hidden", "check").Value(item.Check)
-	b.Input("file", "file").Attr("accept", "image/*")
+	b.Input("file", "file").ID(idStringUnique).Attr("accept", "image/*")
 
 	if item.GetString("file") == "" {
-		b.Div().InnerHTML("Drag Files Here<br><br>Or Click To Select").Close()
+		b.Div().Class("space-above", "space-below").InnerHTML("Drag Files Here, or Click To Select").Close()
 	} else {
 		w.View(b, container, itemID)
 	}

@@ -1,10 +1,8 @@
 package nebula
 
 import (
-	"net/url"
 	"strconv"
 
-	"github.com/benpate/convert"
 	"github.com/benpate/html"
 )
 
@@ -83,25 +81,29 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 		Class("nebula-layout").
 		Data("style", "ROWS").
 		Data("size", strconv.Itoa(len(layout.Refs))).
-		Data("id", layoutIDString)
+		Data("id", layoutIDString).
+		Data("check", layout.Check)
 
 	for childIndex, childID := range layout.Refs {
 		childIDString := strconv.Itoa(childID)
 
 		child := container.GetItem(childID)
-		b.Div().Class("nebula-layout-item")
+		b.Div().Class("nebula-layout-item").Data("id", childIDString)
 
 		if childIndex == 0 {
-			layoutInsert(b, layoutIDString, childIDString, LayoutPlaceAbove, child.Check, endpoint)
+			layoutInsert(b, layoutIDString, childIDString, LayoutPlaceBefore, layout.Check, endpoint)
 		}
 
 		if child.Type != ItemTypeLayout {
+
+			deleteURL := makeURL(endpoint, "action=delete-item", "itemId="+childIDString, "check="+layout.Check)
+
 			b.Div().Class("nebula-layout-controls")
 			b.Div().Class("nebula-layout-sortable-handle")
 			b.Container("i").Class("fa-solid fa-grip-horizontal").Close()
 			b.Close()
 
-			b.Div().Class("nebula-layout-delete")
+			b.Div().Class("nebula-layout-delete").Data("hx-get", deleteURL).Data("hx-vals", "{}")
 			b.Container("i").Class("fa-solid fa-circle-xmark").Close()
 			b.Close()
 			b.Close()
@@ -109,7 +111,7 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 
 		w.library.Edit(b, container, childID, endpoint)
 
-		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceBelow, child.Check, endpoint)
+		layoutInsert(b, layoutIDString, childIDString, LayoutPlaceAfter, layout.Check, endpoint)
 
 		b.Close()
 	}
@@ -117,38 +119,10 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 	b.Close()
 }
 
-func (w Layout) Prop(b *html.Builder, container *Container, id int, endpoint string, params url.Values) error {
-
-	b.H1().InnerHTML("Add Another Section").Close()
-
-	b.Div().Class("table")
-	for _, itemType := range ItemTypes() {
-		b.Div().Attr("tabindex", "0")
-		b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "click")
-		b.Input("hidden", "type").Value("add-item").Close()
-		b.Input("hidden", "itemId").Value(params.Get("subItemId")).Close()
-		b.Input("hidden", "itemType").Value(itemType.Code)
-
-		for key, value := range itemType.Data {
-			b.Input("hidden", key).Value(convert.String(value)).Close()
-		}
-
-		b.Input("hidden", "place").Value(params.Get("place")).Close()
-		b.Input("hidden", "check").Value(params.Get("check")).Close()
-		b.Div().InnerHTML(itemType.Label).Close()
-		b.Div().InnerHTML(itemType.Description).Close()
-		b.Close() // Form
-		b.Close() // Div
-	}
-	b.CloseAll()
-
-	return nil
-}
-
 // insertMarker adds a nebula-layout-insert to the html.Builder.
-func layoutInsert(b *html.Builder, layoutID string, widgetID string, place string, check string, endpoint string) {
+func layoutInsert(b *html.Builder, layoutID string, childID string, place string, check string, endpoint string) {
 
-	url := makeURL(endpoint, "prop=insert", "itemId="+layoutID, "subItemId="+widgetID, "place="+place, "check="+check)
+	url := makeURL(endpoint, "action=add-item", "itemId="+layoutID, "subItemId="+childID, "place="+place, "check="+check)
 
 	b.Span().
 		Class("nebula-layout-insert").

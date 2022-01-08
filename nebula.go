@@ -2,7 +2,6 @@ package nebula
 
 import (
 	"math/rand"
-	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -24,15 +23,9 @@ func View(library *Library, container *Container) string {
 // Edit returns an HTML string containing the EDIT version of the container
 func Edit(library *Library, container *Container, endpoint string) string {
 	builder := html.New()
+	builder.Div().Script("install NebulaLayout")
 	library.Edit(builder, container, 0, endpoint)
 	return builder.String()
-}
-
-// Prop returns an editable property form based on the URL params provided.
-func Prop(library *Library, container *Container, itemID int, endpoint string, params url.Values) (string, error) {
-	builder := html.New()
-	err := library.Prop(builder, container, itemID, endpoint, params)
-	return builder.String(), err
 }
 
 /*****************************************

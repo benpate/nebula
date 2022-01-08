@@ -1,7 +1,6 @@
 package nebula
 
 import (
-	"math/rand"
 	"net/url"
 
 	"github.com/benpate/convert"
@@ -36,7 +35,7 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 		Data("hx-swap", "none")
 
 	// Form fields here
-	b.Input("hidden", "type").Value("update-item")
+	b.Input("hidden", "action").Value("update-item")
 	b.Input("hidden", "itemId").Value(idString)
 	b.Input("hidden", "html").Value(idString)
 	b.Input("hidden", "check").Value(item.Check)
@@ -53,18 +52,18 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	}
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Data("command", "bold").Aria("keyshortcuts", "Ctrl+B").InnerHTML("B " + convert.String(rand.Int())).Close()
+		b.Button().Data("command", "bold").Aria("keyshortcuts", "Ctrl+B").InnerHTML("B").Close()
 		b.Button().Data("command", "italic").Aria("keyshortcuts", "Ctrl+I").InnerHTML("I").Close()
 		b.Button().Data("command", "underline").Aria("keyshortcuts", "Ctrl+U").InnerHTML("U").Close()
 		b.Close()
 	}
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Script("on click log me get prompt('Enter URL') log it call document.execCommand('link', result)")
-		b.Container("i").Class("fa-regular", "fa-link").Close()
+		b.Button().Data("command", "createLink").Aria("keyshortcuts", "Ctrl+K")
+		b.Container("i").Class("fa-solid", "fa-link").Close()
 		b.Close()
-		b.Button().Data("command", "unlink")
-		b.Container("i").Class("fa-regular", "fa-unlink").Close()
+		b.Button().Data("command", "unlink").Aria("keyshortcuts", "Ctrl+Shift+K")
+		b.Container("i").Class("fa-solid", "fa-unlink").Close()
 		b.Close()
 		b.Close()
 	}

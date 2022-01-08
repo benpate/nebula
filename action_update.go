@@ -10,7 +10,7 @@ type UpdateItem struct {
 	Check  string                 `json:"hash"   form:"hash"`
 }
 
-func (txn UpdateItem) Get(library *Library, container *Container) string {
+func (txn UpdateItem) Get(library *Library, container *Container, endpoint string) string {
 	return ""
 }
 

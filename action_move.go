@@ -11,7 +11,7 @@ type MoveItem struct {
 	Check       string `json:"check"       form:"check"`
 }
 
-func (txn MoveItem) Get(library *Library, container *Container) string {
+func (txn MoveItem) Get(library *Library, container *Container, endpoint string) string {
 	return ""
 }
 

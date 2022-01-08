@@ -1,3 +1,5 @@
+github.com/benpate/compare v0.0.4 h1:RFswCSGTpb/Nbt12bfDmsDDGXu/hC8EbS/hd5xkVXNY=
+github.com/benpate/compare v0.0.4/go.mod h1:zmD5F0MljM9f2b0EByHcElUPptfBL/JO9oKsoif8XDo=
 github.com/benpate/convert v0.9.2/go.mod h1:hAck9D6nSY4irEXPGa0jljn/S1ThzfQCMXJ5JyDwaX0=
 github.com/benpate/convert v0.11.0 h1:62T8ez85ownbPb9x3ZCSQsxJLgDfMei28scscVEqWnE=
 github.com/benpate/convert v0.11.0/go.mod h1:FB986mt1s36qxVkU4hyVCkbTzeXai7PRhNCiFv77UAg=
@@ -7,8 +9,6 @@ github.com/benpate/derp v0.20.1/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8f
 github.com/benpate/derp v0.21.0/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
 github.com/benpate/derp v0.22.0 h1:w4Or+AwXpzbuwlVpA327woRtQhvaKx9DpD2mWHsdME0=
 github.com/benpate/derp v0.22.0/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
-github.com/benpate/first v0.0.2 h1:Cron2IbWwpL8N9ChevW5Ccw16HAfClDv46jhf72/SKE=
-github.com/benpate/first v0.0.2/go.mod h1:eswv4JF5zI4gS8FMPtiYkEVGC9dY394oV9K/8m9fOMs=
 github.com/benpate/html v0.11.4 h1:oTTD3PwLYRuNAYKkLFUHleU1BefCxXFhfugMQrCrUTA=
 github.com/benpate/html v0.11.4/go.mod h1:LfFlgbO4BW7dMxGdlFHv1viDdfrw54YDkE5jmWQDapw=
 github.com/benpate/htmlconv v0.3.1 h1:25DAbra+ozCWiSin84K4F8pf3hNMwaoNnH4IaE2UUac=

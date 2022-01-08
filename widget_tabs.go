@@ -110,7 +110,7 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 		Role("tab").
 		ID("tab-new").
 		Data("hx-post", endpoint).
-		Data("hx-vals", fmt.Sprintf("{'type':'new-item', 'itemId':'%s', 'place':'RIGHT', 'itemType':'CONTAINER', 'check':'%s'}", convert.String(id), item.GetString("check"))).
+		Data("hx-vals", fmt.Sprintf("{'action':'new-item', 'itemId':'%s', 'place':'RIGHT', 'itemType':'CONTAINER', 'check':'%s'}", convert.String(id), item.GetString("check"))).
 		EndBracket()
 
 	b.Container("i").Class("fa-regular fa-circle-plus").Close()

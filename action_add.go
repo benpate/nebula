@@ -1,166 +1,83 @@
 package nebula
 
 import (
-	"github.com/benpate/datatype"
+	"github.com/benpate/convert"
 	"github.com/benpate/derp"
-	"github.com/benpate/first"
+	"github.com/benpate/html"
 )
 
 type AddItem struct {
-	ItemID   int    `json:"itemId"   form:"itemId"`   // ID of the root item that will be added to
-	Place    string `json:"place"    form:"place"`    // Position of the new element (BEFORE, AFTER, ABOVE, BELOW, LEFT, RIGHT) relative to the index
-	ItemType string `json:"itemType" form:"itemType"` // Type of content item to add
-	Style    string `json:"style"    form:"style"`    // Optional "style" aregument for certain types (like layouts)
-	Check    string `json:"check"    form:"check"`    // Checksum to validation transaction.
+	ItemID    int    `json:"itemId"    form:"itemId"`    // ID of the layout that will hold the new item
+	SubItemID int    `json:"subItemID" form:"subItemId"` // ID of the item used for relative positioning
+	Place     string `json:"place"     form:"place"`     // Position of the new element (BEFORE, AFTER, ABOVE, BELOW, LEFT, RIGHT) relative to the index
+	ItemType  string `json:"itemType"  form:"itemType"`  // Type of content item to add
+	Style     string `json:"style"     form:"style"`     // Optional "style" aregument for certain types (like layouts)
+	Check     string `json:"check"     form:"check"`     // Checksum to validation transaction.
 }
 
-func (txn AddItem) Get(library *Library, container *Container) string {
-	return ""
+func (txn AddItem) Get(library *Library, container *Container, endpoint string) string {
+
+	b := html.New()
+
+	b.H1().InnerHTML("Add Another Section").Close()
+
+	b.Div().Class("table")
+
+	for _, itemType := range ItemTypes() {
+		b.Div().Attr("tabindex", "0")
+		b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "click")
+		b.Input("hidden", "action").Value("add-item").Close()
+		b.Input("hidden", "itemId").Value(convert.String(txn.ItemID)).Close()
+		b.Input("hidden", "subItemId").Value(convert.String(txn.SubItemID)).Close()
+		b.Input("hidden", "itemType").Value(itemType.Code)
+
+		for key, value := range itemType.Data {
+			b.Input("hidden", key).Value(convert.String(value)).Close()
+		}
+
+		b.Input("hidden", "place").Value(txn.Place).Close()
+		b.Input("hidden", "check").Value(txn.Check).Close()
+		b.Div().InnerHTML(itemType.Label).Close()
+		b.Div().InnerHTML(itemType.Description).Close()
+		b.Close() // Form
+		b.Close() // Div
+	}
+
+	b.Close()
+
+	// Close button (because now we have to do it ourselves)
+	b.Div()
+	b.Button().Script("on click send closeModal").InnerHTML("Close")
+	b.CloseAll()
+
+	return b.String()
+
 }
 
 // Execute performs the AddItem transaction on the provided content structure
 func (txn AddItem) Post(library *Library, container *Container) (int, error) {
 
-	/*** Validate the transa tion */
-
-	// Try to get a copy of the item to be modified (this will return a Nil item, if not found)
-	item := container.GetItem(txn.ItemID)
-
-	// Validate the item can be manipulated
-	if err := item.Validate(txn.Check); err != nil {
-		return -1, derp.Wrap(err, "transaction.AddItem", "Invalid item", txn)
-	}
-
-	// Create the new item to insert into the container
-	newItemID := container.NewItemWithInit(library, txn.ItemType, nil)
-
-	/*** Try to append directly to the layout, if possible */
-
-	// If we can append to this item, do it
-	switch canAppendLayout(&item, txn.Place) {
-
-	case LayoutPlaceBefore:
-		container.AddFirstReference(txn.ItemID, newItemID)
-		return txn.ItemID, nil
-
-	case LayoutPlaceAfter:
-		container.AddLastReference(txn.ItemID, newItemID)
-		return txn.ItemID, nil
-	}
-
 	/*** If we can't append to the item directly, then try to insert into to its parent instead */
 
-	parentID := container.GetParentID(txn.ItemID)
-	parent := container.GetItem(parentID)
+	parent := container.GetItem(txn.ItemID)
 
-	// If we can append to this layout, do it
-	if place := canAppendLayout(&parent, txn.Place); place != "" {
-		container.AddReference(parentID, newItemID, txn.ItemID, place)
-
-		if parentID > 0 {
-			return parentID, nil
-		}
-
-		return 0, nil
+	if err := parent.Validate(txn.Check); err != nil {
+		return -1, derp.Wrap(err, "nebula.AddItem.Post", "Invalid checksum", txn)
 	}
 
-	/*** Fall through means that we'll need to split/replace the existing item with a layout */
+	if container.IsNil(txn.SubItemID) {
+		return -1, derp.New(derp.CodeBadRequestError, "nebula.AddItem.Post", "Invalid Reference Item", txn)
+	}
 
-	// create a new layout item that will contain the new items
-	newLayoutID := container.NewItem(ItemTypeLayout, datatype.Map{
-		"style": getLayoutStyleFromPlace(txn.Place),
-	})
-	newLayout := container.GetItem(newLayoutID)
+	newItemID := container.NewItemWithInit(library, txn.ItemType, nil)
 
-	// Swap original parent with new layout
-	(*container)[txn.ItemID] = newLayout
-	(*container)[newLayoutID] = item
-
-	// Wrap the original item in the new layout
-	container.AddFirstReference(txn.ItemID, newLayoutID)
-
-	place := canAppendLayout(&newLayout, txn.Place)
-
-	// Add the new item into the new layout
-	container.AddReference(txn.ItemID, newItemID, newLayoutID, place)
+	container.AddReference(txn.ItemID, txn.Place, txn.SubItemID, newItemID)
+	container.NewChecksum(txn.ItemID)
 
 	// Since we have moved things around, replace the whole parent
-	if parentID > 0 {
-		return parentID, nil
+	if txn.ItemID > 0 {
+		return txn.ItemID, nil
 	}
+
 	return 0, nil
-}
-
-// canAppendLayout returns TRUE if the placement matches the item's layout style
-func canAppendLayout(item *Item, place string) string {
-
-	if item.Type != ItemTypeLayout {
-		return ""
-	}
-
-	switch getLayoutStyle(item) {
-	case LayoutStyleRows:
-
-		switch place {
-
-		case LayoutPlaceBefore, LayoutPlaceAbove:
-			return LayoutPlaceBefore
-
-		case LayoutPlaceAfter, LayoutPlaceBelow:
-			return LayoutPlaceAfter
-		}
-
-	case LayoutStyleColumns:
-
-		switch place {
-
-		case LayoutPlaceBefore, LayoutPlaceLeft:
-			return LayoutPlaceBefore
-
-		case LayoutPlaceAfter, LayoutPlaceRight:
-			return LayoutPlaceAfter
-		}
-	}
-
-	return ""
-}
-
-// getLayoutStyleFromPlace returns the correct layout style to use
-// when placing new items relative to an existing one.
-func getLayoutStyleFromPlace(place string) string {
-
-	switch place {
-
-	case LayoutPlaceAbove:
-		return LayoutStyleRows
-
-	case LayoutPlaceAfter:
-		return LayoutStyleRows
-
-	case LayoutPlaceBefore:
-		return LayoutStyleRows
-
-	case LayoutPlaceBelow:
-		return LayoutStyleRows
-
-	case LayoutPlaceLeft:
-		return LayoutStyleColumns
-
-	case LayoutPlaceRight:
-		return LayoutStyleColumns
-
-	}
-
-	return LayoutStyleRows
-}
-
-// getLayoutStyle returns a valid layout style for all layout items.
-// If a non-layout item is passed, then it returns ""
-func getLayoutStyle(item *Item) string {
-
-	if item.Type == ItemTypeLayout {
-		return first.String(item.GetString("style"), LayoutStyleRows)
-	}
-
-	return ""
 }
