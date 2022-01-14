@@ -5,8 +5,8 @@ github.com/benpate/datatype v0.0.3 h1:23gn4niC2n2WrdnYnVnCkEYOxBuGwUbLRdPHuQ4v4o
 github.com/benpate/datatype v0.0.3/go.mod h1:c0Tsyrg7t9xvnE3JvfiP6RsI47SjizkVUtUmXxuM7AY=
 github.com/benpate/derp v0.20.1/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
 github.com/benpate/derp v0.21.0/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
-github.com/benpate/derp v0.22.0 h1:w4Or+AwXpzbuwlVpA327woRtQhvaKx9DpD2mWHsdME0=
-github.com/benpate/derp v0.22.0/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
+github.com/benpate/derp v0.22.2 h1:qPcnT32VG8gqhDR4y+dhK2n/0TMvZ3RUP+HbENNogAc=
+github.com/benpate/derp v0.22.2/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
 github.com/benpate/first v0.0.2 h1:Cron2IbWwpL8N9ChevW5Ccw16HAfClDv46jhf72/SKE=
 github.com/benpate/first v0.0.2/go.mod h1:eswv4JF5zI4gS8FMPtiYkEVGC9dY394oV9K/8m9fOMs=
 github.com/benpate/html v0.11.4 h1:oTTD3PwLYRuNAYKkLFUHleU1BefCxXFhfugMQrCrUTA=
