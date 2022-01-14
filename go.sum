@@ -1,12 +1,9 @@
 github.com/benpate/compare v0.1.0 h1:ez9loY//1MHYhk+jVNcHRu1beiS1O6mME9re0TjmUbQ=
 github.com/benpate/compare v0.1.0/go.mod h1:Ii/Lnmvvw+CCvBLAKoKXHWUqQEttAozkiFKVKMzeh6Q=
-github.com/benpate/convert v0.9.2/go.mod h1:hAck9D6nSY4irEXPGa0jljn/S1ThzfQCMXJ5JyDwaX0=
 github.com/benpate/convert v0.11.1 h1:j1GQdQpwqdsXS5cI+uWeDYW/Zk1P1h7n8AQixZBYNnI=
 github.com/benpate/convert v0.11.1/go.mod h1:OOSsfYUChsbE+9hBIJQsxGyiogL//WTHEpgXiSLETRg=
-github.com/benpate/datatype v0.0.3 h1:23gn4niC2n2WrdnYnVnCkEYOxBuGwUbLRdPHuQ4v4oQ=
-github.com/benpate/datatype v0.0.3/go.mod h1:c0Tsyrg7t9xvnE3JvfiP6RsI47SjizkVUtUmXxuM7AY=
-github.com/benpate/derp v0.20.1/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
-github.com/benpate/derp v0.21.0/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
+github.com/benpate/datatype v0.1.0 h1:DqEK1Hj4qyoDCeJyd3tvZm8spSGAFsrR4iI/AW8Ae0g=
+github.com/benpate/datatype v0.1.0/go.mod h1:29kQucgNP1T+9pdjW/JCpgCWjCrnTlON03NKozbhwyc=
 github.com/benpate/derp v0.22.2 h1:qPcnT32VG8gqhDR4y+dhK2n/0TMvZ3RUP+HbENNogAc=
 github.com/benpate/derp v0.22.2/go.mod h1:ENjMpkMmxn9gAulMAggElVcD2kNrsbjFhoZK8fUlCxY=
 github.com/benpate/exp v0.1.0 h1:Xfdh11vnl5vHF6SsYIK7JJvn/ewmYeiPNZcZWVYZBKc=
@@ -19,10 +16,8 @@ github.com/benpate/htmlconv v0.3.1 h1:25DAbra+ozCWiSin84K4F8pf3hNMwaoNnH4IaE2UUa
 github.com/benpate/htmlconv v0.3.1/go.mod h1:bGNdbENTMlEia0Mc7SjSmwAjGDOYqJePE+HbFt9TDhc=
 github.com/benpate/list v0.4.2 h1:on6Y6Fh7L+gNI41eRbeCntgNX54jQlFiO2RAa8wj0lw=
 github.com/benpate/list v0.4.2/go.mod h1:qT9JMhKPxIP97Gsr+mUfvuGwwDfKsfR/jfRuWj0ogLc=
-github.com/benpate/null v0.6.0/go.mod h1:ObR4S/eyKgPvABPJhSmvNkF0Ma4I9m/icDc0vaJcUw8=
 github.com/benpate/null v0.6.1 h1:MInsq7/M9E9IzF6EWeB1po5p9zQpvimw3brrU1UeRzA=
 github.com/benpate/null v0.6.1/go.mod h1:gxun/MktUPdKfYWvkzCI2fCy3OX/3+sZWh01hjYdXwE=
-github.com/benpate/path v0.4.0/go.mod h1:NlcH/jI4VoGgndQ9rEQmP2HBXb+9Jj5vBtgN6zk92sQ=
 github.com/benpate/path v0.5.1 h1:FRMpfuXURbRT5EkrgFs7mIsRdPXC8xzBsVsD2OCayEc=
 github.com/benpate/path v0.5.1/go.mod h1:uIiKDHeOa2YIIahSJ6eP/0vqx8cpThV5nuplQETSZ44=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
