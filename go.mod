@@ -7,7 +7,7 @@ require (
 	github.com/benpate/datatype v0.0.3
 	github.com/benpate/derp v0.22.2
 	github.com/benpate/first v0.0.2
-	github.com/benpate/html v0.11.4
+	github.com/benpate/html v0.11.5
 	github.com/benpate/htmlconv v0.3.1
 	github.com/benpate/list v0.4.2
 	github.com/benpate/path v0.5.1
