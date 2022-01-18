@@ -41,7 +41,7 @@ func (txn SortChildren) Post(library *Library, container *Container) (int, error
 
 	// Validation passed, set the value
 	(*container)[txn.ItemID].Refs = txn.ChildIDs
-	container.NewChecksum(txn.ItemID)
+	// container.NewChecksum(txn.ItemID)
 
 	return txn.ItemID, nil
 }
