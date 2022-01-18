@@ -5,6 +5,7 @@
 [![Build Status](http://img.shields.io/travis/benpate/svg?style=flat-square)](https://travis-ci.com/benpate/nebula)
 [![Codecov](https://img.shields.io/codecov/c/github/benpate/svg?style=flat-square)](https://codecov.io/gh/benpate/nebula)
 ![Version](https://img.shields.io/github/v/release/benpate/nebula?include_prereleases&style=flat-square&color=brightgreen)
+
 ## A loosely coupled library for building and editing HTML content
 
 Nebula is a container format for rich HTML content, along with a reference library of HTML layouts and widgets, along with transactions to change items within the container.
@@ -19,7 +20,7 @@ Instead of storing content items in a natural, nested format, nebula puts each o
 * Text-only content
 * WYSIWYG content editor (currently via Quill)
 * OEmbed content for pictures, videos, and other rich objects
-* Image / Video uploader (with hooks into [mediaserver](https://github.com/benpate/mediaserver))
+* Image / Video uploader (with hooks into [mediaserver](https://github.com/whisperverse/mediaserver))
 * ???
 
 ## Layout Library (in progress)
