@@ -8,6 +8,7 @@ type ItemType struct {
 	Code        string
 	Label       string
 	Description string
+	Icon        string
 	Data        datatype.Map
 }
 
@@ -17,22 +18,27 @@ func ItemTypes() []ItemType {
 		{
 			Code:  ItemTypeWYSIWYG,
 			Label: "HTML Content",
-		},
-		{
-			Code:  ItemTypeText,
-			Label: "Plain Text Content",
+			Icon:  "fa-solid fa-align-left",
 		},
 		{
 			Code:  ItemTypeOEmbed,
-			Label: "Embed Image or Video",
+			Label: "Image/Video Upload",
+			Icon:  "fa-regular fa-image",
 		},
 		{
 			Code:  ItemTypeTabs,
 			Label: "Tabs",
+			Icon:  "fa-solid",
+		},
+		{
+			Code:  ItemTypeText,
+			Label: "Plain Text Content",
+			Icon:  "fa-solid fa-align-left",
 		},
 		{
 			Code:  ItemTypeHTML,
 			Label: "HTML Code",
+			Icon:  "fa-solid fa-code",
 		},
 	}
 }

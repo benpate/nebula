@@ -10,7 +10,11 @@ type UpdateItem struct {
 	Check  string                 `json:"hash"   form:"hash"`
 }
 
-func (txn UpdateItem) Execute(library *Library, container *Container) (int, error) {
+func (txn UpdateItem) Get(library *Library, container *Container, endpoint string) string {
+	return ""
+}
+
+func (txn UpdateItem) Post(library *Library, container *Container) (int, error) {
 
 	// Bounds check
 	if container.IsNil(txn.ItemID) {

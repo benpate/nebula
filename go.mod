@@ -3,10 +3,10 @@ module github.com/benpate/nebula
 go 1.17
 
 require (
+	github.com/benpate/compare v0.1.0
 	github.com/benpate/convert v0.11.1
 	github.com/benpate/datatype v0.1.0
 	github.com/benpate/derp v0.22.2
-	github.com/benpate/first v0.0.2
 	github.com/benpate/html v0.11.5
 	github.com/benpate/htmlconv v0.3.1
 	github.com/benpate/list v0.4.2
@@ -15,7 +15,6 @@ require (
 )
 
 require (
-	github.com/benpate/compare v0.1.0 // indirect
 	github.com/benpate/exp v0.1.0 // indirect
 	github.com/benpate/null v0.6.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

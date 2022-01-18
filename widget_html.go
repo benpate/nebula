@@ -25,12 +25,11 @@ func (w HTML) Edit(b *html.Builder, container *Container, id int, endpoint strin
 	idString := convert.String(id)
 
 	b.Form("", "").
-		Data("id", idString).
 		Data("hx-post", endpoint).
 		Data("hx-trigger", "autosave").
 		Data("hx-swap", "none")
 
-	b.Input("hidden", "type").Value("update-item")
+	b.Input("hidden", "action").Value("update-item")
 	b.Input("hidden", "itemId").Value(idString)
 	b.Input("hidden", "check").Value(item.Check)
 	b.Container("textarea").Name("html").Script("install Autosize install Autosave").InnerHTML(result)

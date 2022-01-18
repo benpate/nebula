@@ -10,7 +10,11 @@ type UploadFile struct {
 	Check  string `json:"hash"   form:"hash"`
 }
 
-func (txn UploadFile) Execute(library *Library, container *Container) (int, error) {
+func (txn UploadFile) Get(library *Library, container *Container, endpoint string) string {
+	return ""
+}
+
+func (txn UploadFile) Post(library *Library, container *Container) (int, error) {
 
 	// Bounds check
 	if container.IsNil(txn.ItemID) {
@@ -24,6 +28,7 @@ func (txn UploadFile) Execute(library *Library, container *Container) (int, erro
 
 	// Update "file" data.
 	(*container)[txn.ItemID].Set("file", txn.File)
+	container.NewChecksum(txn.ItemID)
 
 	return txn.ItemID, nil
 }

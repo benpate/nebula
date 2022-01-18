@@ -2,6 +2,7 @@ package nebula
 
 import (
 	"github.com/benpate/datatype"
+	"github.com/benpate/list"
 )
 
 // Container represents a complete package of container
@@ -47,6 +48,7 @@ func (container *Container) IsNil(itemID int) bool {
 
 	// Check for empty item
 	return (*container)[itemID].Type == ""
+	// return false
 }
 
 // GetType returns the item type of the designated item
@@ -132,7 +134,7 @@ func (container *Container) AddLastReference(itemID int, newItemID int) {
 }
 
 // AddReference links the newItemID into the parent's reference list, placed relative to the referenceID
-func (container *Container) AddReference(parentID int, newItemID int, referenceID int, place string) {
+func (container *Container) AddReference(parentID int, place string, referenceID int, newItemID int) {
 
 	index := (*container)[parentID].findReference(referenceID)
 
@@ -140,7 +142,7 @@ func (container *Container) AddReference(parentID int, newItemID int, referenceI
 	// With a good UI, this shouldn't happen very much, though.
 	if index == -1 {
 		if place == LayoutPlaceBefore {
-			container.AddLastReference(parentID, newItemID)
+			container.AddFirstReference(parentID, newItemID)
 		} else {
 			container.AddLastReference(parentID, newItemID)
 		}
@@ -160,10 +162,21 @@ func (container *Container) DeleteReference(parentID int, referenceID int) {
 }
 
 // Execute parses and executes a new Action against this container.
-func (container *Container) Execute(library *Library, input map[string]interface{}) (int, error) {
-
+func (container *Container) Get(library *Library, input map[string]interface{}, endpoint string) string {
 	action := NewAction(input)
-	return action.Execute(library, container)
+	endpoint = list.Head(endpoint, "?") // strip URL values from future calls
+	return action.Get(library, container, endpoint)
+}
+
+// Execute parses and executes a new Action against this container.
+func (container *Container) Post(library *Library, input map[string]interface{}) (int, error) {
+	action := NewAction(input)
+	return action.Post(library, container)
+}
+
+// NewChecksum assigns a new checksum value to the designated item
+func (container *Container) NewChecksum(itemID int) {
+	(*container)[itemID].Check = newChecksum()
 }
 
 // Compact removes any unused items in the container slice

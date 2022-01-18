@@ -1,23 +1,42 @@
 package nebula
 
 import (
+	"strings"
+
+	"github.com/benpate/convert"
 	"github.com/benpate/datatype"
 )
+
+// Action interface wraps the "Execute" method, which takes some
+// non-reversible, non-idempotent action on the container.
+type Action interface {
+	Get(library *Library, container *Container, endpoint string) string
+
+	// Execute performs an update to the content data.  It returns
+	// the ID of the element to be re-rendered on the client, along
+	// with an error (if present).  Implementations can use this to
+	// selectively re-render portions of the content structure without
+	// reloading the entire page.
+	Post(library *Library, container *Container) (int, error)
+
+	// TODO: ExecuteMongo() -- generates an efficient update statement for a mongodb collection.
+}
 
 func NewAction(in map[string]interface{}) Action {
 
 	data := datatype.Map(in)
 
-	switch data.GetString("type") {
+	switch data.GetString("action") {
 
 	case "add-item":
 
 		return AddItem{
-			ItemID:   data.GetInt("itemId"),
-			Place:    data.GetString("place"),
-			ItemType: data.GetString("itemType"),
-			Style:    data.GetString("style"),
-			Check:    data.GetString("check"),
+			ItemID:    data.GetInt("itemId"),
+			SubItemID: data.GetInt("subItemId"),
+			Place:     data.GetString("place"),
+			ItemType:  data.GetString("itemType"),
+			Style:     data.GetString("style"),
+			Check:     data.GetString("check"),
 		}
 
 	case "change-type":
@@ -42,6 +61,14 @@ func NewAction(in map[string]interface{}) Action {
 			NewParentID: data.GetInt("newParentId"),
 			Position:    data.GetInt("position"),
 			Check:       data.GetString("check"),
+		}
+
+	case "sort-children":
+
+		return SortChildren{
+			ItemID:   data.GetInt("itemId"),
+			ChildIDs: convert.SliceOfInt(strings.Split(data.GetString("childIds"), ",")),
+			Check:    data.GetString("check"),
 		}
 
 	case "update-item":

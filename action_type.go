@@ -10,8 +10,12 @@ type ChangeType struct {
 	Check    string `json:"check"    form:"check"`    // Checksum to validation transaction.
 }
 
+func (txn ChangeType) Get(library *Library, container *Container, endpoint string) string {
+	return ""
+}
+
 // Execute performs the ChangeType transaction on the provided content structure
-func (txn ChangeType) Execute(library *Library, container *Container) (int, error) {
+func (txn ChangeType) Post(library *Library, container *Container) (int, error) {
 
 	// Validate transaction
 	if err := (*container)[txn.ItemID].Validate(txn.Check); err != nil {
@@ -19,6 +23,7 @@ func (txn ChangeType) Execute(library *Library, container *Container) (int, erro
 	}
 
 	(*container)[txn.ItemID].Type = txn.ItemType
+	container.NewChecksum(txn.ItemID)
 
 	return txn.ItemID, nil
 }

@@ -30,13 +30,12 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	idString := convert.String(id)
 
 	b.Form("", "").
-		Data("id", idString).
 		Data("hx-post", endpoint).
 		Data("hx-trigger", "autosave").
 		Data("hx-swap", "none")
 
 	// Form fields here
-	b.Input("hidden", "type").Value("update-item")
+	b.Input("hidden", "action").Value("update-item")
 	b.Input("hidden", "itemId").Value(idString)
 	b.Input("hidden", "html").Value(idString)
 	b.Input("hidden", "check").Value(item.Check)
@@ -53,21 +52,28 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	}
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Data("command", "bold").Data("hotkey", "b").InnerHTML("B").Close()
-		b.Button().Data("command", "italic").Data("hotkey", "i").InnerHTML("I").Close()
-		b.Button().Data("command", "underline").Data("hotkey", "u").InnerHTML("U").Close()
+		b.Button().Data("command", "bold").Aria("keyshortcuts", "Ctrl+B").InnerHTML("B").Close()
+		b.Button().Data("command", "italic").Aria("keyshortcuts", "Ctrl+I").InnerHTML("I").Close()
+		b.Button().Data("command", "underline").Aria("keyshortcuts", "Ctrl+U").InnerHTML("U").Close()
 		b.Close()
 	}
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Script("on click log me get prompt('Enter URL') log it call document.execCommand('link', result)").InnerHTML("Link").Close()
-		b.Button().Data("command", "unlink").InnerHTML("Unlink").Close()
+		b.Button().Data("command", "createLink").Aria("keyshortcuts", "Ctrl+K")
+		b.Container("i").Class("fa-solid", "fa-link").Close()
+		b.Close()
+		b.Button().Data("command", "unlink").Aria("keyshortcuts", "Ctrl+Shift+K")
+		b.Container("i").Class("fa-solid", "fa-unlink").Close()
+		b.Close()
 		b.Close()
 	}
 	{
-		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
-		b.Button().Data("command", "undo").Data("hotkey", "z").InnerHTML("Undo").Close()
-		b.Button().Data("command", "redo").Data("hotkey", "Z").InnerHTML("Redo").Close()
+		b.Span().Class("wysiwyg-toolbar-group").Attr("hidden", "true").EndBracket()
+		b.Button().Data("command", "cut").Aria("keyshortcuts", "Ctrl+X").InnerHTML("Cut").Close()
+		b.Button().Data("command", "copy").Aria("keyshortcuts", "Ctrl+C").InnerHTML("Copy").Close()
+		b.Button().Data("command", "paste").Aria("keyshortcuts", "Ctrl+V").InnerHTML("Paste").Close()
+		b.Button().Data("command", "undo").Aria("keyshortcuts", "Ctrl+Z").InnerHTML("Undo").Close()
+		b.Button().Data("command", "redo").Aria("keyshortcuts", "Ctrl+Shift+Z").InnerHTML("Redo").Close()
 		b.Close()
 	}
 	b.Close()
