@@ -9,7 +9,7 @@ import (
 type AddItem struct {
 	ItemID    int    `json:"itemId"    form:"itemId"`    // ID of the layout that will hold the new item
 	SubItemID int    `json:"subItemID" form:"subItemId"` // ID of the item used for relative positioning
-	Place     string `json:"place"     form:"place"`     // Position of the new element (BEFORE, AFTER, ABOVE, BELOW, LEFT, RIGHT) relative to the index
+	Place     string `json:"place"     form:"place"`     // Position of the new element (BEFORE, AFTER) relative to the index
 	ItemType  string `json:"itemType"  form:"itemType"`  // Type of content item to add
 	Style     string `json:"style"     form:"style"`     // Optional "style" aregument for certain types (like layouts)
 	Check     string `json:"check"     form:"check"`     // Checksum to validation transaction.

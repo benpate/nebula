@@ -14,7 +14,7 @@ func TestDelete(t *testing.T) {
 	container := getTestContainer()
 
 	itemID, err := container.Post(&library, datatype.Map{
-		"type":   "delete-item",
+		"action": "delete-item",
 		"itemId": "3",
 		"check":  container.GetChecksum(3),
 	})
@@ -43,14 +43,14 @@ func TestDelete_BoundsCheck(t *testing.T) {
 	container := getTestContainer()
 
 	itemID, err := container.Post(&library, datatype.Map{
-		"type":   "delete-item",
+		"action": "delete-item",
 		"itemId": "4",
 		"check":  "",
 	})
 
 	require.NotNil(t, err)
 	require.Equal(t, -1, itemID)
-	require.Equal(t, "nebula.DeleteItem.Execute: Invalid item", derp.Message(err))
+	require.Equal(t, "nebula.DeleteItem.Post: Invalid item", derp.Message(err))
 }
 
 func getTestContainer() Container {
