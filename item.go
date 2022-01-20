@@ -4,7 +4,6 @@ import (
 	"github.com/benpate/convert"
 	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
-	"github.com/benpate/path"
 )
 
 // Item represents a single piece of content.  It will be rendered by one of several rendering
@@ -103,8 +102,8 @@ func (item *Item) UnmarshalMap(value map[string]interface{}) {
  * Data Accessors
  *****************************************/
 
-func (item *Item) GetPath(p path.Path) (interface{}, error) {
-	return item.Data.GetPath(p)
+func (item *Item) GetPath(path string) (interface{}, bool) {
+	return item.Data.GetPath(path)
 }
 
 func (item *Item) GetString(key string) string {
@@ -127,8 +126,8 @@ func (item *Item) GetInterface(key string) interface{} {
 	return item.Data.GetInterface(key)
 }
 
-func (item *Item) SetPath(p path.Path, value interface{}) error {
-	return item.Data.SetPath(p, value)
+func (item *Item) SetPath(path string, value interface{}) error {
+	return item.Data.SetPath(path, value)
 }
 
 func (item *Item) Set(key string, value interface{}) *Item {
