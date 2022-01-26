@@ -14,7 +14,7 @@ require (
 )
 
 require (
-	github.com/benpate/exp v0.1.0 // indirect
+	github.com/benpate/exp v0.1.1 // indirect
 	github.com/benpate/null v0.6.1 // indirect
 	github.com/benpate/path v0.8.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
