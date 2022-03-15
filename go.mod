@@ -10,7 +10,7 @@ require (
 	github.com/benpate/html v0.11.5
 	github.com/benpate/htmlconv v0.3.3
 	github.com/benpate/list v0.4.2
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 )
 
 require (
