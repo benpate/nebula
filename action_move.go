@@ -16,5 +16,5 @@ func (txn MoveItem) Get(library *Library, container *Container, endpoint string)
 }
 
 func (txn MoveItem) Post(library *Library, container *Container) (int, error) {
-	return -1, derp.New(derp.CodeBadRequestError, "content.transaction.MoveItem", "Unimplemented")
+	return -1, derp.NewBadRequestError("content.transaction.MoveItem", "Unimplemented")
 }

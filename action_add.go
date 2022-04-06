@@ -66,7 +66,7 @@ func (txn AddItem) Post(library *Library, container *Container) (int, error) {
 	}
 
 	if container.IsNil(txn.SubItemID) {
-		return -1, derp.New(derp.CodeBadRequestError, "nebula.AddItem.Post", "Invalid Reference Item", txn)
+		return -1, derp.NewBadRequestError("nebula.AddItem.Post", "Invalid Reference Item", txn)
 	}
 
 	newItemID := container.NewItemWithInit(library, txn.ItemType, nil)

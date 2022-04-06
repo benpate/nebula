@@ -83,5 +83,5 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 }
 
 func (w WYSIWYG) Prop(container *Container, id int, params url.Values) (string, error) {
-	return "", derp.New(derp.CodeNotFoundError, "content.WYSIWYG.Prop", "Unrecognized panel", params)
+	return "", derp.NewNotFoundError("content.WYSIWYG.Prop", "Unrecognized panel", params)
 }

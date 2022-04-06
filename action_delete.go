@@ -35,7 +35,7 @@ func (txn DeleteItem) Post(library *Library, container *Container) (int, error) 
 	parentID := container.GetParentID(txn.ItemID)
 
 	if container.IsNil(parentID) {
-		return -1, derp.New(derp.CodeBadRequestError, "nebula.DeleteItem.Post", "Invalid item", txn)
+		return -1, derp.NewBadRequestError("nebula.DeleteItem.Post", "Invalid item", txn)
 	}
 
 	parent := container.GetItem(parentID)

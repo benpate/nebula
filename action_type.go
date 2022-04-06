@@ -19,7 +19,7 @@ func (txn ChangeType) Post(library *Library, container *Container) (int, error) 
 
 	// Validate transaction
 	if err := (*container)[txn.ItemID].Validate(txn.Check); err != nil {
-		return -1, derp.New(derp.CodeForbiddenError, "content.transaction.ChangeType", "Invalid Checksum")
+		return -1, derp.NewForbiddenError("content.transaction.ChangeType", "Invalid Checksum")
 	}
 
 	(*container)[txn.ItemID].Type = txn.ItemType

@@ -29,13 +29,13 @@ func (txn SortChildren) Post(library *Library, container *Container) (int, error
 
 	// Validate that lengths are equal
 	if len(txn.ChildIDs) != len(parent.Refs) {
-		return -1, derp.New(derp.CodeBadRequestError, "nebula.SortChildren.Post", "Invalid sort list", txn.ChildIDs)
+		return -1, derp.NewBadRequestError("nebula.SortChildren.Post", "Invalid sort list", txn.ChildIDs)
 	}
 
 	// Validate that all items are the same (just sorted differently)
 	for _, childID := range txn.ChildIDs {
 		if !compare.Contains(parent.Refs, childID) {
-			return -1, derp.New(derp.CodeBadRequestError, "nebula.SortChildren.Post", "Invalid sort list.  Value does not appear in existing references", childID)
+			return -1, derp.NewBadRequestError("nebula.SortChildren.Post", "Invalid sort list.  Value does not appear in existing references", childID)
 		}
 	}
 
