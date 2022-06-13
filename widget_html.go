@@ -34,3 +34,10 @@ func (w HTML) Edit(b *html.Builder, container *Container, id int, endpoint strin
 	b.Input("hidden", "check").Value(item.Check)
 	b.Container("textarea").Name("html").Script("install Autosize install Autosave").InnerHTML(result)
 }
+
+// Validate cleans the container for invalid content
+func (w HTML) Validate(container *Container, index int) {
+	originalHTML := (*container)[index].GetString("html")
+	cleanHTML := htmlPolicy.Sanitize(originalHTML)
+	(*container)[index].Data.SetString("html", cleanHTML)
+}

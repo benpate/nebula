@@ -67,3 +67,12 @@ func (library *Library) Edit(builder *html.Builder, container *Container, id int
 	widget.Edit(subBuilder, container, id, endpoint)
 	subBuilder.CloseAll()
 }
+
+// Validate scans all content in the container, removing invalid content before it is saved.
+func (library *Library) Validate(container *Container) {
+	for index := range *container {
+		item := container.GetItem(index)
+		widget := library.Widget(item.Type)
+		widget.Validate(container, index)
+	}
+}

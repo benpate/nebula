@@ -63,3 +63,7 @@ func (w OEmbed) Edit(b *html.Builder, container *Container, itemID int, endpoint
 	}
 	b.CloseAll()
 }
+
+// Validate cleans the container for invalid content
+func (w OEmbed) Validate(container *Container, index int) {
+}

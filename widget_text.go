@@ -33,3 +33,10 @@ func (w Text) Edit(b *html.Builder, container *Container, id int, endpoint strin
 	b.Input("hidden", "check").Value(item.Check)
 	b.Container("textarea").Name("text").Script("install Autosize install Autosave").InnerHTML(item.GetString("text"))
 }
+
+// Validate cleans the container for invalid content
+func (w Text) Validate(container *Container, index int) {
+	originalText := (*container)[index].GetString("text")
+	cleanText := textPolicy.Sanitize(originalText)
+	(*container)[index].Data.SetString("text", cleanText)
+}

@@ -14,3 +14,8 @@ func (w NilWidget) View(b *html.Builder, container *Container, id int) {
 func (w NilWidget) Edit(b *html.Builder, container *Container, id int, endpoint string) {
 	// Nothing to see here
 }
+
+// Validate cleans the container for invalid content
+func (w NilWidget) Validate(container *Container, index int) {
+	// Nothing to see here
+}

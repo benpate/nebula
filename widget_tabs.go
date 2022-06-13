@@ -134,3 +134,14 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 
 	b.CloseAll()
 }
+
+// Validate cleans the container for invalid content
+func (w Tabs) Validate(container *Container, index int) {
+
+	for _, id := range (*container)[index].Refs {
+		item := container.GetItem(id)
+		originalText := item.GetString("label")
+		cleanText := textPolicy.Sanitize(originalText)
+		item.Data.SetString("label", cleanText)
+	}
+}

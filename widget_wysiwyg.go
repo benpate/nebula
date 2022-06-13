@@ -82,6 +82,13 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	b.CloseAll()
 }
 
+// Validate cleans the container for invalid content
+func (w WYSIWYG) Validate(container *Container, index int) {
+	originalHTML := (*container)[index].GetString("html")
+	cleanHTML := htmlPolicy.Sanitize(originalHTML)
+	(*container)[index].Data.SetString("html", cleanHTML)
+}
+
 func (w WYSIWYG) Prop(container *Container, id int, params url.Values) (string, error) {
 	return "", derp.NewNotFoundError("content.WYSIWYG.Prop", "Unrecognized panel", params)
 }

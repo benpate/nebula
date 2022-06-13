@@ -119,6 +119,10 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 	b.Close()
 }
 
+// Validate cleans the container for invalid content
+func (w Layout) Validate(container *Container, index int) {
+}
+
 // insertMarker adds a nebula-layout-insert to the html.Builder.
 func layoutInsert(b *html.Builder, layoutID string, childID string, place string, check string, endpoint string) {
 
