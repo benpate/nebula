@@ -7,7 +7,7 @@ require (
 	github.com/benpate/html v0.12.1
 	github.com/benpate/rosetta v0.2.1
 	github.com/microcosm-cc/bluemonday v1.0.18
-	github.com/stretchr/testify v1.7.3
+	github.com/stretchr/testify v1.7.4
 )
 
 require (
