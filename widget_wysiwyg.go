@@ -3,9 +3,9 @@ package nebula
 import (
 	"net/url"
 
-	"github.com/benpate/convert"
 	"github.com/benpate/derp"
 	"github.com/benpate/html"
+	"github.com/benpate/rosetta/convert"
 )
 
 // ItemTypeWYSIWYG describes a what-you-see-is-what-you-get content editor

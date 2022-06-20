@@ -1,10 +1,8 @@
 package nebula
 
-import (
-	"github.com/benpate/datatype"
-)
+import "github.com/benpate/rosetta/maps"
 
-type NilAction datatype.Map
+type NilAction maps.Map
 
 func (txn NilAction) Get(library *Library, container *Container, endpoint string) string {
 	return ""

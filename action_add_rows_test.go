@@ -3,7 +3,7 @@ package nebula
 import (
 	"testing"
 
-	"github.com/benpate/datatype"
+	"github.com/benpate/rosetta/maps"
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,7 +14,7 @@ func TestAddItem_Rows_BEFORE(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Post(&library, datatype.Map{
+		itemID, err := container.Post(&library, maps.Map{
 			"action":   "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -39,7 +39,7 @@ func TestAddItem_Rows_AFTER(t *testing.T) {
 	{
 		container := getTestRows()
 
-		itemID, err := container.Post(&library, datatype.Map{
+		itemID, err := container.Post(&library, maps.Map{
 			"action":   "add-item",
 			"itemId":   0,
 			"itemType": "TEXT",
@@ -63,13 +63,13 @@ func getTestRows() Container {
 		{
 			Type: ItemTypeLayout,
 			Refs: []int{1},
-			Data: datatype.Map{
+			Data: maps.Map{
 				"style": LayoutStyleRows,
 			},
 		},
 		{
 			Type: ItemTypeHTML,
-			Data: datatype.Map{
+			Data: maps.Map{
 				"html": "FIRST HTML BLOCK",
 			},
 		},

@@ -3,9 +3,9 @@ package nebula
 import (
 	"fmt"
 
-	"github.com/benpate/convert"
-	"github.com/benpate/datatype"
 	"github.com/benpate/html"
+	"github.com/benpate/rosetta/convert"
+	"github.com/benpate/rosetta/maps"
 )
 
 // ItemTypeTabs describes a multi-tab container layout
@@ -20,7 +20,7 @@ func (w Tabs) Init(container *Container, id int) {
 
 	// Let's add THREE new tabs
 	for index := 1; index <= 3; index++ {
-		itemID := container.NewItemWithInit(w.library, ItemTypeLayout, datatype.Map{
+		itemID := container.NewItemWithInit(w.library, ItemTypeLayout, maps.Map{
 			"style": LayoutStyleRows,
 			"label": "Tab " + convert.String(index),
 		})

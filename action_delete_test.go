@@ -3,8 +3,8 @@ package nebula
 import (
 	"testing"
 
-	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
+	"github.com/benpate/rosetta/maps"
 	"github.com/stretchr/testify/require"
 )
 
@@ -13,7 +13,7 @@ func TestDelete(t *testing.T) {
 	library := NewLibrary()
 	container := getTestContainer()
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action": "delete-item",
 		"itemId": "3",
 		"check":  container.GetChecksum(3),
@@ -42,7 +42,7 @@ func TestDelete_BoundsCheck(t *testing.T) {
 	library := NewLibrary()
 	container := getTestContainer()
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action": "delete-item",
 		"itemId": "4",
 		"check":  "",
@@ -56,10 +56,10 @@ func TestDelete_BoundsCheck(t *testing.T) {
 func getTestContainer() Container {
 
 	container := NewContainer()
-	zero := container.NewItem("LAYOUT", datatype.Map{"style": "ROWS"})
-	first := container.NewItem("HTML", datatype.Map{"html": "FIRST HTML ITEM"})
-	second := container.NewItem("TEXT", datatype.Map{"html": "SECOND TEXT ITEM"})
-	third := container.NewItem("WYSIWYG", datatype.Map{"html": "THIRD WYSIWYG ITEM"})
+	zero := container.NewItem("LAYOUT", maps.Map{"style": "ROWS"})
+	first := container.NewItem("HTML", maps.Map{"html": "FIRST HTML ITEM"})
+	second := container.NewItem("TEXT", maps.Map{"html": "SECOND TEXT ITEM"})
+	third := container.NewItem("WYSIWYG", maps.Map{"html": "THIRD WYSIWYG ITEM"})
 
 	container.AddFirstReference(zero, first)
 	container.AddLastReference(zero, second)

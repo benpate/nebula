@@ -1,8 +1,8 @@
 package nebula
 
 import (
-	"github.com/benpate/convert"
 	"github.com/benpate/html"
+	"github.com/benpate/rosetta/convert"
 )
 
 // ItemTypeHTML describes an HTML code editor

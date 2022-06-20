@@ -1,8 +1,8 @@
 package nebula
 
 import (
-	"github.com/benpate/compare"
 	"github.com/benpate/derp"
+	"github.com/benpate/rosetta/compare"
 )
 
 type SortChildren struct {

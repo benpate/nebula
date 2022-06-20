@@ -3,9 +3,9 @@ package nebula
 import (
 	"math/rand"
 
-	"github.com/benpate/convert"
 	"github.com/benpate/html"
-	"github.com/benpate/list"
+	"github.com/benpate/rosetta/convert"
+	"github.com/benpate/rosetta/list"
 )
 
 // ItemTypeOEmbed describes an oEmbed object (see https://oembed.com)

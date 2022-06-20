@@ -1,9 +1,9 @@
 package nebula
 
 import (
-	"github.com/benpate/convert"
 	"github.com/benpate/html"
-	"github.com/benpate/htmlconv"
+	"github.com/benpate/rosetta/convert"
+	htmlconv "github.com/benpate/rosetta/html"
 )
 
 // ItemTypeText describes a plain text editor

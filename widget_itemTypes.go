@@ -1,15 +1,13 @@
 package nebula
 
-import (
-	"github.com/benpate/datatype"
-)
+import "github.com/benpate/rosetta/maps"
 
 type ItemType struct {
 	Code        string
 	Label       string
 	Description string
 	Icon        string
-	Data        datatype.Map
+	Data        maps.Map
 }
 
 // ItemTypes returns all item types provided by this widget library

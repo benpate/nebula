@@ -7,9 +7,9 @@ func TestItem_Split_ABOVE(t *testing.T) {
 
 	container := NewContainer()
 
-	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
+	firstID := container.NewItemWithInit(&library, ItemTypeHTML, maps.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action":   "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -45,9 +45,9 @@ func TestItem_Split_BELOW(t *testing.T) {
 
 	container := NewContainer()
 
-	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
+	firstID := container.NewItemWithInit(&library, ItemTypeHTML, maps.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action":   "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -83,9 +83,9 @@ func TestItem_Split_LEFT(t *testing.T) {
 
 	container := NewContainer()
 
-	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
+	firstID := container.NewItemWithInit(&library, ItemTypeHTML, maps.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action":   "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -121,9 +121,9 @@ func TestItem_Split_RIGHT(t *testing.T) {
 
 	container := NewContainer()
 
-	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
+	firstID := container.NewItemWithInit(&library, ItemTypeHTML, maps.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action":   "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -159,9 +159,9 @@ func TestItem_Split_BEFORE(t *testing.T) {
 
 	container := NewContainer()
 
-	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
+	firstID := container.NewItemWithInit(&library, ItemTypeHTML, maps.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action":   "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",
@@ -197,9 +197,9 @@ func TestItem_Split_AFTER(t *testing.T) {
 
 	container := NewContainer()
 
-	firstID := container.NewItemWithInit(&library, ItemTypeHTML, datatype.Map{"html": "FIRST HTML ITEM"})
+	firstID := container.NewItemWithInit(&library, ItemTypeHTML, maps.Map{"html": "FIRST HTML ITEM"})
 
-	itemID, err := container.Post(&library, datatype.Map{
+	itemID, err := container.Post(&library, maps.Map{
 		"action":   "add-item",
 		"itemId":   0,
 		"itemType": "WYSIWYG",

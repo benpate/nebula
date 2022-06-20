@@ -3,8 +3,8 @@ package nebula
 import (
 	"strings"
 
-	"github.com/benpate/convert"
-	"github.com/benpate/datatype"
+	"github.com/benpate/rosetta/convert"
+	"github.com/benpate/rosetta/maps"
 )
 
 // Action interface wraps the "Execute" method, which takes some
@@ -24,7 +24,7 @@ type Action interface {
 
 func NewAction(in map[string]interface{}) Action {
 
-	data := datatype.Map(in)
+	data := maps.Map(in)
 
 	switch data.GetString("action") {
 

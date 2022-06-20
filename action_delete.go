@@ -1,9 +1,9 @@
 package nebula
 
 import (
-	"github.com/benpate/convert"
 	"github.com/benpate/derp"
 	"github.com/benpate/html"
+	"github.com/benpate/rosetta/convert"
 )
 
 // Delete action removes a single item from a container

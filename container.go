@@ -1,8 +1,8 @@
 package nebula
 
 import (
-	"github.com/benpate/datatype"
-	"github.com/benpate/list"
+	"github.com/benpate/rosetta/list"
+	"github.com/benpate/rosetta/maps"
 )
 
 // Container represents a complete package of container
@@ -85,10 +85,10 @@ func (container *Container) GetParentID(itemID int) int {
  *****************************************/
 
 // NewItem creates a new item of the designated type
-func (container *Container) NewItem(itemType string, data datatype.Map) int {
+func (container *Container) NewItem(itemType string, data maps.Map) int {
 
 	if data == nil {
-		data = make(datatype.Map)
+		data = make(maps.Map)
 	}
 
 	// Create a new item using type and data
@@ -105,7 +105,7 @@ func (container *Container) NewItem(itemType string, data datatype.Map) int {
 
 // NewItem creates a new item of the designated type and initializes it
 // with the default Init() method from the corresponding widget library
-func (container *Container) NewItemWithInit(library *Library, itemType string, data datatype.Map) int {
+func (container *Container) NewItemWithInit(library *Library, itemType string, data maps.Map) int {
 
 	// Create the new item
 	itemID := container.NewItem(itemType, data)

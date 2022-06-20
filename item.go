@@ -1,25 +1,25 @@
 package nebula
 
 import (
-	"github.com/benpate/convert"
-	"github.com/benpate/datatype"
 	"github.com/benpate/derp"
+	"github.com/benpate/rosetta/convert"
+	"github.com/benpate/rosetta/maps"
 )
 
 // Item represents a single piece of content.  It will be rendered by one of several rendering
 // Libraries, using the custom data it contains.
 type Item struct {
-	Type  string       `json:"type"           bson:"type"`  // The type of contem item (WYSIWYG, CONTAINER, OEMBED, ETC...)
-	Check string       `json:"check"          bson:"check"` // A random code or nonce to authenticate requests
-	Refs  []int        `json:"refs,omitempty" bson:"refs"`  // Indexes of sub-items contained by this item
-	Data  datatype.Map `json:"data,omitempty" bson:"data"`  // Additional data specific to this item type.
+	Type  string   `json:"type"           bson:"type"`  // The type of contem item (WYSIWYG, CONTAINER, OEMBED, ETC...)
+	Check string   `json:"check"          bson:"check"` // A random code or nonce to authenticate requests
+	Refs  []int    `json:"refs,omitempty" bson:"refs"`  // Indexes of sub-items contained by this item
+	Data  maps.Map `json:"data,omitempty" bson:"data"`  // Additional data specific to this item type.
 }
 
 // NewItem returns a fully initialized Item
 func NewItem(t string, refs ...int) Item {
 	return Item{
 		Type:  t,
-		Data:  make(datatype.Map),
+		Data:  make(maps.Map),
 		Refs:  refs,
 		Check: newChecksum(),
 	}
