@@ -23,7 +23,7 @@ func (w OEmbed) View(b *html.Builder, container *Container, itemID int) {
 		return
 	}
 
-	switch list.Head(item.GetString("mimeType"), "/") {
+	switch list.Slash(item.GetString("mimeType")).Head() {
 
 	case "video":
 		b.Span().InnerHTML("video here...")

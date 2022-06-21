@@ -164,7 +164,7 @@ func (container *Container) DeleteReference(parentID int, referenceID int) {
 // Execute parses and executes a new Action against this container.
 func (container *Container) Get(library *Library, input map[string]interface{}, endpoint string) string {
 	action := NewAction(input)
-	endpoint = list.Head(endpoint, "?") // strip URL values from future calls
+	endpoint = string(list.Head([]byte(endpoint), '?')) // strip URL values from future calls
 	return action.Get(library, container, endpoint)
 }
 
