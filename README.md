@@ -17,7 +17,7 @@ Instead of storing content items in a natural, nested format, nebula puts each o
 ## Widget Library (in-progress)
 
 * WYSIWYG content editor
-* Image Uploads (with hooks into [mediaserver](https://github.com/whisperverse/mediaserver))
+* Image Uploads (with hooks into [mediaserver](https://github.com/benpate/mediaserver))
 * OEmbed content for pictures, videos, and other rich objects
 * more to come
 
