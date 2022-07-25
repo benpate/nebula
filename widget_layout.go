@@ -100,11 +100,11 @@ func (w Layout) Edit(b *html.Builder, container *Container, layoutID int, endpoi
 
 			b.Div().Class("nebula-layout-controls")
 			b.Div().Class("nebula-layout-sortable-handle")
-			b.Container("i").Class("fa-solid fa-grip-horizontal").Close()
+			b.Container("i").Class("ti ti-grip-horizontal").Close()
 			b.Close()
 
 			b.Div().Class("nebula-layout-delete").Data("hx-get", deleteURL).Data("hx-vals", "{}")
-			b.Container("i").Class("fa-solid fa-circle-xmark").Close()
+			b.Container("i").Class("ti ti-circle-x").Close()
 			b.Close()
 			b.Close()
 		}

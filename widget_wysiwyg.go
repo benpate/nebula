@@ -60,10 +60,10 @@ func (w WYSIWYG) Edit(b *html.Builder, container *Container, id int, endpoint st
 	{
 		b.Span().Class("wysiwyg-toolbar-group").EndBracket()
 		b.Button().Data("command", "createLink").Aria("keyshortcuts", "Ctrl+K")
-		b.Container("i").Class("fa-solid", "fa-link").Close()
+		b.Container("i").Class("ti", "ti-link").Close()
 		b.Close()
 		b.Button().Data("command", "unlink").Aria("keyshortcuts", "Ctrl+Shift+K")
-		b.Container("i").Class("fa-solid", "fa-unlink").Close()
+		b.Container("i").Class("ti", "ti-unlink").Close()
 		b.Close()
 		b.Close()
 	}

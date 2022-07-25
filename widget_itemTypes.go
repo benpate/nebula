@@ -16,27 +16,27 @@ func ItemTypes() []ItemType {
 		{
 			Code:  ItemTypeWYSIWYG,
 			Label: "HTML Content",
-			Icon:  "fa-solid fa-align-left",
+			Icon:  "ti ti-align-left",
 		},
 		{
 			Code:  ItemTypeOEmbed,
 			Label: "Image/Video Upload",
-			Icon:  "fa-regular fa-image",
+			Icon:  "ti ti-photo",
 		},
 		{
 			Code:  ItemTypeTabs,
 			Label: "Tabs",
-			Icon:  "fa-solid",
+			Icon:  "ti",
 		},
 		{
 			Code:  ItemTypeText,
 			Label: "Plain Text Content",
-			Icon:  "fa-solid fa-align-left",
+			Icon:  "ti ti-align-left",
 		},
 		{
 			Code:  ItemTypeHTML,
 			Label: "HTML Code",
-			Icon:  "fa-solid fa-code",
+			Icon:  "ti ti-code",
 		},
 	}
 }

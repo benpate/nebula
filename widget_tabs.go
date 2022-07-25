@@ -98,7 +98,7 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 		b.Input("hidden", "check").Value(item.GetString("check")).Close()
 
 		b.Container("i").
-			Class("fa-regular fa-circle-xmark", "space-left").
+			Class("ti ti-circle-x", "space-left").
 			Close()
 
 		b.Close()
@@ -113,7 +113,7 @@ func (w Tabs) Edit(b *html.Builder, container *Container, id int, endpoint strin
 		Data("hx-vals", fmt.Sprintf("{'action':'new-item', 'itemId':'%s', 'place':'RIGHT', 'itemType':'CONTAINER', 'check':'%s'}", convert.String(id), item.GetString("check"))).
 		EndBracket()
 
-	b.Container("i").Class("fa-regular fa-circle-plus").Close()
+	b.Container("i").Class("ti ti-circle-plus").Close()
 
 	b.Close()
 	b.Close()
