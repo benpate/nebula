@@ -21,29 +21,47 @@ func (txn AddItem) Get(library *Library, container *Container, endpoint string) 
 
 	b.H1().InnerHTML("Add Another Section").Close()
 
-	b.Div().Class("table")
+	b.Div().Class("table", "space-below")
 
 	for _, itemType := range ItemTypes() {
-		b.Div().Attr("tabindex", "0")
-		b.Form("", "").Data("hx-post", endpoint).Data("hx-trigger", "click")
-		b.Input("hidden", "action").Value("add-item").Close()
-		b.Input("hidden", "itemId").Value(convert.String(txn.ItemID)).Close()
-		b.Input("hidden", "subItemId").Value(convert.String(txn.SubItemID)).Close()
-		b.Input("hidden", "itemType").Value(itemType.Code)
 
-		for key, value := range itemType.Data {
-			b.Input("hidden", key).Value(convert.String(value)).Close()
+		b.Form("", "").
+			Role("button").
+			Class("flex-row").
+			TabIndex("0").
+			Data("hx-post", endpoint).
+			Data("hx-trigger", "click").
+			Data("hx-target", "#content-editor").
+			Data("hx-swap", "innerHTML")
+		{
+			b.Input("hidden", "action").Value("add-item").Close()
+			b.Input("hidden", "itemId").Value(convert.String(txn.ItemID)).Close()
+			b.Input("hidden", "subItemId").Value(convert.String(txn.SubItemID)).Close()
+			b.Input("hidden", "itemType").Value(itemType.Code)
+
+			for key, value := range itemType.Data {
+				b.Input("hidden", key).Value(convert.String(value)).Close()
+			}
+
+			b.Input("hidden", "place").Value(txn.Place).Close()
+			b.Input("hidden", "check").Value(txn.Check).Close()
+
+			b.Div().Style("flex-grow:0") // row item 1
+			{
+				b.I(itemType.Icon, "text-xxl", "bold").Close()
+			}
+			b.Close()
+			b.Div().Style("flex-grow:1") // row item 2
+			{
+				b.Div().Class("bold").InnerHTML(itemType.Label).Close()
+				b.Div().Class("gray50", "text-sm").InnerHTML(itemType.Description).Close()
+			}
+			b.Close()
 		}
-
-		b.Input("hidden", "place").Value(txn.Place).Close()
-		b.Input("hidden", "check").Value(txn.Check).Close()
-		b.Div().InnerHTML(itemType.Label).Close()
-		b.Div().InnerHTML(itemType.Description).Close()
 		b.Close() // Form
-		b.Close() // Div
 	}
 
-	b.Close()
+	b.Close() // Div
 
 	// Close button (because now we have to do it ourselves)
 	b.Div()

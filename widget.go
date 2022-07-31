@@ -12,7 +12,7 @@ type Widget interface {
 	// Edit writes an editable widget into the provided HTML builder
 	Edit(*html.Builder, *Container, int, string)
 
-	// Validate cleans each item, stripping strip away invalid content
+	// Validate cleans/updates each item, stripping strip away invalid content
 	Validate(*Container, int)
 }
 

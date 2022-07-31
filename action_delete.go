@@ -18,7 +18,7 @@ func (txn DeleteItem) Get(library *Library, container *Container, endpoint strin
 
 	b.H1().InnerHTML("Remove This Content Item?")
 	b.Div()
-	b.Form("", "").Data("hx-post", endpoint)
+	b.Form("", "").Data("hx-post", endpoint).Data("hx-swap", "innerHTML")
 	b.Input("hidden", "action").Value("delete-item")
 	b.Input("hidden", "itemId").Value(convert.String(txn.ItemID))
 	b.Input("hidden", "check").Value(txn.Check)
