@@ -2,12 +2,15 @@ module github.com/benpate/nebula
 
 go 1.18
 
+replace github.com/benpate/rosetta => ../rosetta
+
 require (
 	github.com/benpate/derp v0.24.0
-	github.com/benpate/html v0.14.0
-	github.com/benpate/rosetta v0.5.0
+	github.com/benpate/html v0.14.1
+	github.com/benpate/rosetta v0.5.3
 	github.com/microcosm-cc/bluemonday v1.0.19
 	github.com/stretchr/testify v1.8.0
+	github.com/yuin/goldmark v1.4.13
 )
 
 require (
