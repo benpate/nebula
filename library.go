@@ -15,6 +15,7 @@ func NewLibrary() Library {
 	library.Register(ItemTypeTabs, Tabs{library: &library})
 	library.Register(ItemTypeText, Text{})
 	library.Register(ItemTypeWYSIWYG, WYSIWYG{})
+	library.Register(ItemTypeMarkdown, Markdown{})
 
 	return library
 }

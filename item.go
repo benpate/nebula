@@ -110,6 +110,10 @@ func (item *Item) GetString(key string) string {
 	return item.Data.GetString(key)
 }
 
+func (item *Item) GetBytes(key string) []byte {
+	return item.Data.GetBytes(key)
+}
+
 func (item *Item) GetInt(key string) int {
 	return item.Data.GetInt(key)
 }
