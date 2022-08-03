@@ -33,13 +33,13 @@ func ItemTypes() []ItemType {
 		},
 		{
 			Code:        ItemTypeText,
-			Label:       "Plain Text Content",
+			Label:       "Plain Text",
 			Description: "Plain text content without any additional formatting.",
 			Icon:        "ti ti-align-left",
 		},
 		{
 			Code:        ItemTypeMarkdown,
-			Label:       "Markdown",
+			Label:       "Markdown Code",
 			Description: "Markdown formatted text",
 			Icon:        "ti ti-markdown",
 		},
