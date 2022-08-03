@@ -43,7 +43,7 @@ func (w Markdown) Edit(b *html.Builder, container *Container, id int, endpoint s
 	b.Input("hidden", "html").Value(idString)
 	b.Input("hidden", "check").Value(item.Check)
 
-	b.Textarea("markdown").Script("install Autosave").InnerHTML(result).Close()
+	b.Textarea("markdown").Class("code").Script("install Autosize install Autosave").InnerHTML(result).Close()
 	b.CloseAll()
 }
 
