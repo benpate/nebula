@@ -32,7 +32,7 @@ func (w HTML) Edit(b *html.Builder, container *Container, id int, endpoint strin
 	b.Input("hidden", "action").Value("update-item")
 	b.Input("hidden", "itemId").Value(idString)
 	b.Input("hidden", "check").Value(item.Check)
-	b.Container("textarea").Name("html").Script("install Autosize install Autosave").InnerHTML(result)
+	b.Container("textarea").Name("html").Class("code").Script("install Autosize install Autosave").InnerHTML(result)
 }
 
 // Validate cleans the container for invalid content
