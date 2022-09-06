@@ -6,7 +6,7 @@ require (
 	github.com/benpate/derp v0.24.0
 	github.com/benpate/html v0.14.1
 	github.com/benpate/rosetta v0.6.0
-	github.com/microcosm-cc/bluemonday v1.0.19
+	github.com/microcosm-cc/bluemonday v1.0.20
 	github.com/stretchr/testify v1.8.0
 	github.com/yuin/goldmark v1.4.14
 )
@@ -17,6 +17,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/net v0.0.0-20220708220712-1185a9018129 // indirect
+	golang.org/x/net v0.0.0-20220826154423-83b083e8dc8b // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
