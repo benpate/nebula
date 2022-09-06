@@ -8,7 +8,7 @@ require (
 	github.com/benpate/rosetta v0.6.0
 	github.com/microcosm-cc/bluemonday v1.0.19
 	github.com/stretchr/testify v1.8.0
-	github.com/yuin/goldmark v1.4.13
+	github.com/yuin/goldmark v1.4.14
 )
 
 require (
