@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/benpate/derp v0.24.0
 	github.com/benpate/html v0.14.1
-	github.com/benpate/rosetta v0.6.0
+	github.com/benpate/rosetta v0.6.1
 	github.com/microcosm-cc/bluemonday v1.0.20
 	github.com/stretchr/testify v1.8.0
 	github.com/yuin/goldmark v1.4.15
