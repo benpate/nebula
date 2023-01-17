@@ -3,7 +3,7 @@ module github.com/benpate/nebula
 go 1.18
 
 require (
-	github.com/benpate/derp v0.25.1
+	github.com/benpate/derp v0.26.0
 	github.com/benpate/html v0.15.0
 	github.com/benpate/rosetta v0.8.1
 	github.com/microcosm-cc/bluemonday v1.0.21
